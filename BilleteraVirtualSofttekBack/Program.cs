@@ -1,7 +1,11 @@
 using BilleteraVirtualSofttekBack.Helpers;
 using BilleteraVirtualSofttekBack.Models.HelperClasses;
 using IntegradorSofttekImanol.DAL.Context;
+using IntegradorSofttekImanol.DAL.UnitOfWork;
+using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -30,6 +34,15 @@ builder.Services.AddCors(options =>
 
 Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/TechOilLogs.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 
+#region Scoped Services
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+/*
+builder.Services.AddScoped<IClientService, ClientService>();
+*/
+
+#endregion
 
 // Configure Swagger to add an authorize token field
 builder.Services.AddSwaggerGen(c =>

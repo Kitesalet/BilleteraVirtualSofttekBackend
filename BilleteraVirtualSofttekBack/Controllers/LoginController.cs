@@ -2,6 +2,7 @@
 using BilleteraVirtualSofttekBack.Models.DTOs.Client;
 using BilleteraVirtualSofttekBack.Models.HelperClasses;
 using IntegradorSofttekImanol.Infrastructure;
+using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -52,7 +53,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         {
             try
             {
-                var userCredentials = await _unitOfWork.UserRepository.AuthenticateCredentials(authenticate);
+                var userCredentials = await _unitOfWork.ClientRepository.AuthenticateCredentials(authenticate);
 
                 if (userCredentials == null)
                 {
@@ -64,9 +65,9 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 var user = new ClientLoginDto()
                 {
                     Token = token,
-                    Email = userCredentials.,
-                    Name = userCredentials.Name,
-                    Type = UserRoleDic.TranslateUserRole((int)userCredentials.Type)
+                    Email = userCredentials.Email,
+                    Name = userCredentials.Name
+                    
                 };
 
                 return Ok(user);
