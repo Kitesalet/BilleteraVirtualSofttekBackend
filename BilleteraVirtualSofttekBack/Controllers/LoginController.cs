@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BilleteraVirtualSofttekBack.Helpers;
+using BilleteraVirtualSofttekBack.Models.DTOs.Client;
+using BilleteraVirtualSofttekBack.Models.HelperClasses;
+using IntegradorSofttekImanol.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
 
@@ -44,7 +48,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserAuthenticateDTO authenticate)
+        public async Task<IActionResult> Login([FromBody] ClientAuthenticateDto authenticate)
         {
             try
             {
@@ -57,10 +61,10 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
                 var token = _tokenJWTHelper.GenerateToken(userCredentials);
 
-                var user = new UserLoginDTO()
+                var user = new ClientLoginDto()
                 {
                     Token = token,
-                    CodUser = userCredentials.CodUser,
+                    Email = userCredentials.,
                     Name = userCredentials.Name,
                     Type = UserRoleDic.TranslateUserRole((int)userCredentials.Type)
                 };
