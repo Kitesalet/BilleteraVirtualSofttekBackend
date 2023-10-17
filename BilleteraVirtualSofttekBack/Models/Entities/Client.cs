@@ -15,7 +15,7 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
         public string Password { get; set; }
 
 
-        public List<Account> Accounts { get; set; }
+        public List<BaseAccount> Accounts { get; set; }
 
     }
 }

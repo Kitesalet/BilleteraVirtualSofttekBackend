@@ -15,7 +15,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
             throw new NotImplementedException();
         }
 
-        public override void Transfer(Account toAccount, decimal amount)
+        public override void Transfer(BaseAccount toAccount, decimal amount)
         {
             throw new NotImplementedException();
         }

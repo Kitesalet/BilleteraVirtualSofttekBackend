@@ -2,7 +2,7 @@
 
 namespace BilleteraVirtualSofttekBack.Models.Accounts
 {
-    public abstract class FiduciaryAccount : Account
+    public abstract class FiduciaryAccount : BaseAccount
     {
         public int CBU { get; set; }
         public int AccountNumber { get; set; }

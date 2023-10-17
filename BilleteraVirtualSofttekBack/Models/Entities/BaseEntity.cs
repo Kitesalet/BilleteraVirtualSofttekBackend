@@ -4,11 +4,11 @@
     {
         public int Id { get; set; }
 
-        public DateTime CreatedDate { get;set; }
+        public DateTime CreatedDate { get;set; } = DateTime.Now;
 
-        public DateTime DeletedDate { get;set; }
+        public DateTime? DeletedDate { get; set; } = null;
 
-        public DateTime ModifiedDate { get;set; }
+        public DateTime? ModifiedDate { get;set; }
 
     }
 }

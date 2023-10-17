@@ -2,7 +2,7 @@
 
 namespace BilleteraVirtualSofttekBack.Models.Accounts
 {
-    public sealed class CryptoAccount : Account
+    public sealed class CryptoAccount : BaseAccount
     {
 
         public Guid UUID { get; set; }
@@ -17,7 +17,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
             throw new NotImplementedException();
         }
 
-        public override void Transfer(Account toAccount, decimal amount)
+        public override void Transfer(BaseAccount toAccount, decimal amount)
         {
             throw new NotImplementedException();
         }

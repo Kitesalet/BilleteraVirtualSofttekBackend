@@ -7,7 +7,7 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
     /// <summary>
     /// This interface defines extra repository operations related to the Usuario entity.
     /// </summary>
-    public interface IUserRepository : IRepository<Client>
+    public interface IClientRepository : IRepository<Client>
     {
         /// <summary>
         /// Evaluates if a client exists and check its credentials.
@@ -29,7 +29,7 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
         /// |
         /// A false value if it fails
         /// </returns>
-        Task<bool> UserExists(ClientAuthenticateDto dto);
+        Task<bool> ClientExists(ClientCreateDto dto);
 
 
     }

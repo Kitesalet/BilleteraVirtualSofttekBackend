@@ -1,13 +1,15 @@
 ﻿using BilleteraVirtualSofttekBack.Helpers;
 using BilleteraVirtualSofttekBack.Models.DTOs.Client;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces;
 using IntegradorSofttekImanol.DAL.Context;
+using IntegradorSofttekImanol.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace BilleteraVirtualSofttekBack.DAL.Repositories
 {
     /// <summary>
-    /// The implemmentation that defines extra repository operations related to the User entity.
+    /// The implemmentation that defines extra repository operations related to the Client entity.
     /// </summary>
     public class ClientRepository : Repository<Client>, IClientRepository
     {
@@ -38,11 +40,10 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<bool> ClientExists(ClientAuthenticateDto dto)
+        public async Task<bool> ClientExists(ClientCreateDto dto)
         {
 
-
-            return await _context.Clients.AnyAsync(e => e.Email.ToString() == dto.Email.ToString());
+            return await _context.Clients.AnyAsync(c => c.Email.ToString() == dto.Email.ToString() || c.DeletedDate != null);
 
         }
 
