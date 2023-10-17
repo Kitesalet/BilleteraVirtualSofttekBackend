@@ -10,6 +10,11 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
             throw new NotImplementedException();
         }
 
+        public override void Extract(decimal amount)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Transfer(Account toAccount, decimal amount)
         {
             throw new NotImplementedException();

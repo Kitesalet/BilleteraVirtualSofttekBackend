@@ -18,6 +18,8 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
 
             public abstract void Deposit(decimal amount);
 
+            public abstract void Extract(decimal amount);
+
             public abstract void Transfer(Account toAccount, decimal amount);
         
 
