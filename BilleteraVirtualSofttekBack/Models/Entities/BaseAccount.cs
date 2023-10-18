@@ -7,9 +7,6 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
     [Table("Accounts")]
     public abstract class BaseAccount : BaseEntity
     {
-            [Required]
-            [Column("account_id")]
-            public int AccountId { get; set; }
 
             [Required]
             [Column("account_money", TypeName = "decimal(18,2)")]
