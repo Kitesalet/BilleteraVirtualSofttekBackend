@@ -4,6 +4,7 @@ using IntegradorSofttekImanol.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BilleteraVirtualSofttekBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231018223528_54")]
+    partial class _54
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,7 +114,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 80, DateTimeKind.Local).AddTicks(5628),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 567, DateTimeKind.Local).AddTicks(6613),
                             Email = "1@1.com",
                             Name = "random",
                             Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
@@ -120,7 +122,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 80, DateTimeKind.Local).AddTicks(5743),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 567, DateTimeKind.Local).AddTicks(6678),
                             Email = "2@2.com",
                             Name = "random",
                             Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
@@ -140,6 +142,9 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Concept")
@@ -171,6 +176,8 @@ namespace BilleteraVirtualSofttekBack.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("ClientId1");
+
                     b.HasIndex("DestinationAccountId");
 
                     b.HasIndex("SourceAccountId");
@@ -196,18 +203,18 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 3,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 85, DateTimeKind.Local).AddTicks(1244),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 570, DateTimeKind.Local).AddTicks(9303),
                             Type = 3,
-                            UUID = new Guid("f21b0863-7631-4ff0-ab01-8ad06b761b3c")
+                            UUID = new Guid("687da781-0104-4822-8e80-60020e663331")
                         },
                         new
                         {
                             Id = 6,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 85, DateTimeKind.Local).AddTicks(1248),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 570, DateTimeKind.Local).AddTicks(9308),
                             Type = 3,
-                            UUID = new Guid("111d283e-0ca4-46aa-b160-708326ab2894")
+                            UUID = new Guid("1a7820a4-0a50-4d20-8b50-bfe2bb30d448")
                         });
                 });
 
@@ -241,7 +248,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 2,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 83, DateTimeKind.Local).AddTicks(8847),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 570, DateTimeKind.Local).AddTicks(766),
                             Type = 2,
                             AccountNumber = 2,
                             Alias = "roca",
@@ -252,7 +259,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 5,
                             Balance = 4000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 83, DateTimeKind.Local).AddTicks(8854),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 570, DateTimeKind.Local).AddTicks(773),
                             Type = 2,
                             AccountNumber = 5,
                             Alias = "acor",
@@ -290,7 +297,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 1,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 81, DateTimeKind.Local).AddTicks(7885),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 568, DateTimeKind.Local).AddTicks(9593),
                             Type = 1,
                             AccountNumber = 1,
                             Alias = "espada",
@@ -301,7 +308,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 4,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 81, DateTimeKind.Local).AddTicks(7889),
+                            CreatedDate = new DateTime(2023, 10, 18, 19, 35, 27, 568, DateTimeKind.Local).AddTicks(9598),
                             Type = 1,
                             AccountNumber = 4,
                             Alias = "riccad",
@@ -323,10 +330,14 @@ namespace BilleteraVirtualSofttekBack.Migrations
             modelBuilder.Entity("BilleteraVirtualSofttekBack.Models.Entities.Transaction", b =>
                 {
                     b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.Client", "Client")
-                        .WithMany("Transactions")
+                        .WithMany()
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.Client", null)
+                        .WithMany("Transactions")
+                        .HasForeignKey("ClientId1");
 
                     b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.BaseAccount", "DestinationAccount")
                         .WithMany()

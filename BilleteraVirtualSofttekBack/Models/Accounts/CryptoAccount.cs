@@ -1,12 +1,14 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BilleteraVirtualSofttekBack.Models.Accounts
 {
     public sealed class CryptoAccount : BaseAccount
     {
-        
+
+        [Column("accound_uuid")]
         public Guid UUID { get; set; }
 
         public override void Deposit(decimal amount)

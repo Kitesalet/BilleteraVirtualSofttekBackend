@@ -9,8 +9,12 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
     {
 
             [Required]
-            [Column("account_money", TypeName = "decimal(18,2)")]
+            [Column("account_balance", TypeName = "decimal(18,2)")]
             public decimal Balance { get; set; } = 0;
+            
+            [Required]
+            [Column("account_type")]
+
             public AccountType Type { get; set; }
             public Client Client { get; set; }
 
