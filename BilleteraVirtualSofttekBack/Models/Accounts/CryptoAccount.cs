@@ -16,7 +16,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
 
         public override void Extract(decimal amount)
         {
-            this.Balance = amount - this.Balance;
+            this.Balance = this.Balance - amount;
         }
 
         public override void Transfer(BaseAccount toAccount, decimal amount)

@@ -165,36 +165,7 @@ namespace BilleteraVirtualSofttekBack.Services
            
         }
 
-        public async Task<bool> TransferAsyncDifferentType(TransferDto transactionDTO)
-        {
-
-            var originAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.OriginAccountId);
-            var receptionAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.DestinationAccountId);
-
-            if (originAccount == null || receptionAccount == null || originAccount.DeletedDate != null || receptionAccount.DeletedDate != null)
-            {
-                return false;
-            }
-
-            try
-            {
-
-
-
-                originAccount.Transfer(receptionAccount, transactionDTO.Amount);
-
-
-                await _unitOfWork.Complete();
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> TransferAsyncSameType(TransferDto transactionDTO)
+        public async Task<bool> TransferAsync(TransferDto transactionDTO)
         {
 
             var originAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.OriginAccountId);
@@ -210,7 +181,6 @@ namespace BilleteraVirtualSofttekBack.Services
 
                 originAccount.Transfer(receptionAccount, transactionDTO.Amount);
 
-
                 await _unitOfWork.Complete();
 
                 return true;
@@ -220,6 +190,7 @@ namespace BilleteraVirtualSofttekBack.Services
                 return false;
             }
         }
+
 
         public async Task<bool> ExtractAsync(AccountExtractDto transactionDTO)
         {

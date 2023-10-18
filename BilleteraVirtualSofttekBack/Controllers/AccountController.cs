@@ -324,7 +324,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return BadRequest("The user is in the token doesnt match with the account client id!");
             }
 
-            if(acc.Balance < extractionDto.Amount)
+            if(acc.Balance <= extractionDto.Amount)
             {
                 return BadRequest("There arent enough funds to make this extraction!");
             }
@@ -352,9 +352,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         public async Task<IActionResult> TransferAsync(int id, TransferDto transferDto)
         {
-            if (transferDto.Amount >= 1)
+            if (transferDto.Amount <= 1)
             {
                 return BadRequest("Amount must be greater than 1");
+            }
+
+            if (transferDto.OriginAccountId != id)
+            {
+                return BadRequest("Ids dont match!");
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
@@ -365,9 +370,9 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return BadRequest("The user is in the token doesnt match with the account client id!");
             }
 
-            if (acc.Balance < transferDto.Amount)
+            if (acc.Balance <= transferDto.Amount)
             {
-                return BadRequest("There arent enough funds to make this extraction!");
+                return BadRequest("There arent enough funds to make this transaction!");
             }
 
             var flag = await _service.TransferAsync(transferDto);
@@ -380,7 +385,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             //Add Transaction
 
             _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance}");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance - transferDto.Amount}");
 
         }
 
