@@ -1,8 +1,15 @@
 using BilleteraVirtualSofttekBack.Helpers;
+using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.HelperClasses;
+using BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces;
+using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
+using BilleteraVirtualSofttekBack.Services;
 using IntegradorSofttekImanol.DAL.Context;
+using IntegradorSofttekImanol.DAL.Repositories;
 using IntegradorSofttekImanol.DAL.UnitOfWork;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
+using IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces;
+using IntegradorSofttekImanol.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -36,11 +43,13 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/Te
 
 #region Scoped Services
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
-/*
 builder.Services.AddScoped<IClientService, ClientService>();
-*/
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.AddScoped<IRepository<BaseAccount>, Repository<BaseAccount>>();
+builder.Services.AddScoped<IRepository<Client>, Repository<Client>>();
 
 #endregion
 

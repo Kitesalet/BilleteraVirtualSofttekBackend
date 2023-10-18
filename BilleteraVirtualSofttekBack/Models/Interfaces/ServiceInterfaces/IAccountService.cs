@@ -1,4 +1,5 @@
 ﻿using BilleteraVirtualSofttekBack.Models.DTOs.Account;
+using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
 
 namespace BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces
 {
@@ -43,7 +44,15 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces
             /// <param name="id">An int.</param>
             /// <returns>A boolean value based on the Deletion of the Account, true if it was soft or hard deleted.</returns>
             Task<bool> DeleteAccountAsync(int id);
-        }
+            public Task<bool> DepositAsync(AccountDepositDto transactionDTO);
 
-    
+            public Task<bool> TransferAsync(TransferDto transactionDTO);
+
+            public Task<bool> ExtractAsync(AccountExtractDto transactionDTO);
+
+
+
+    }
+
+
 }

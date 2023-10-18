@@ -3,6 +3,7 @@ using BilleteraVirtualSofttekBack.Helpers;
 using BilleteraVirtualSofttekBack.Infrastructure;
 using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
+using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using System.Security.Principal;
@@ -14,7 +15,6 @@ namespace BilleteraVirtualSofttekBack.Services
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
         private readonly AccountFactory _accountFactory;
 
         /// <summary>
@@ -22,11 +22,10 @@ namespace BilleteraVirtualSofttekBack.Services
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork with DI.</param>
         /// <param name="mapper">IMapper with DI.</param>
-        public AccountService(AccountFactory accountFactory, IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public AccountService(AccountFactory accountFactory, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _configuration = configuration;
             _accountFactory = accountFactory;
 
         }
@@ -122,5 +121,83 @@ namespace BilleteraVirtualSofttekBack.Services
 
         }
 
+        public async Task<bool> DepositAsync(AccountDepositDto transactionDTO)
+        {
+
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.Id);
+
+
+            if (account != null || account.DeletedDate != null)
+            {
+                return false;
+            }
+               
+            try
+            {
+
+                account.Deposit(transactionDTO.Amount);
+
+                await _unitOfWork.Complete();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+           
+        }
+
+        public async Task<bool> TransferAsync(TransferDto transactionDTO)
+        {
+
+            var originAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.OriginAccountId);
+            var receptionAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.DestinationAccountId);
+
+            if (originAccount == null || receptionAccount == null || originAccount.DeletedDate != null || receptionAccount.DeletedDate != null)
+            {
+                return false;
+            }
+
+            try
+            {
+
+                originAccount.Transfer(receptionAccount, transactionDTO.Amount);
+
+
+                await _unitOfWork.Complete();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ExtractAsync(AccountExtractDto transactionDTO)
+        {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.Id);
+
+
+            if (account == null || account.DeletedDate != null)
+            {
+                return false;
+            }
+
+            try
+            {
+
+                account.Extract(transactionDTO.Amount);
+
+                await _unitOfWork.Complete();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
