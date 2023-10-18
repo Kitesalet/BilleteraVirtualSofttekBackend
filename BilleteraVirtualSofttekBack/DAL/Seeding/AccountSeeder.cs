@@ -16,12 +16,11 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
     {
 
         /// <summary>
-        /// Performs seeding of Client objects into the database during migration.
+        /// Performs seeding of PesoAccount objects into the database during migration.
         /// </summary>
         /// <param name="modelBuilder">Takes a modelBuilder object to use Fluent API.</param>
         public void SeedDatabase(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<PesoAccount>().HasData(
                 new PesoAccount
                 {
@@ -33,7 +32,13 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Type = AccountType.Peso,
                     ClientId = 1,
                     CreatedDate = DateTime.Now
-                },
+                });
+
+            /// <summary>
+            /// Performs seeding of PesoAccount objects into the database during migration.
+            /// </summary>
+            /// <param name="modelBuilder">Takes a modelBuilder object to use Fluent API.</param>
+            modelBuilder.Entity<DollarAccount>().HasData(
                 new DollarAccount
                 {
                     Id = 2,
@@ -44,7 +49,13 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Type = AccountType.Dollar,
                     ClientId = 1,
                     CreatedDate = DateTime.Now
-                },
+                });
+
+            /// <summary>
+            /// Performs seeding of PesoAccount objects into the database during migration.
+            /// </summary>
+            /// <param name="modelBuilder">Takes a modelBuilder object to use Fluent API.</param>
+            modelBuilder.Entity<CryptoAccount>().HasData(
                 new CryptoAccount
                 {
                     Id = 3,
@@ -53,8 +64,7 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Type = AccountType.Crypto,
                     ClientId = 1,
                     CreatedDate = DateTime.Now
-                }
-                ); ;
+                });
         }
     }
 }

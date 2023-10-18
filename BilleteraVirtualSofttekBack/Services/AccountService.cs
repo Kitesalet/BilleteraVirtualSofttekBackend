@@ -4,6 +4,7 @@ using BilleteraVirtualSofttekBack.Infrastructure;
 using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
+using BilleteraVirtualSofttekBack.Models.Enums;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using System.Security.Principal;
@@ -39,6 +40,22 @@ namespace BilleteraVirtualSofttekBack.Services
 
                 if (baseAccount != null)
                 {
+
+                    if (baseAccount.Type == AccountType.Crypto)
+                    {
+
+                        CryptoAccount crypto = (CryptoAccount)baseAccount;
+                        crypto.CreatedDate = DateTime.Now;
+                        crypto.UUID = Guid.NewGuid();
+                    }
+                    else
+                    {
+                        FiduciaryAccount fiduciary = (FiduciaryAccount)baseAccount;
+                        fiduciary.CreatedDate = DateTime.Now;
+                        fiduciary.Alias = $"{new Random().Next(1, 99)}";
+                        fiduciary.AccountNumber = new Random().Next(1, 999999999);
+                        fiduciary.CBU = new Random().Next(1, 999999999);
+                    }
 
                     await _unitOfWork.AccountRepository.AddAsync(baseAccount);
                     await _unitOfWork.Complete();
@@ -103,7 +120,7 @@ namespace BilleteraVirtualSofttekBack.Services
             try
             {
 
-
+                
                 account.ModifiedDate = DateTime.Now;
 
                 _unitOfWork.AccountRepository.Update(account);
@@ -127,7 +144,7 @@ namespace BilleteraVirtualSofttekBack.Services
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.Id);
 
 
-            if (account != null || account.DeletedDate != null)
+            if (account == null || account.DeletedDate != null)
             {
                 return false;
             }
@@ -148,7 +165,36 @@ namespace BilleteraVirtualSofttekBack.Services
            
         }
 
-        public async Task<bool> TransferAsync(TransferDto transactionDTO)
+        public async Task<bool> TransferAsyncDifferentType(TransferDto transactionDTO)
+        {
+
+            var originAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.OriginAccountId);
+            var receptionAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.DestinationAccountId);
+
+            if (originAccount == null || receptionAccount == null || originAccount.DeletedDate != null || receptionAccount.DeletedDate != null)
+            {
+                return false;
+            }
+
+            try
+            {
+
+
+
+                originAccount.Transfer(receptionAccount, transactionDTO.Amount);
+
+
+                await _unitOfWork.Complete();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> TransferAsyncSameType(TransferDto transactionDTO)
         {
 
             var originAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.OriginAccountId);

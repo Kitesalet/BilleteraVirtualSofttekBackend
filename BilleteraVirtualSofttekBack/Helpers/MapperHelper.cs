@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using BilleteraVirtualSofttekBack.Models.Accounts;
+using BilleteraVirtualSofttekBack.Models.DTOs.Account;
+using BilleteraVirtualSofttekBack.Models.DTOs.Client;
+using BilleteraVirtualSofttekBack.Models.Entities;
 using System.Data;
 
 namespace BilleteraVirtualSofttekBack.Helpers
@@ -13,41 +17,25 @@ namespace BilleteraVirtualSofttekBack.Helpers
         /// </summary>
         public MapperHelper()
         {
-
-            /*
-            #region Rol mapping to their Dto class
-            CreateMap<Role, RoleDto>().ReverseMap();
+            #region Client mapping to their Dto class
+            CreateMap<Client, ClientCreateDto>().ReverseMap();
+            CreateMap<Client, ClientGetDto>().ReverseMap();
+            CreateMap<Client, ClientUpdateDto>().ReverseMap();
             #endregion
 
-            #region Project mapping to their Dto class
-            CreateMap<Project, ProjectGetDto>().ReverseMap();
-            CreateMap<Project, ProjectUpdateDto>().ReverseMap();
-            CreateMap<Project, ProjectCreateDto>().ReverseMap();
-            CreateMap<Project, ProjectGetMinDto>().ReverseMap();
-            #endregion
+            #region Account mapping to their Dto class
+            CreateMap<PesoAccount, AccountGetDto>().ReverseMap();
+            CreateMap<CryptoAccount, AccountGetDto>().ReverseMap();
+            CreateMap<DollarAccount, AccountGetDto>().ReverseMap();
 
-            #region Service mapping to their Dto class
-            CreateMap<Service, ServiceGetDto>().ReverseMap();
-            CreateMap<Service, ServiceUpdateDto>().ReverseMap();
-            CreateMap<Service, ServiceCreateDto>().ReverseMap();
-            CreateMap<Service, ServiceGetMinDto>().ReverseMap();
-            #endregion
+            CreateMap<PesoAccount, AccountUpdateDto>().ReverseMap();
+            CreateMap<CryptoAccount, AccountUpdateDto>().ReverseMap();
+            CreateMap<DollarAccount, AccountUpdateDto>().ReverseMap();
 
-            #region Work mapping to their Dto class
-            CreateMap<Work, WorkGetDto>().ReverseMap();
-            CreateMap<Work, WorkGetMinDto>().ReverseMap();
-            CreateMap<Work, WorkCreateDto>().ReverseMap();
-            CreateMap<Work, WorkUpdateDto>().ReverseMap();
+            CreateMap<PesoAccount, AccountCreateDto>().ReverseMap();
+            CreateMap<CryptoAccount, AccountCreateDto>().ReverseMap();
+            CreateMap<DollarAccount, AccountCreateDto>().ReverseMap();
             #endregion
-
-            #region User mapping to their Dto class
-            CreateMap<User, UserUpdateDto>().ReverseMap();
-            CreateMap<User, UserCreateDto>().ReverseMap();
-            CreateMap<User, UserGetDto>().ReverseMap();
-            CreateMap<User, UserLoginDTO>().ReverseMap();
-            #endregion
-            */
-
         }
 
     }

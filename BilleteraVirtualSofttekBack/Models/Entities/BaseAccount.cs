@@ -12,8 +12,6 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
             [Column("account_money", TypeName = "decimal(18,2)")]
             public decimal Balance { get; set; } = 0;
             public AccountType Type { get; set; }
-
-
             public Client Client { get; set; }
 
             [ForeignKey("Client")]

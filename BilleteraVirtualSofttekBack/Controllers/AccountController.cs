@@ -1,10 +1,12 @@
 ﻿using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
+using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
@@ -139,7 +141,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
             */
 
-            _logger.LogInformation($"Account was created, Email = {dto.AccountId}");
+            _logger.LogInformation($"Account was created, Email = {dto.Alias}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.Created, "The account was created!");
 
         }
@@ -155,43 +157,46 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 400 Bad Request response if account update fails.
         /// </returns>
 
-        [HttpPut]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Route("account/{id:int}")]
-        public async Task<IActionResult> UpdateAccount(int id, AccountUpdateDto dto)
-        {
 
-            /*
-            #region Validations
-            var validation = await _validator.UpdateAccountValidator(id, dto);
-            if (validation != null)
-            {
-                return validation;
-            }
-            #endregion
-            */
+        
+        //[HttpPut]
+        //[Authorize]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
+        //[Route("account/{id:int}")]
+        //public async Task<IActionResult> UpdateAccount(int id, AccountUpdateDto dto)
+        //{
 
-            var result = await _service.UpdateAccount(dto);
+        //    /*
+        //    #region Validations
+        //    var validation = await _validator.UpdateAccountValidator(id, dto);
+        //    if (validation != null)
+        //    {
+        //        return validation;
+        //    }
+        //    #endregion
+        //    */
 
-            /*
-            #region Errors
-            var error = _validator.UpdateError(result, dto);
-            if (error != null)
-            {
-                return error;
-            }
-            #endregion
-            */
+        //    var result = await _service.UpdateAccount(dto);
 
-            _logger.LogInformation($"Account was properly updated, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Account was properly updated!");
+        //    /*
+        //    #region Errors
+        //    var error = _validator.UpdateError(result, dto);
+        //    if (error != null)
+        //    {
+        //        return error;
+        //    }
+        //    #endregion
+        //    */
 
-        }
+        //    _logger.LogInformation($"Account was properly updated, id = {id}");
+        //    return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Account was properly updated!");
+
+        //}
+    
 
         /// <summary>
         /// Deletes a account by their ID.
@@ -254,15 +259,20 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         public async Task<IActionResult> DepositAsync(int id, AccountExtractionDto depositDto)
         {
-            if (depositDto.Amount >= 1)
+            if (depositDto.Amount <= 1)
             {
                 return BadRequest("Amount must be greater than 1");
             }
 
-            var acc = await _service.GetAccountByIdAsync(id);
-            var userId = int.Parse(User.FindFirst("UserId").Value);
+            if(depositDto.Id != id)
+            {
+                return BadRequest("Ids dont match!");
+            }
 
-            if (userId != acc.ClientId)
+            var acc = await _service.GetAccountByIdAsync(id);
+            var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
+
+            if (clientId != acc.ClientId)
             {                   
                 
                 return BadRequest("The user is in the token doesnt match with the account client id!");         
@@ -278,7 +288,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             //Add transaction
 
             _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "The transaction was completed!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance}");
 
         }
 
@@ -294,27 +304,32 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/extract/{id:int}")]
 
-        public async Task<IActionResult> ExtractionAsync(int id, AccountExtractDto exctractionDto)
+        public async Task<IActionResult> ExtractionAsync(int id, AccountExtractDto extractionDto)
         {
-            if (exctractionDto.Amount >= 1)
+            if (extractionDto.Amount <= 1)
             {
                 return BadRequest("Amount must be greater than 1");
             }
 
-            var acc = await _service.GetAccountByIdAsync(id);
-            var userId = int.Parse(User.FindFirst("UserId").Value);
+            if (extractionDto.Id != id)
+            {
+                return BadRequest("Ids dont match!");
+            }
 
-            if (userId != acc.ClientId)
+            var acc = await _service.GetAccountByIdAsync(id);
+            var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
+
+            if (clientId != acc.ClientId)
             {
                 return BadRequest("The user is in the token doesnt match with the account client id!");
             }
 
-            if(acc.Balance < exctractionDto.Amount)
+            if(acc.Balance < extractionDto.Amount)
             {
                 return BadRequest("There arent enough funds to make this extraction!");
             }
 
-            var flag = await _service.ExtractAsync(exctractionDto);
+            var flag = await _service.ExtractAsync(extractionDto);
 
             if (flag == false)
             {
@@ -324,7 +339,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             //Add Transaction
 
             _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "The transaction was completed!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance}");
 
         }
 
@@ -343,9 +358,9 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
-            var userId = int.Parse(User.FindFirst("UserId").Value);
+            var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
-            if (userId != acc.ClientId)
+            if (clientId != acc.ClientId)
             {
                 return BadRequest("The user is in the token doesnt match with the account client id!");
             }
@@ -365,7 +380,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             //Add Transaction
 
             _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "The transaction was completed!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance}");
 
         }
 

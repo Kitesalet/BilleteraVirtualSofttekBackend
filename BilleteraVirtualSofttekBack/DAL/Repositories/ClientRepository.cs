@@ -34,7 +34,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
 
             return await _context.Clients
                                       .SingleOrDefaultAsync(e => e.DeletedDate == null
-                                                             && e.Email.ToString() == dto.Email
+                                                             && e.Email == dto.Email
                                                              && e.Password == EncrypterHelper.Encrypter(dto.Password, _configuration["EncryptKey"])); ;
 
         }
