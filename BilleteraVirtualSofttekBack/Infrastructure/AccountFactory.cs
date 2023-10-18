@@ -23,18 +23,20 @@ namespace BilleteraVirtualSofttekBack.Infrastructure
             {
                 case AccountType.Peso:
                     account = _mapper.Map<PesoAccount>(accountDto);
+                    return account;
                     break;
                 case AccountType.Dollar:
                     account = _mapper.Map<DollarAccount>(accountDto);
+                    return account;
                     break;
                 case AccountType.Crypto:
                     account = _mapper.Map<CryptoAccount>(accountDto);
+                    return account;
                     break;
                 default:
                     throw new ArgumentException("Invalid account type.");
             }
 
-            return account;
         }
     }
 }

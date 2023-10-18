@@ -1,4 +1,5 @@
 using BilleteraVirtualSofttekBack.Helpers;
+using BilleteraVirtualSofttekBack.Infrastructure;
 using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.HelperClasses;
 using BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces;
@@ -43,13 +44,15 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/Te
 
 #region Scoped Services
 
-builder.Services.AddSingleton<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddScoped<IRepository<BaseAccount>, Repository<BaseAccount>>();
 builder.Services.AddScoped<IRepository<Client>, Repository<Client>>();
+
+builder.Services.AddScoped<AccountFactory>();
 
 #endregion
 

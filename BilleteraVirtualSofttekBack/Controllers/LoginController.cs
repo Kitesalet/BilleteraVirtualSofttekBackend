@@ -19,7 +19,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
     {
 
         private TokenJwtHelper _tokenJWTHelper;
-        private readonly ILogger _logger;
+        private readonly ILogger<LoginController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
 

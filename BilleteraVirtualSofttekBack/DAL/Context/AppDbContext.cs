@@ -1,6 +1,6 @@
-﻿
-
-using BilleteraVirtualSofttekBack.Models.Entities;
+﻿using BilleteraVirtualSofttekBack.Models.Entities;
+using IntegradorSofttekImanol.DAL.DBSeeding;
+using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace IntegradorSofttekImanol.DAL.Context
@@ -26,7 +26,7 @@ namespace IntegradorSofttekImanol.DAL.Context
 
         #region Database tables
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        //public DbSet<Transaction> Transactions { get; set; }
         public DbSet<BaseAccount> Accounts { get; set; }
 
         #endregion
@@ -35,16 +35,15 @@ namespace IntegradorSofttekImanol.DAL.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            /*
+            
             #region Seeding config
 
             
             var seeder = new List<IEntitySeeder>()
             {
-                new ProjectSeeder(),
-                new ServiceSeeder(),
-                new WorkSeeder(),
-                new UserSeeder(_configuration),
+                new ClientSeeder(_configuration),
+                new AccountSeeder()
+
             };
             
 
@@ -58,7 +57,7 @@ namespace IntegradorSofttekImanol.DAL.Context
 
             base.OnModelCreating(modelBuilder);
 
-            */
+            
         }
 
     }
