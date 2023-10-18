@@ -13,6 +13,10 @@ namespace IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces
         /// </summary>
         ClientRepository ClientRepository { get; }
 
+        /// <summary>
+        /// Gets the repository for Account data.
+        /// </summary>
+        AccountRepository AccountRepository { get; }
 
         /// <summary>
         /// Completes and saves the context related to the database.

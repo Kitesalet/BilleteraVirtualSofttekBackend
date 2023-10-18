@@ -3,9 +3,9 @@
     public enum AccountType
     {
 
-        Peso,
-        Dollar,
-        Crypto
+        Peso = 1,
+        Dollar = 2,
+        Crypto = 3
 
     }
 }

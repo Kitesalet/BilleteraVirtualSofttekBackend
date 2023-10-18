@@ -12,6 +12,7 @@ namespace IntegradorSofttekImanol.DAL.UnitOfWork
     {
         private readonly AppDbContext _context;
         public ClientRepository ClientRepository { get; }
+        public AccountRepository AccountRepository { get; }
 
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace IntegradorSofttekImanol.DAL.UnitOfWork
         {
             _context = context;
             ClientRepository = new ClientRepository(context, configuration);
-
+            AccountRepository = new AccountRepository(context, configuration);
 
         }
 

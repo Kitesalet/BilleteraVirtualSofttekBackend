@@ -1,8 +1,6 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces;
 using IntegradorSofttekImanol.DAL.Context;
-using IntegradorSofttekImanol.Models.Entities;
-using IntegradorSofttekImanol.Models.Interfaces.RepoInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;

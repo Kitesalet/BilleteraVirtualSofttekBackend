@@ -35,9 +35,10 @@ namespace IntegradorSofttekImanol.DAL.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            /*
             #region Seeding config
 
-            /*
+            
             var seeder = new List<IEntitySeeder>()
             {
                 new ProjectSeeder(),

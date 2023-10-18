@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BilleteraVirtualSofttekBack.Models.Entities
 {
+    [Table("Accounts")]
     public abstract class BaseAccount : BaseEntity
     {
             [Required]
