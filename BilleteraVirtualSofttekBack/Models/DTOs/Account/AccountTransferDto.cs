@@ -2,10 +2,9 @@
 {
     public class AccountTransferDto
     {
-        public decimal Mount { get; set; }
+        public decimal Amount { get; set; }
         public int IdOrigin { get; set; }
-
-        public int Id
+        public int IdReception { get; set; }
 
     }
 }
