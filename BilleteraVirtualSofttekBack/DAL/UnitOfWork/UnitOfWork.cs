@@ -13,7 +13,7 @@ namespace IntegradorSofttekImanol.DAL.UnitOfWork
         private readonly AppDbContext _context;
         public ClientRepository ClientRepository { get; }
         public AccountRepository AccountRepository { get; }
-
+        public TransactionRepository TransactionRepository { get; }
 
         /// <summary>
         /// Initializes an instance of UnitOfWork using dependency injection with its parameters
@@ -25,6 +25,7 @@ namespace IntegradorSofttekImanol.DAL.UnitOfWork
             _context = context;
             ClientRepository = new ClientRepository(context, configuration);
             AccountRepository = new AccountRepository(context, configuration);
+            TransactionRepository = new TransactionRepository(context, configuration);
 
         }
 

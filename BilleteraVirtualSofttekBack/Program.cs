@@ -48,9 +48,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();  
 
 builder.Services.AddScoped<IRepository<BaseAccount>, Repository<BaseAccount>>();
 builder.Services.AddScoped<IRepository<Client>, Repository<Client>>();
+builder.Services.AddScoped<IRepository<Transaction>, Repository<Transaction>>();
 
 builder.Services.AddScoped<AccountFactory>();
 

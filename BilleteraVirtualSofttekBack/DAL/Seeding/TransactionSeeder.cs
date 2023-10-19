@@ -1,5 +1,4 @@
 ﻿using BilleteraVirtualSofttekBack.Helpers;
-using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;

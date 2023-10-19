@@ -1,7 +1,7 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 
-namespace BilleteraVirtualSofttekBack.Models.Accounts
+namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
 {
     public sealed class DollarAccount : FiduciaryAccount
     {
@@ -14,7 +14,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
                 //This crypto value has been hardcoded to 100 dollars
 
                 //Dollars to extract
-                this.Extract(amount);
+                Extract(amount);
 
                 //Dollars to deposit
                 decimal newCrypto = amount / 100;
@@ -26,7 +26,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
             {
 
                 //Same type of account, same rates
-                this.Extract(amount);
+                Extract(amount);
                 toAccount.Deposit(amount);
 
             }
@@ -35,7 +35,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
                 //Dollar value is hardcoded to 500 pesos
 
                 //Dollars to extract
-                this.Extract(amount);
+                Extract(amount);
 
                 //Dollars to deposit
                 decimal newPesos = amount * 500;

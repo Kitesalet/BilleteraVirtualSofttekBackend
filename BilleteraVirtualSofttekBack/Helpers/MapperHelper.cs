@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Client;
+using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Entities.Accounts;
 using System.Data;
 
 namespace BilleteraVirtualSofttekBack.Helpers
@@ -35,6 +36,15 @@ namespace BilleteraVirtualSofttekBack.Helpers
             CreateMap<PesoAccount, AccountCreateDto>().ReverseMap();
             CreateMap<CryptoAccount, AccountCreateDto>().ReverseMap();
             CreateMap<DollarAccount, AccountCreateDto>().ReverseMap();
+            #endregion
+
+            #region Transaction Mapping
+
+            CreateMap<Transaction, TransactionCreateDto>().ReverseMap();
+            CreateMap<Transaction, TransactionGetDto>().ReverseMap();
+            CreateMap<Transaction, TransactionUpdateDto>().ReverseMap();
+            CreateMap<Transaction, TransferDto>().ReverseMap();
+
             #endregion
         }
 

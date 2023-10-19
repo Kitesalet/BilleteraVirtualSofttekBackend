@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using BilleteraVirtualSofttekBack.Helpers;
 using BilleteraVirtualSofttekBack.Infrastructure;
-using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
+using BilleteraVirtualSofttekBack.Models.Entities.Accounts;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;

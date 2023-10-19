@@ -9,11 +9,11 @@ namespace BilleteraVirtualSofttekBack.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientsController : ControllerBase
     {
 
         private readonly IClientService _service;
-        private readonly ILogger<ClientController> _logger;
+        private readonly ILogger<ClientsController> _logger;
         //private readonly IClientValidator _validator;
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </summary>
         /// <param name="service">An IClientService.</param>
         /// <param name="logger">An ILogger.</param>
-        public ClientController(IClientService service, ILogger<ClientController> logger)
+        public ClientsController(IClientService service, ILogger<ClientsController> logger)
         {
             _service = service;
             _logger = logger;

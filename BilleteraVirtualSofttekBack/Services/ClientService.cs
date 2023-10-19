@@ -8,7 +8,7 @@ using IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces;
 namespace IntegradorSofttekImanol.Services
 {
     /// <summary>
-    /// The implementation of the service for defining and using UserDtos and its logic.
+    /// The implementation of the service for defining and using ClientDtos and its logic.
     /// </summary>
     public class ClientService : IClientService
     {
