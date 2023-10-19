@@ -38,6 +38,12 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+builder.Services.AddHttpClient("useApi", config =>
+{
+    config.BaseAddress = new Uri(builder.Configuration["ServiceUrl:ApiUrl"]);
+});
+
 //Serilog configuration and file path
 
 Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/TechOilLogs.txt", rollingInterval: RollingInterval.Day).CreateLogger();

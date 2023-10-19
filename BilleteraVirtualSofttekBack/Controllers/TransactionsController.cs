@@ -101,7 +101,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
             */
 
-            _logger.LogInformation($"Transaction was retrieved, id = {id}.");
+            _logger.LogInformation($"Transaction was retrieved, transaction = {transaction}.");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transaction);
 
         }
@@ -125,22 +125,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [Route("transaction/register")]
+        [Route("transaction/create")]
         public async Task<IActionResult> CreateTransaction(TransactionCreateDto dto)
         {
 
-            //It creates the Transaction
-            var flag = await _service.CreateTransactionAsync(dto);
+            await _service.CreateTransactionAsync(dto);
 
-            /*
-            var validationError = _validator.CreateUserValidator(dto, flag);
-            if (validationError != null)
-            {
-                return validationError;
-            }
-            */
-
-            _logger.LogInformation($"Transaction was created, Concept = {dto.Concept}");
+            _logger.LogInformation($"Transaction was created, dto = {dto}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.Created, "The Transaction was created!");
 
         }
@@ -189,7 +180,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             #endregion
             */
 
-            _logger.LogInformation($"Transaction was properly updated, id = {id}");
+            _logger.LogInformation($"Transaction was properly updated, dto = {dto}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Transaction was properly updated!");
 
         }

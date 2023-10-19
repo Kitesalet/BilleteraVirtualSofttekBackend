@@ -138,7 +138,7 @@ namespace BilleteraVirtualSofttekBack.Services
 
         }
 
-        public async Task<bool> DepositAsync(AccountExtractionDto transactionDTO)
+        public async Task<bool> DepositAsync(AccountDepositDto transactionDTO)
         {
 
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.Id);

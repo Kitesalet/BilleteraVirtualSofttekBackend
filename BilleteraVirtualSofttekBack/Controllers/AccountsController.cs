@@ -1,7 +1,9 @@
 ﻿using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Enums;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
+using Data.Base;
 using IntegradorSofttekImanol.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         private readonly IAccountService _service;
         private readonly ILogger<AccountsController> _logger;
+        private readonly IHttpClientFactory _httpClient;
+
         //private readonly IAccountValidator _validator;
 
         /// <summary>
@@ -24,10 +28,11 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </summary>
         /// <param name="service">An IAccountService.</param>
         /// <param name="logger">An ILogger.</param>
-        public AccountsController(IAccountService service, ILogger<AccountsController> logger)
+        public AccountsController(IAccountService service, IHttpClientFactory httpClient , ILogger<AccountsController> logger)
         {
             _service = service;
             _logger = logger;
+            _httpClient = httpClient;
 
         }
 
@@ -257,7 +262,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/deposit/{id:int}")]
 
-        public async Task<IActionResult> DepositAsync(int id, AccountExtractionDto depositDto)
+        public async Task<IActionResult> DepositAsync(int id, AccountDepositDto depositDto)
         {
             if (depositDto.Amount <= 1)
             {
@@ -270,6 +275,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
+
+            if (acc == null)
+            {
+                return BadRequest("The selected account doesnt exist!");
+            }
+
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
             if (clientId != acc.ClientId)
@@ -287,8 +298,26 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             //Add transaction
 
-            _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance}");
+            TransactionCreateDto transactionCreate = new TransactionCreateDto()
+            {
+                DestinationAccountId = id,
+                SourceAccountId = id,
+                Amount = depositDto.Amount,
+                ClientId = clientId,
+                Type = TransactionType.Deposit,
+                Concept = ""
+            };
+
+            var baseApi = new BaseApi(_httpClient);
+
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+
+            var transaction = baseApi.PostToApi("transaction/create", transactionCreate, token);
+
+
+
+            _logger.LogInformation($"Deposit Transaction was completed!, id = {id}, transaction = {transaction}");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The deposit transaction was completed! The new account balance is {acc.Balance + depositDto.Amount}");
 
         }
 
@@ -317,7 +346,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
+
+            if(acc == null)
+            {
+                return BadRequest("The selected account doesnt exist!");
+            }
+
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
+            
 
             if (clientId != acc.ClientId)
             {
@@ -338,8 +374,27 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             //Add Transaction
 
-            _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance}");
+            TransactionCreateDto transactionCreate = new TransactionCreateDto()
+            {
+                SourceAccountId = id,
+                DestinationAccountId = id,
+                Amount = extractionDto.Amount,
+                ClientId = clientId,
+                Type = TransactionType.Withdrawal,
+                Concept = ""
+            };
+            
+            var baseApi = new BaseApi(_httpClient);
+
+            //Obtains the token
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+
+            var transaction = baseApi.PostToApi("transaction/create", transactionCreate, token);
+
+
+
+            _logger.LogInformation($"Transaction was completed!, id = {id}, transaction = {transaction}");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance - extractionDto.Amount}");
 
         }
 
@@ -348,21 +403,27 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [Route("account/transfer/{id:int}")]
+        [Route("account/transfer")]
 
-        public async Task<IActionResult> TransferAsync(int id, TransferDto transferDto)
+        public async Task<IActionResult> TransferAsync(TransferDto transferDto)
         {
             if (transferDto.Amount <= 1)
             {
                 return BadRequest("Amount must be greater than 1");
             }
 
-            if (transferDto.OriginAccountId != id)
+            if(transferDto.DestinationAccountId == transferDto.OriginAccountId)
             {
-                return BadRequest("Ids dont match!");
+                return BadRequest("The accounts cant be the same!");
             }
 
-            var acc = await _service.GetAccountByIdAsync(id);
+            var acc = await _service.GetAccountByIdAsync(transferDto.OriginAccountId);
+
+            if (acc == null)
+            {
+                return BadRequest("The selected account doesnt exist!");
+            }
+
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
             if (clientId != acc.ClientId)
@@ -384,8 +445,25 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             //Add Transaction
 
-            _logger.LogInformation($"Transaction was completed!, id = {id}");
-            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance - transferDto.Amount}");
+            TransactionCreateDto transactionCreate = new TransactionCreateDto()
+            {
+                SourceAccountId = 1,
+                DestinationAccountId = transferDto.DestinationAccountId,
+                Concept = transferDto.Concept,
+                Amount = transferDto.Amount,
+                ClientId = clientId,
+                Type = TransactionType.Transfer
+            };
+
+            var baseApi = new BaseApi(_httpClient);
+
+            var token = HttpContext.Request.Headers["Authorization"].ToString();
+
+            var transaction = baseApi.PostToApi("transaction/create", transactionCreate, token);
+
+
+            _logger.LogInformation($"Transaction was completed!, id = {transferDto.OriginAccountId}, transaction = {transaction}");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! Your account balance is {acc.Balance - transferDto.Amount}");
 
         }
 
