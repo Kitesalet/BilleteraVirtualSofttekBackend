@@ -12,11 +12,11 @@ namespace BilleteraVirtualSofttekBack.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
 
         private readonly IAccountService _service;
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger<AccountsController> _logger;
         //private readonly IAccountValidator _validator;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </summary>
         /// <param name="service">An IAccountService.</param>
         /// <param name="logger">An ILogger.</param>
-        public AccountController(IAccountService service, ILogger<AccountController> logger)
+        public AccountsController(IAccountService service, ILogger<AccountsController> logger)
         {
             _service = service;
             _logger = logger;

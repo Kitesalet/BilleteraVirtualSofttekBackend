@@ -4,6 +4,7 @@ using IntegradorSofttekImanol.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BilleteraVirtualSofttekBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231018213003_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,7 +114,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 80, DateTimeKind.Local).AddTicks(5628),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 72, DateTimeKind.Local).AddTicks(4242),
                             Email = "1@1.com",
                             Name = "random",
                             Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
@@ -120,62 +122,11 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 80, DateTimeKind.Local).AddTicks(5743),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 72, DateTimeKind.Local).AddTicks(4395),
                             Email = "2@2.com",
                             Name = "random",
                             Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
                         });
-                });
-
-            modelBuilder.Entity("BilleteraVirtualSofttekBack.Models.Entities.Transaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Concept")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("created_date");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("deleted_date");
-
-                    b.Property<int>("DestinationAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("modified_date");
-
-                    b.Property<int>("SourceAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("DestinationAccountId");
-
-                    b.HasIndex("SourceAccountId");
-
-                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("BilleteraVirtualSofttekBack.Models.Accounts.CryptoAccount", b =>
@@ -196,18 +147,18 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 3,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 85, DateTimeKind.Local).AddTicks(1244),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 76, DateTimeKind.Local).AddTicks(4793),
                             Type = 3,
-                            UUID = new Guid("f21b0863-7631-4ff0-ab01-8ad06b761b3c")
+                            UUID = new Guid("cbda4077-6543-4322-8e17-e8d12a7b1aac")
                         },
                         new
                         {
                             Id = 6,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 85, DateTimeKind.Local).AddTicks(1248),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 76, DateTimeKind.Local).AddTicks(4797),
                             Type = 3,
-                            UUID = new Guid("111d283e-0ca4-46aa-b160-708326ab2894")
+                            UUID = new Guid("0d92c084-ca1a-4559-bde8-474e4c5d4fa7")
                         });
                 });
 
@@ -241,7 +192,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 2,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 83, DateTimeKind.Local).AddTicks(8847),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 75, DateTimeKind.Local).AddTicks(5790),
                             Type = 2,
                             AccountNumber = 2,
                             Alias = "roca",
@@ -252,7 +203,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 5,
                             Balance = 4000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 83, DateTimeKind.Local).AddTicks(8854),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 75, DateTimeKind.Local).AddTicks(5795),
                             Type = 2,
                             AccountNumber = 5,
                             Alias = "acor",
@@ -290,7 +241,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 1,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 81, DateTimeKind.Local).AddTicks(7885),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 74, DateTimeKind.Local).AddTicks(4071),
                             Type = 1,
                             AccountNumber = 1,
                             Alias = "espada",
@@ -301,7 +252,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 4,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 18, 19, 41, 25, 81, DateTimeKind.Local).AddTicks(7889),
+                            CreatedDate = new DateTime(2023, 10, 18, 18, 30, 3, 74, DateTimeKind.Local).AddTicks(4075),
                             Type = 1,
                             AccountNumber = 4,
                             Alias = "riccad",
@@ -320,38 +271,9 @@ namespace BilleteraVirtualSofttekBack.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("BilleteraVirtualSofttekBack.Models.Entities.Transaction", b =>
-                {
-                    b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.Client", "Client")
-                        .WithMany("Transactions")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.BaseAccount", "DestinationAccount")
-                        .WithMany()
-                        .HasForeignKey("DestinationAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.BaseAccount", "SourceAccount")
-                        .WithMany()
-                        .HasForeignKey("SourceAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("DestinationAccount");
-
-                    b.Navigation("SourceAccount");
-                });
-
             modelBuilder.Entity("BilleteraVirtualSofttekBack.Models.Entities.Client", b =>
                 {
                     b.Navigation("Accounts");
-
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,24 +1,24 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 
-namespace BilleteraVirtualSofttekBack.Models.Accounts
+namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
 {
     public sealed class PesoAccount : FiduciaryAccount
     {
         public override void Transfer(BaseAccount toAccount, decimal amount)
         {
 
-            if(toAccount.Type == AccountType.Crypto)
+            if (toAccount.Type == AccountType.Crypto)
             {
                 throw new Exception("Invalid account");
             }
-            else if(toAccount.Type == AccountType.Dollar)
+            else if (toAccount.Type == AccountType.Dollar)
             {
 
                 //Dollar value is hardcoded to 500 pesos
 
                 //Pesos to extract
-                this.Extract(amount);
+                Extract(amount);
 
                 //Dollars to deposit
                 decimal newDollar = amount / 500;
@@ -28,7 +28,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
             else
             {
                 //Same type of account, same rates
-                this.Extract(amount);
+                Extract(amount);
                 toAccount.Deposit(amount);
             }
 

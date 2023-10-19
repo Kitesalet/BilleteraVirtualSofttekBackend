@@ -19,6 +19,11 @@ namespace IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces
         AccountRepository AccountRepository { get; }
 
         /// <summary>
+        /// Gets the repository for Transaction data.
+        /// </summary>
+        TransactionRepository TransactionRepository { get; }
+
+        /// <summary>
         /// Completes and saves the context related to the database.
         /// </summary>
         /// <returns>The number of rows affected by saving the changed of the context.</returns>

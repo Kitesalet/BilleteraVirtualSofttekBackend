@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Entities.Accounts;
 using BilleteraVirtualSofttekBack.Models.Enums;
 
 namespace BilleteraVirtualSofttekBack.Infrastructure

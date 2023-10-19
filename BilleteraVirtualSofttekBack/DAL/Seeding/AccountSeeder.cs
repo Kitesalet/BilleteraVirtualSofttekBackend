@@ -1,6 +1,6 @@
 ﻿using BilleteraVirtualSofttekBack.Helpers;
-using BilleteraVirtualSofttekBack.Models.Accounts;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Entities.Accounts;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +32,16 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Type = AccountType.Peso,
                     ClientId = 1,
                     CreatedDate = DateTime.Now
+                }, new PesoAccount
+                {
+                    Id = 4,
+                    AccountNumber = 4,
+                    Alias = "riccad",
+                    Balance = 2000,
+                    CBU = 532456234,
+                    Type = AccountType.Peso,
+                    ClientId = 1,
+                    CreatedDate = DateTime.Now
                 });
 
             /// <summary>
@@ -49,6 +59,16 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Type = AccountType.Dollar,
                     ClientId = 1,
                     CreatedDate = DateTime.Now
+                }, new DollarAccount
+                {
+                    Id = 5,
+                    AccountNumber = 5,
+                    Alias = "acor",
+                    Balance = 4000,
+                    CBU = 654334523,
+                    Type = AccountType.Dollar,
+                    ClientId = 1,
+                    CreatedDate = DateTime.Now
                 });
 
             /// <summary>
@@ -61,6 +81,14 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Id = 3,
                     UUID = Guid.NewGuid(),
                     Balance = 1000,
+                    Type = AccountType.Crypto,
+                    ClientId = 1,
+                    CreatedDate = DateTime.Now
+                }, new CryptoAccount
+                {
+                    Id = 6,
+                    UUID = Guid.NewGuid(),
+                    Balance = 2000,
                     Type = AccountType.Crypto,
                     ClientId = 1,
                     CreatedDate = DateTime.Now

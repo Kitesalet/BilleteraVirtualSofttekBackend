@@ -1,22 +1,24 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BilleteraVirtualSofttekBack.Models.Accounts
+namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
 {
     public sealed class CryptoAccount : BaseAccount
     {
-        
+
+        [Column("accound_uuid")]
         public Guid UUID { get; set; }
 
         public override void Deposit(decimal amount)
         {
-            this.Balance = amount + this.Balance;
+            Balance = amount + Balance;
         }
 
         public override void Extract(decimal amount)
         {
-            this.Balance = this.Balance - amount;
+            Balance = Balance - amount;
         }
 
         public override void Transfer(BaseAccount toAccount, decimal amount)
@@ -25,7 +27,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
             if (toAccount.Type == AccountType.Crypto)
             {
                 //Same type of account, same rates
-                this.Extract(amount);
+                Extract(amount);
                 toAccount.Deposit(amount);
 
             }
@@ -35,7 +37,7 @@ namespace BilleteraVirtualSofttekBack.Models.Accounts
                 //This crypto value has been hardcoded to 100 dollars
 
                 //Dollars to extract
-                this.Extract(amount);
+                Extract(amount);
 
                 //Dollars to deposit
                 decimal newDollar = amount * 100;
