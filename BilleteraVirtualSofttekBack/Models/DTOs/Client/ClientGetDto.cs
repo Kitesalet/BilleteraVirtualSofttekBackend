@@ -1,9 +1,10 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
 {
-    public class ClientGetDto : BaseEntity
+    public class ClientGetDto 
     {
 
         public string Name { get; set; }
@@ -11,6 +12,8 @@ namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+        public int Id { get; set; }
 
 
     }

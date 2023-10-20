@@ -63,6 +63,29 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
+        /// Gets all Transactions by account.
+        /// </summary>
+        /// <returns>
+        /// 200 OK response with the list of Transactions by account if successful.
+        /// </returns>
+
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Route("transactions/account/{accountId:int}")]
+        public async Task<IActionResult> GetAllTransactionsByAccount(int accountId)
+        {
+
+
+            var transactions = await _service.GetTransactionByAccountAsync(accountId);
+
+            _logger.LogInformation("All Transactions by client were retrieved!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transactions);
+
+        }
+
+        /// <summary>
         /// Gets a Transaction by their ID.
         /// </summary>
         /// <param name="id">ID of the Transaction to get.</param>
@@ -113,16 +136,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <returns>
         /// 201 Created response if Transaction creation is successful.
         /// |
-        /// 400 Bad Request response if Transaction creation fails.
-        /// |
-        /// 409 Conflict if Transaction was found in the database.
+        /// 401 Unauthorized
         /// </returns>
 
         [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("transaction/create")]

@@ -81,6 +81,15 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
+        public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int clientId)
+        {
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(clientId);
+
+            return _mapper.Map<List<TransactionGetDto>>(transactions);
+
+        }
+
+        /// <inheritdoc/>
         public async Task<TransactionGetDto> GetTransactionByIdAsync(int id)
         {
 

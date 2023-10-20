@@ -12,6 +12,7 @@ using System.Security.Claims;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
+    [Authorize]
     [Route("api")]
     [ApiController]
     public class AccountsController : ControllerBase
@@ -44,7 +45,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -146,7 +146,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
             */
 
-            _logger.LogInformation($"Account was created, Email = {dto.Alias}");
+            _logger.LogInformation($"Account was created, dto = ${dto}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.Created, "The account was created!");
 
         }

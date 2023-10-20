@@ -2,7 +2,7 @@
 
 namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
 {
-    public class ClientCreateDto : BaseEntity
+    public class ClientCreateDto 
     {
         public string Name { get; set; }
 

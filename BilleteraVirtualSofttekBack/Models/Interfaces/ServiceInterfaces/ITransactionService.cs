@@ -22,6 +22,13 @@ namespace IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces
         Task<TransactionGetDto> GetTransactionByIdAsync(int id);
 
         /// <summary>
+        /// Gets Transaction data by an account Id
+        /// </summary>
+        /// <param name="id">An int.</param>
+        /// <returns>One of the Transaction entities as a TransactionGetDto.</returns>
+        Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int clientId);
+
+        /// <summary>
         /// Creates a Transaction.
         /// </summary>
         /// <param name="transactionDto">An transactionCreateDto.</param>

@@ -30,6 +30,7 @@ namespace BilleteraVirtualSofttekBack.Helpers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, _jwtSettings.Subject),
                 new Claim("NameIdentifier", client.Id.ToString()),
+                new Claim(ClaimTypes.Actor, $"{client.Id}"),
                 new Claim(ClaimTypes.Name, client.Name),
                 new Claim(ClaimTypes.Email, $"{client.Email}")
             };
