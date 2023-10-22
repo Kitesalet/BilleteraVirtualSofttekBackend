@@ -42,12 +42,16 @@ namespace IntegradorSofttekImanol.Services
                     return false;
                 }
 
+                if(await _unitOfWork.ClientRepository.VerifyExistingEmail(clientDto.Email))
+                {
+                    return false;
+                }
+
                 client.Password = EncrypterHelper.Encrypter(client.Password, _configuration["EncryptKey"] );
 
                 await _unitOfWork.ClientRepository.AddAsync(client);
 
                 client.CreatedDate = DateTime.Now;
-
                 
 
                 await _unitOfWork.Complete();

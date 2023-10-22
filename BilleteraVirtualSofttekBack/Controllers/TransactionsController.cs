@@ -50,7 +50,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(page < 1 || units < 1)
             {
                 _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "There was an error in the pagination!");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
             }
 
             var transactions = await _service.GetAllTransactionsAsync(page, units);
@@ -75,6 +75,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("transactions/account/{accountId:int}")]
         public async Task<IActionResult> GetAllTransactionsByAccount(int accountId)
         {
+
+            if (accountId <= 0)
+            {
+                _logger.LogInformation($"The account id was invalid, id = {accountId}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
+            }
 
             var transactions = await _service.GetTransactionByAccountAsync(accountId);
 
@@ -107,6 +113,11 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("transaction/{id:int}")]
         public async Task<IActionResult> GetTransaction([FromRoute] int id)
         {
+            if (id <= 0)
+            {
+                _logger.LogInformation($"The transaction id was invalid, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction id is invalid!");
+            }
 
             var transaction = await _service.GetTransactionByIdAsync(id);
 

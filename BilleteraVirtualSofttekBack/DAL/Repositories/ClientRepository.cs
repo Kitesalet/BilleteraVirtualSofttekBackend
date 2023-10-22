@@ -47,5 +47,11 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
 
         }
 
+        public async Task<bool> VerifyExistingEmail(string email)
+        {
+            var flag = await _context.Clients.AnyAsync(e => e.Email == email);
+
+            return flag;
+        }
     }
 }

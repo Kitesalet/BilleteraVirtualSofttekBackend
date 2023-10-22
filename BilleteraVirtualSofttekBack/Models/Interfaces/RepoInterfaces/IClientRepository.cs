@@ -31,6 +31,8 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
         /// </returns>
         Task<bool> ClientExists(ClientCreateDto dto);
 
+        Task<bool> VerifyExistingEmail(string email);
+
 
     }
 }
