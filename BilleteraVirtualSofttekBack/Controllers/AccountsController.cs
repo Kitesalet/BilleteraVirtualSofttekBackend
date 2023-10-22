@@ -47,19 +47,9 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("accounts/{id:int}")]
         public async Task<IActionResult> GetAllAccountsByClient(int id)
         {
-            /*
-            #region Validations           
-            var validation = _validator.GetAllAccountsValidator(page, units);
-            if (validation != null)
-            {
-                return validation;
-            }
-            #endregion
-            */
 
             var accounts = await _service.GetAllAccountsByClientAsync(id);
 
@@ -87,25 +77,19 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("account/{id:int}")]
         public async Task<IActionResult> GetAccount([FromRoute] int id)
         {
-            /*
-            #region Validations
-            var validation = _validator.GetAccountValidator(id);
-            if (validation != null)
+            if(id <= 0)
             {
-                return validation;
+                _logger.LogError($"Invalid id introduced, id = {id}");
+                ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, $"The id introduced was invalid, Id = {id}");
             }
-            #endregion
-            */
 
             var account = await _service.GetAccountByIdAsync(id);
 
-            /*
-            var error = _validator.GetAccountError(Account, id);
-            if (error != null)
+            if(account == null)
             {
-                return error;
+                _logger.LogError($"The account wasnt found!, id = {id}");
+                ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, $"The account introduced wasn't found!");
             }
-            */
 
             _logger.LogInformation($"Account was retrieved, id = {id}.");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, account);
@@ -135,16 +119,19 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> CreateAccount(AccountCreateDto dto)
         {
 
-            //It creates the account
+            if(dto.Type != AccountType.Crypto && dto.Type != AccountType.Dollar && dto.Type == AccountType.Peso)
+            {
+                _logger.LogError($"The account type was incorrect!, dto = {dto}");
+                ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, $"The account type submitted was incorrect!");
+            }
+
             var flag = await _service.CreateAccountAsync(dto);
 
-            /*
-            var validationError = _validator.CreateUserValidator(dto, flag);
-            if (validationError != null)
+            if(flag == false)
             {
-                return validationError;
+                _logger.LogError($"There was a problem with the creation of the account, dto = {dto}");
+                ResponseFactory.CreateErrorResponse(HttpStatusCode.Conflict, $"The account couldn't be created!");
             }
-            */
 
             _logger.LogInformation($"Account was created, dto = ${dto}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.Created, "The account was created!");
@@ -223,27 +210,22 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("account/{id:int}")]
         public async Task<IActionResult> DeleteAccount([FromRoute] int id)
         {
-            /*
-            #region Validations
-            var validation = _validator.DeleteGetUserValidator(id);
-            if (validation != null)
+
+            if(id <= 0)
             {
-                return validation;
+                _logger.LogInformation($"The id introduced was invalid, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The id introduces was invalid!");
             }
-            #endregion
-            */
 
             var result = await _service.DeleteAccountAsync(id);
 
-            /*
-            #region Errors
-            var error = _validator.DeleteGetUserValidator(id, result);
-            if (error != null)
+            if(result == false)
             {
-                return error;
+
+                _logger.LogInformation($"Account was not deleted or not found, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The account submited was not found!");
+
             }
-            #endregion
-            */
 
             _logger.LogInformation($"Account was deleted, id = {id}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "The Account was deleted!");
@@ -266,34 +248,39 @@ namespace BilleteraVirtualSofttekBack.Controllers
         {
             if (depositDto.Amount <= 1)
             {
-                return BadRequest("Amount must be greater than 1");
+                _logger.LogInformation($"The amount introduced was invalid, dto = {depositDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+
             }
 
             if(depositDto.Id != id)
             {
-                return BadRequest("Ids dont match!");
+                _logger.LogInformation($"The ids introduced didnt match, id = {id}, dto = {depositDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Ids dont match!");
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
 
             if (acc == null)
             {
-                return BadRequest("The selected account doesnt exist!");
+                _logger.LogInformation($"The selected account didnt exist!, dto = {depositDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");            
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
             if (clientId != acc.ClientId)
-            {                   
-                
-                return BadRequest("The user is in the token doesnt match with the account client id!");         
+            {
+                _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {depositDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
             }
 
             var flag = await _service.DepositAsync(depositDto);
        
             if(flag == false)
             {
-                return BadRequest("There was a problem with the transaction!");
+                _logger.LogInformation($"There was a problem with the deposit, dto = {depositDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem with the deposit!");
             }
 
             //Add transaction
@@ -337,39 +324,39 @@ namespace BilleteraVirtualSofttekBack.Controllers
         {
             if (extractionDto.Amount <= 1)
             {
-                return BadRequest("Amount must be greater than 1");
+                _logger.LogInformation($"The amount introduced was invalid, dto = {extractionDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+
             }
 
             if (extractionDto.Id != id)
             {
-                return BadRequest("Ids dont match!");
+                _logger.LogInformation($"The ids introduced didnt match, id = {id}, dto = {extractionDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Ids dont match!");
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
 
-            if(acc == null)
+            if (acc == null)
             {
-                return BadRequest("The selected account doesnt exist!");
+                _logger.LogInformation($"The selected account didnt exist!, dto = {extractionDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
-            
 
             if (clientId != acc.ClientId)
             {
-                return BadRequest("The user is in the token doesnt match with the account client id!");
-            }
-
-            if(acc.Balance <= extractionDto.Amount)
-            {
-                return BadRequest("There arent enough funds to make this extraction!");
+                _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {extractionDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
             }
 
             var flag = await _service.ExtractAsync(extractionDto);
 
             if (flag == false)
             {
-                return BadRequest("There was a problem with the transaction!");
+                _logger.LogInformation($"There was a problem with the extraction, dto = {extractionDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem with the extraction!");
             }
 
             //Add Transaction
@@ -391,8 +378,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var transaction = baseApi.PostToApi("transaction/create", transactionCreate, token);
 
-
-
             _logger.LogInformation($"Transaction was completed!, id = {id}, transaction = {transaction}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! The new account balance is {acc.Balance - extractionDto.Amount}");
 
@@ -409,38 +394,48 @@ namespace BilleteraVirtualSofttekBack.Controllers
         {
             if (transferDto.Amount <= 1)
             {
-                return BadRequest("Amount must be greater than 1");
+                _logger.LogInformation($"The amount introduced was invalid, dto = {transferDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+
             }
 
-            if(transferDto.DestinationAccountId == transferDto.OriginAccountId)
+            if (transferDto.DestinationAccountId == transferDto.OriginAccountId)
             {
-                return BadRequest("The accounts cant be the same!");
+                _logger.LogInformation($"The accounts introduced as origin and destination were the same, dto = {transferDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The accounts cant be the same!");
+
             }
 
             var acc = await _service.GetAccountByIdAsync(transferDto.OriginAccountId);
 
             if (acc == null)
             {
-                return BadRequest("The selected account doesnt exist!");
+                _logger.LogInformation($"The account selected as origin didnt exist in the database, dto = {transferDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The selected origin account doesnt exist!");
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
             if (clientId != acc.ClientId)
             {
-                return BadRequest("The user is in the token doesnt match with the account client id!");
+                _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {transferDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
+
             }
 
             if (acc.Balance <= transferDto.Amount)
             {
-                return BadRequest("There arent enough funds to make this transaction!");
+                _logger.LogInformation($"There werent enough funds to make the perceived transaction, dto = {transferDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There arent enough funds to make this transaction!");
+
             }
 
             var flag = await _service.TransferAsync(transferDto);
 
             if (flag == false)
             {
-                return BadRequest("There was a problem with the transaction!");
+                _logger.LogInformation($"There was a problem with the transfer, dto = {transferDto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem with the transfer!");
             }
 
             //Add Transaction

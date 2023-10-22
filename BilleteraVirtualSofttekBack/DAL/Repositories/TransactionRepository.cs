@@ -32,7 +32,9 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
             return await _context.Transactions.Include(e => e.SourceAccount)
                                                 .Include(t => t.DestinationAccount)
                                                 .Where(t => (t.SourceAccountId == accountId 
-                                                || t.DestinationAccountId == accountId) && t.DeletedDate == null)
+                                                || t.DestinationAccountId == accountId) 
+                                                && t.DeletedDate == null)
+                                                .OrderBy(t => t.CreatedDate)
                                                 .ToListAsync();
 
         }

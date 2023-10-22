@@ -10,5 +10,11 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
 
         public Task<IEnumerable<BaseAccount>> GetAllAccountsByClient(int clientId);
 
+        public Task<bool> VerifyExistingCBU(int cbu);
+
+        public Task<bool> VerifyExistingAccountNumber(int accountNumber);
+
+        public Task<bool> VerifyExistingAlias(string alias);
+
     }
 }

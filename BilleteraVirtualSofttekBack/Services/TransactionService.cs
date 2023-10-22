@@ -85,7 +85,9 @@ namespace BilleteraVirtualSofttekBack.Services
         {
             var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(clientId);
 
-            return _mapper.Map<List<TransactionGetDto>>(transactions);
+            var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
+
+            return transactionsDto;
 
         }
 
