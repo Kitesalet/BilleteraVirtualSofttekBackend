@@ -47,6 +47,8 @@ builder.Services.AddHttpClient("useApi", config =>
 //Serilog configuration and file path
 
 Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/VirtualWalletLogs.txt", rollingInterval: RollingInterval.Day).CreateLogger();
+builder.Services.AddLogging(logging => logging.AddSerilog());
+
 
 #region Scoped Services
 
