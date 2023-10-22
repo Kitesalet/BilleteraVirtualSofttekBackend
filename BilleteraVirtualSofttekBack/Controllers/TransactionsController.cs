@@ -2,6 +2,7 @@
 using BilleteraVirtualSofttekBack.Models.Entities;
 using IntegradorSofttekImanol.Infrastructure;
 using IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces;
+using BilleteraVirtualSofttekBack.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,15 +46,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("transactions")]
         public async Task<IActionResult> GetAllTransactions([FromQuery] int page = 1, [FromQuery] int units = 10)
         {
-            /*
-            #region Validations           
-            var validation = _validator.GetAllTransactionsValidator(page, units);
-            if (validation != null)
+
+            if(page < 1 || units < 1)
             {
-                return validation;
+                _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "There was an error in the pagination!");
             }
-            #endregion
-            */
 
             var transactions = await _service.GetAllTransactionsAsync(page, units);
 
@@ -73,12 +71,18 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("transactions/account/{accountId:int}")]
         public async Task<IActionResult> GetAllTransactionsByAccount(int accountId)
         {
 
-
             var transactions = await _service.GetTransactionByAccountAsync(accountId);
+
+            if(transactions == null)
+            {
+                _logger.LogInformation($"The account was not found, id = {accountId}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The account was not found!");
+            }
 
             _logger.LogInformation("All Transactions by client were retrieved!");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transactions);
@@ -100,29 +104,17 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("transaction/{id:int}")]
         public async Task<IActionResult> GetTransaction([FromRoute] int id)
         {
-            /*
-            #region Validations
-            var validation = _validator.GetTransactionValidator(id);
-            if (validation != null)
-            {
-                return validation;
-            }
-            #endregion
-            */
 
             var transaction = await _service.GetTransactionByIdAsync(id);
 
-            /*
-            var error = _validator.GetTransactionError(Transaction, id);
-            if (error != null)
+            if (transaction == null)
             {
-                return error;
+                _logger.LogInformation($"The transaction was not found, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The transaction was not found!");
             }
-            */
 
             _logger.LogInformation($"Transaction was retrieved, transaction = {transaction}.");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transaction);
@@ -148,7 +140,27 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> CreateTransaction(TransactionCreateDto dto)
         {
 
-            await _service.CreateTransactionAsync(dto);
+            if (dto.Amount <= 1)
+            {
+                _logger.LogInformation($"The amount introduced was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+
+            }
+
+            if (dto.Type != TransactionType.Transfer && dto.Type != TransactionType.Withdrawal && dto.Type != TransactionType.Deposit)
+            {
+                _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
+
+            }
+
+            var flag = await _service.CreateTransactionAsync(dto);
+
+            if(flag == false)
+            {
+                _logger.LogInformation($"There was a problem with the transaction creation, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There is a problem with the transaction creation, check if the client and the accounts were valid!");
+            }
 
             _logger.LogInformation($"Transaction was created, dto = {dto}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.Created, "The Transaction was created!");
@@ -177,27 +189,27 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> UpdateTransaction(int id, TransactionUpdateDto dto)
         {
 
-            /*
-            #region Validations
-            var validation = await _validator.UpdateTransactionValidator(id, dto);
-            if (validation != null)
+            if (dto.Amount <= 1)
             {
-                return validation;
+                _logger.LogInformation($"The amount introduced was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+
             }
-            #endregion
-            */
 
-            var result = await _service.UpdateTransaction(dto);
-
-            /*
-            #region Errors
-            var error = _validator.UpdateError(result, dto);
-            if (error != null)
+            if (dto.Type != TransactionType.Transfer && dto.Type != TransactionType.Withdrawal && dto.Type != TransactionType.Deposit)
             {
-                return error;
+                _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
+
             }
-            #endregion
-            */
+
+            var flag = await _service.UpdateTransaction(dto);
+
+            if (flag == false)
+            {
+                _logger.LogInformation($"There was a problem with the transaction update, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There is a problem with the transaction update, check if the client and the accounts were valid!");
+            }
 
             _logger.LogInformation($"Transaction was properly updated, dto = {dto}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Transaction was properly updated!");
@@ -224,27 +236,21 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("transaction/{id:int}")]
         public async Task<IActionResult> DeleteTransaction([FromRoute] int id)
         {
-            /*
-            #region Validations
-            var validation = _validator.DeleteGetUserValidator(id);
-            if (validation != null)
-            {
-                return validation;
-            }
-            #endregion
-            */
 
-            var result = await _service.DeleteTransactionAsync(id);
-
-            /*
-            #region Errors
-            var error = _validator.DeleteGetUserValidator(id, result);
-            if (error != null)
+            if(id <= 0)
             {
-                return error;
+                _logger.LogInformation($"The transaction id was invalid, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction id is invalid!");
             }
-            #endregion
-            */
+
+
+            var transaction = await _service.DeleteTransactionAsync(id);
+
+            if (transaction == null)
+            {
+                _logger.LogInformation($"The transaction was not found, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The transaction was not found!");
+            }
 
             _logger.LogInformation($"Transaction was deleted, id = {id}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "The Transaction was deleted!");

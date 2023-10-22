@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.Base
+namespace BilleteraVirtualSofttekBack.Controllers.ApiHelper
 {
     public class BaseApi : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace Data.Base
         public BaseApi(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient;
-        } 
+        }
 
         public async Task<IActionResult> PostToApi(string controllerName, object model, string token = "")
         {
@@ -33,7 +33,7 @@ namespace Data.Base
                 //removes first bearer format
                 token = token.Substring("Bearer ".Length).Trim();
                 //Adds token to client
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer",token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
             }
 

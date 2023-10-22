@@ -41,8 +41,6 @@ namespace BilleteraVirtualSofttekBack.Services
 
                 transaction.CreatedDate = DateTime.Now;
 
-
-
                 await _unitOfWork.Complete();
 
                 return true;
@@ -83,6 +81,13 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int clientId)
         {
+            var client = _unitOfWork.ClientRepository.GetByIdAsync(clientId);
+
+            if(client == null)
+            {
+                return null;   
+            }
+
             var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(clientId);
 
             var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
