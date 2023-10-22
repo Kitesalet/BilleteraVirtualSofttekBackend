@@ -118,19 +118,19 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (String.IsNullOrEmpty(dto.Email))
             {
                 _logger.LogInformation($"The email was invalid, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The email is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The email entered is invalid!");
             }
 
             if (String.IsNullOrEmpty(dto.Name))
             {
                 _logger.LogInformation($"The name was invalid, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The name is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The name entered is invalid!");
             }
 
             if (String.IsNullOrEmpty(dto.Password))
             {
                 _logger.LogInformation($"The password was invalid, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The password is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered password is invalid!");
             }
 
             var flag = await _service.CreateClientAsync(dto);
@@ -138,7 +138,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogInformation($"There was a problem in the creation of the client, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email may be in use.");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email is in use.");
             }
 
             _logger.LogInformation($"Client was created, Email = {dto.Email}");
