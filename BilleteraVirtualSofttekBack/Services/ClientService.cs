@@ -92,7 +92,7 @@ namespace IntegradorSofttekImanol.Services
         }
 
         /// <inheritdoc/>
-        public async Task<ClientGetDto> GetClientByIdAsync(int id)
+        public async Task<ClientGetDto?> GetClientByIdAsync(int id)
         {
             
             var client = await _unitOfWork.ClientRepository.GetByIdAsync(id);
