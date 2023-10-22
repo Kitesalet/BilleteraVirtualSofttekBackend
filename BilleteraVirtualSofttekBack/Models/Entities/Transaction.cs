@@ -12,17 +12,16 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
             [Required]
             public TransactionType Type { get; set; }
 
-            [Required]
             public string Concept { get; set; }
 
 
 
             [ForeignKey("Client")]
             public int ClientId { get; set; }
-            public int SourceAccountId { get; set; }
-            public int DestinationAccountId { get; set; }
-            public virtual BaseAccount SourceAccount { get; set; }
-            public virtual BaseAccount DestinationAccount { get; set; }
+            public int? SourceAccountId { get; set; }
+            public int? DestinationAccountId { get; set; }
+            public virtual BaseAccount? SourceAccount { get; set; }
+            public virtual BaseAccount? DestinationAccount { get; set; }
             public virtual Client Client { get;set; }
 
 

@@ -43,15 +43,11 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("clients")]
         public async Task<IActionResult> GetAllClients([FromQuery] int page = 1, [FromQuery] int units = 10)
         {
-            /*
-            #region Validations           
-            var validation = _validator.GetAllClientsValidator(page, units);
-            if (validation != null)
+            if (page < 1 || units < 1)
             {
-                return validation;
+                _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
             }
-            #endregion
-            */
 
             var clients = await _service.GetAllClientsAsync(page, units);
 
@@ -79,25 +75,19 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("client/{id:int}")]
         public async Task<IActionResult> GetClient([FromRoute] int id)
         {
-            /*
-            #region Validations
-            var validation = _validator.GetClientValidator(id);
-            if (validation != null)
+            if (id <= 0)
             {
-                return validation;
+                _logger.LogInformation($"The client id was invalid, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
             }
-            #endregion
-            */
 
             var client = await _service.GetClientByIdAsync(id);
 
-            /*
-            var error = _validator.GetClientError(client, id);
-            if (error != null)
+            if (client == null)
             {
-                return error;
+                _logger.LogInformation($"The client was not found, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The client was not found!");
             }
-            */
 
             _logger.LogInformation($"Client was retrieved, id = {id}.");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, client);
@@ -127,16 +117,31 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> CreateClient(ClientCreateDto dto)
         {
 
-            //It creates the client
+            if (String.IsNullOrEmpty(dto.Email))
+            {
+                _logger.LogInformation($"The email was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The email is invalid!");
+            }
+
+            if (String.IsNullOrEmpty(dto.Name))
+            {
+                _logger.LogInformation($"The name was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The name is invalid!");
+            }
+
+            if (String.IsNullOrEmpty(dto.Password))
+            {
+                _logger.LogInformation($"The password was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The password is invalid!");
+            }
+
             var flag = await _service.CreateClientAsync(dto);
 
-            /*
-            var validationError = _validator.CreateUserValidator(dto, flag);
-            if (validationError != null)
+            if(flag == false)
             {
-                return validationError;
+                _logger.LogInformation($"There was a problem in the creation of the client, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email may be in use.");
             }
-            */
 
             _logger.LogInformation($"Client was created, Email = {dto.Email}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.Created, "The client was created!");
@@ -165,27 +170,31 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> UpdateClient(int id, ClientUpdateDto dto)
         {
 
-            /*
-            #region Validations
-            var validation = await _validator.UpdateClientValidator(id, dto);
-            if (validation != null)
+            if (String.IsNullOrEmpty(dto.Email))
             {
-                return validation;
+                _logger.LogInformation($"The email was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The email is invalid!");
             }
-            #endregion
-            */
 
-            var result = await _service.UpdateClient(dto);
-
-            /*
-            #region Errors
-            var error = _validator.UpdateError(result, dto);
-            if (error != null)
+            if (String.IsNullOrEmpty(dto.Name))
             {
-                return error;
+                _logger.LogInformation($"The name was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The name is invalid!");
             }
-            #endregion
-            */
+
+            if (String.IsNullOrEmpty(dto.Password))
+            {
+                _logger.LogInformation($"The password was invalid, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The password is invalid!");
+            }
+
+            var flag = await _service.UpdateClient(dto);
+
+            if (flag == false)
+            {
+                _logger.LogInformation($"There was a problem in the update of the client, dto = {dto}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt updated!");
+            }
 
             _logger.LogInformation($"Client was properly updated, id = {id}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Client was properly updated!");
@@ -212,27 +221,20 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("client/{id:int}")]
         public async Task<IActionResult> DeleteClient([FromRoute] int id)
         {
-            /*
-            #region Validations
-            var validation = _validator.DeleteGetUserValidator(id);
-            if (validation != null)
-            {
-                return validation;
-            }
-            #endregion
-            */
 
-            var result = await _service.DeleteClientAsync(id);
-
-            /*
-            #region Errors
-            var error = _validator.DeleteGetUserValidator(id, result);
-            if (error != null)
+            if (id <= 0)
             {
-                return error;
+                _logger.LogInformation($"The client id was invalid, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
             }
-            #endregion
-            */
+
+            var client = await _service.DeleteClientAsync(id);
+
+            if (client == null)
+            {
+                _logger.LogInformation($"The transaction was not found, id = {id}");
+                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The transaction was not found!");
+            }
 
             _logger.LogInformation($"Client was deleted, id = {id}");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "The client was deleted!");

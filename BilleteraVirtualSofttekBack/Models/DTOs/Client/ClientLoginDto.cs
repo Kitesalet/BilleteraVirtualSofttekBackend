@@ -11,5 +11,6 @@ namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
 
         public string Token { get; set; }
 
+
     }
 }

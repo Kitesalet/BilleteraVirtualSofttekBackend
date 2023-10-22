@@ -34,6 +34,8 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<bool> CreateAccountAsync(AccountCreateDto accountDto)
         {
+            Random random = new Random();
+
             try
             {
                 var baseAccount = _accountFactory.CreateAccount(accountDto);
@@ -50,11 +52,42 @@ namespace BilleteraVirtualSofttekBack.Services
                     }
                     else
                     {
+
+                        int randomAccountNumber = 0;
+                        int randomCBUNumber = 0;
+
                         FiduciaryAccount fiduciary = (FiduciaryAccount)baseAccount;
                         fiduciary.CreatedDate = DateTime.Now;
-                        fiduciary.Alias = $"{new Random().Next(1, 99)}";
-                        fiduciary.AccountNumber = new Random().Next(1, 999999999);
-                        fiduciary.CBU = new Random().Next(1, 999999999);
+
+                        #region database validatons
+                        var newAlias = AliasCreatorHelper.CreateAlias();
+                        while(await _unitOfWork.AccountRepository.VerifyExistingAlias(newAlias))
+                        {
+
+                            newAlias = AliasCreatorHelper.CreateAlias();
+
+                        }
+
+                        randomAccountNumber = random.Next(999999999);
+                        while (await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(randomAccountNumber))
+                        {
+
+                            randomAccountNumber = random.Next(999999999);
+
+                        }
+
+                        randomCBUNumber = random.Next(999999999);
+                        while (await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(randomCBUNumber))
+                        {
+
+                            randomCBUNumber = random.Next(999999999);
+
+                        }
+                        #endregion
+
+                        fiduciary.Alias = newAlias;
+                        fiduciary.AccountNumber = randomAccountNumber;
+                        fiduciary.CBU = randomCBUNumber;
                     }
 
                     await _unitOfWork.AccountRepository.AddAsync(baseAccount);
@@ -138,7 +171,7 @@ namespace BilleteraVirtualSofttekBack.Services
 
         }
 
-        public async Task<bool> DepositAsync(AccountExtractionDto transactionDTO)
+        public async Task<bool> DepositAsync(AccountDepositDto transactionDTO)
         {
 
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDTO.Id);

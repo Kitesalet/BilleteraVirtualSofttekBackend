@@ -9,7 +9,8 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
     /// </summary>
     public interface ITransactionRepository : IRepository<Transaction>
     {
-        
+
+        public Task<IEnumerable<Transaction>> GetTransactionByAccount(int accountId);
 
 
     }
