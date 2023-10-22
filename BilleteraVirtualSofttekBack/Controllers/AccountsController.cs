@@ -1,14 +1,13 @@
-﻿using BilleteraVirtualSofttekBack.Models.DTOs.Account;
+﻿using BilleteraVirtualSofttekBack.Controllers.ApiHelper;
+using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
-using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
-using Data.Base;
 using IntegradorSofttekImanol.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Security.Claims;
+
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {

@@ -3,6 +3,7 @@ using IntegradorSofttekImanol.Infrastructure;
 using IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace BilleteraVirtualSofttekBack.Controllers
