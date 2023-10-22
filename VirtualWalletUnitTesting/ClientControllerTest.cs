@@ -20,9 +20,14 @@ namespace VirtualWalletUnitTesting
 
         }
 
+        public ClientControllerTest() 
+        { 
+
+        }
+
 
         [TestMethod]
-        public async void Get_GetAllClients()
+        public async Task Get_GetAllClients()
         {
 
             //Arrange
@@ -36,8 +41,9 @@ namespace VirtualWalletUnitTesting
             };
 
             var mockRepository = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
             mockRepository.Setup(service => service.GetAllClientsAsync(1, 4)).ReturnsAsync(clients);
-            var controller = new ClientsController(mockRepository.Object, _logger);
+            var controller = new ClientsController(mockRepository.Object, mockLogger.Object);
 
             //Act
 
