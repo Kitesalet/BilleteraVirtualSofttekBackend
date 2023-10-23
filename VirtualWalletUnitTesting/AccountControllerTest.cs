@@ -629,16 +629,15 @@ namespace VirtualWalletUnitTesting
 
         
         [TestMethod]
-        public async Task DepositAsync_AccountNotFound_ReturnError()
+        public async Task ExtractionAsync_AccountNotFound_ReturnError()
         {
 
             //Arrange
 
-            AccountDepositDto deposit = new AccountDepositDto()
+            AccountExtractDto extract = new AccountExtractDto()
             {
                 Id = 1,
-                Amount = 1000m,
-                ClientId = 2
+                Amount = 1000m
             };
 
             AccountGetDto account = null;
@@ -647,12 +646,12 @@ namespace VirtualWalletUnitTesting
             var mockFactory = new Mock<IHttpClientFactory>();
             var mockLogger = new Mock<ILogger<AccountsController>>();
 
-            mockService.Setup(service => service.GetAccountByIdAsync(2)).ReturnsAsync(account);
+            mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
             var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
 
             //Act
 
-            var result = await controller.DepositAsync(1, deposit);
+            var result = await controller.ExtractionAsync(1, extract);
             var objectResult = result as ObjectResult;
             var response = objectResult.Value as ApiErrorResponse;
             var responseResult = response.Errors[0].Error as string;
@@ -664,18 +663,17 @@ namespace VirtualWalletUnitTesting
         }
 
 
-        /*
+        
         [TestMethod]
-        public async Task DepositAsync_InvalidDeposit_ReturnError()
+        public async Task ExtractAsync_InvalidDeposit_ReturnError()
         {
 
             //Arrange
 
-            AccountDepositDto deposit = new AccountDepositDto()
+            AccountExtractDto extract = new AccountExtractDto()
             {
                 Id = 1,
-                Amount = 1000m,
-                ClientId = 2
+                Amount = 1000m
             };
 
             AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2 };
@@ -685,7 +683,7 @@ namespace VirtualWalletUnitTesting
             var mockFactory = new Mock<IHttpClientFactory>();
             var mockLogger = new Mock<ILogger<AccountsController>>();
 
-            mockService.Setup(service => service.DepositAsync(deposit)).ReturnsAsync(false);
+            mockService.Setup(service => service.ExtractAsync(extract)).ReturnsAsync(false);
             mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
             var mockHttpContext = new Mock<HttpContext>();
             var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -701,7 +699,7 @@ namespace VirtualWalletUnitTesting
 
             //Act
 
-            var result = await controller.DepositAsync(1, deposit);
+            var result = await controller.ExtractionAsync(1, extract);
             var objectResult = result as ObjectResult;
             var response = objectResult.Value as ApiErrorResponse;
             var responseResult = response.Errors[0].Error as string;
@@ -712,17 +710,17 @@ namespace VirtualWalletUnitTesting
 
         }
 
+        
         [TestMethod]
-        public async Task DepositAsync_TokenMismatch_ReturnError()
+        public async Task ExtractAsync_TokenMismatch_ReturnError()
         {
 
             //Arrange
 
-            AccountDepositDto deposit = new AccountDepositDto()
+            AccountExtractDto extract = new AccountExtractDto()
             {
                 Id = 1,
-                Amount = 1000m,
-                ClientId = 2
+                Amount = 1000m
             };
 
             AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2 };
@@ -732,7 +730,7 @@ namespace VirtualWalletUnitTesting
             var mockFactory = new Mock<IHttpClientFactory>();
             var mockLogger = new Mock<ILogger<AccountsController>>();
 
-            mockService.Setup(service => service.DepositAsync(deposit)).ReturnsAsync(false);
+            mockService.Setup(service => service.ExtractAsync(extract)).ReturnsAsync(false);
             mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
             var mockHttpContext = new Mock<HttpContext>();
             var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -748,28 +746,27 @@ namespace VirtualWalletUnitTesting
 
             //Act
 
-            var result = await controller.DepositAsync(1, deposit);
+            var result = await controller.ExtractionAsync(1, extract);
             var objectResult = result as ObjectResult;
             var response = objectResult.Value as ApiErrorResponse;
             var responseResult = response.Errors[0].Error as string;
 
             ///Assert
 
-            Assert.AreEqual("There was a problem with the deposit!", responseResult);
+            Assert.AreEqual("There was a problem with the extraction!", responseResult);
 
         }
 
         [TestMethod]
-        public async Task DepositAsync_Valid_ReturnTransaction()
+        public async Task ExtractAsync_Valid_ReturnTransaction()
         {
 
             //Arrange
 
-            AccountDepositDto deposit = new AccountDepositDto()
+            AccountExtractDto extract = new AccountExtractDto()
             {
                 Id = 1,
-                Amount = 1000m,
-                ClientId = 2
+                Amount = 1000m
             };
 
             AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2 };
@@ -778,7 +775,7 @@ namespace VirtualWalletUnitTesting
             var mockFactory = new Mock<IHttpClientFactory>();
             var mockLogger = new Mock<ILogger<AccountsController>>();
 
-            mockService.Setup(service => service.DepositAsync(deposit)).ReturnsAsync(true);
+            mockService.Setup(service => service.ExtractAsync(extract)).ReturnsAsync(true);
             mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
 
             //Mocking the httpContext
@@ -797,7 +794,7 @@ namespace VirtualWalletUnitTesting
 
             //Act
 
-            var result = await controller.DepositAsync(1, deposit);
+            var result = await controller.ExtractionAsync(1, extract);
             var objectResult = result as ObjectResult;
             var response = objectResult.Value as ApiSuccessResponse;
             var responseResult = response.StatusCode;
@@ -808,6 +805,6 @@ namespace VirtualWalletUnitTesting
 
         }
 
-        */
+        
     }
 }
