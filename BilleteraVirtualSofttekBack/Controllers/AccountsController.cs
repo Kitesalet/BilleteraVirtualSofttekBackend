@@ -21,8 +21,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         private readonly ILogger<AccountsController> _logger;
         private readonly IHttpClientFactory _httpClient;
 
-        //private readonly IAccountValidator _validator;
-
         /// <summary>
         /// Initializes an instance of AccountController using dependency injection with its parameters.
         /// </summary>
@@ -45,11 +43,18 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("accounts/{id:int}")]
         public async Task<IActionResult> GetAllAccountsByClient(int id)
         {
 
+            if(id < 1)
+            {
+                _logger.LogInformation($"Client id was invalid, id = {id}!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client id was invalid");
+            }
+        
             var accounts = await _service.GetAllAccountsByClientAsync(id);
 
             _logger.LogInformation("All accounts were retrieved!");
@@ -79,7 +84,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(id <= 0)
             {
                 _logger.LogError($"Invalid id introduced, id = {id}");
-                ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, $"The id introduced was invalid, Id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The id introduced was invalid");
             }
 
             var account = await _service.GetAccountByIdAsync(id);
@@ -87,7 +92,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(account == null)
             {
                 _logger.LogError($"The account wasnt found!, id = {id}");
-                ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, $"The account introduced wasn't found!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, $"The account introduced wasn't found!");
             }
 
             _logger.LogInformation($"Account was retrieved, id = {id}.");
@@ -118,10 +123,10 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> CreateAccount(AccountCreateDto dto)
         {
 
-            if(dto.Type != AccountType.Crypto && dto.Type != AccountType.Dollar && dto.Type == AccountType.Peso)
+            if(dto.Type != AccountType.Crypto && dto.Type != AccountType.Dollar && dto.Type != AccountType.Peso)
             {
                 _logger.LogError($"The account type was incorrect!, dto = {dto}");
-                ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, $"The account type submitted was incorrect!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, $"The account type submitted was incorrect!");
             }
 
             var flag = await _service.CreateAccountAsync(dto);
@@ -129,7 +134,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogError($"There was a problem with the creation of the account, dto = {dto}");
-                ResponseFactory.CreateErrorResponse(HttpStatusCode.Conflict, $"The account couldn't be created!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.Conflict, $"The account couldn't be created!");
             }
 
             _logger.LogInformation($"Account was created, dto = ${dto}");
@@ -213,7 +218,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(id <= 0)
             {
                 _logger.LogInformation($"The id introduced was invalid, id = {id}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The id introduces was invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The id introduced was invalid!");
             }
 
             var result = await _service.DeleteAccountAsync(id);
@@ -263,7 +268,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (acc == null)
             {
                 _logger.LogInformation($"The selected account didnt exist!, dto = {depositDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");            
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");            
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
