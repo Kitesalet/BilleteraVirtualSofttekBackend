@@ -323,5 +323,214 @@ namespace VirtualWalletUnitTesting
             Assert.AreEqual("The client was created!", clientResult);
 
         }
+
+
+        [TestMethod]
+        public async Task UpdateClient_InvalidEmail_ReturnsError()
+        {
+
+            //Arrange
+
+            var client = new ClientUpdateDto()
+            {
+                Name = "Client 1",
+                Email = "",
+                Password = "password1",
+                Id = 1
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateClient(client.Id, client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var errorResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("The entered email is invalid!", errorResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateClient_InvalidName_ReturnsError()
+        {
+
+            //Arrange
+
+            var client = new ClientUpdateDto()
+            {
+                Name = "",
+                Email = "client@example.com",
+                Password = "password1",
+                Id = 1
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateClient(client.Id, client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var errorResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("The entered name is invalid!", errorResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateClient_InvalidPassword_ReturnsError()
+        {
+
+            //Arrange
+
+            var client = new ClientUpdateDto()
+            {
+                Name = "Client 1",
+                Email = "client@example.com",
+                Password = "",
+                Id = 1
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateClient(client.Id, client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var errorResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("The entered password is invalid!", errorResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateClient_EmailExisted_ReturnsError()
+        {
+
+            //Arrange
+
+            var client = new ClientUpdateDto()
+            {
+                Name = "Client 1",
+                Email = "client@example.com",
+                Password = "password1",
+                Id = 1
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateClient(client.Id, client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var errorResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("There was a problem, the client wasnt created! Email is in use.", errorResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateClient_Valid_ReturnsAccount()
+        {
+
+            //Arrange
+
+            var client = new ClientUpdateDto()
+            {
+                Name = "Client 1",
+                Email = "client@example.com",
+                Password = "password1",
+                Id = 1
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(true);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateClient(client.Id, client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiSuccessResponse;
+            var clientResult = apiResponse.Data as string;
+
+            //Assert
+
+            Assert.AreEqual("Client was properly updated!", clientResult);
+
+        }
+
+        [TestMethod]
+        public async Task DeleteClient_Valid_ReturnsAccount()
+        {
+
+            //Arrange
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.DeleteClientAsync(1)).ReturnsAsync(true);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.DeleteClient(1);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiSuccessResponse;
+            var clientResult = apiResponse.Data as string;
+
+            //Assert
+
+            Assert.AreEqual("The client was deleted!", clientResult);
+
+        }
+
+        [TestMethod]
+        public async Task DeleteClient_InvalidId_ReturnsError()
+        {
+
+            //Arrange
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.DeleteClientAsync(0)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.DeleteClient(0);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var clientResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("The client id is invalid!", clientResult);
+
+        }
     }
 }
