@@ -43,7 +43,7 @@ namespace VirtualWalletUnitTesting
 
             //Assert
 
-            Assert.AreEqual(clients, list);
+            CollectionAssert.AreEqual(clients, list);
 
         }
 
