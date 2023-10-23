@@ -14,7 +14,6 @@ namespace VirtualWalletUnitTesting
     public class ClientControllerTest
     {
 
-
         [TestMethod]
         public async Task GetAllClients_Valid_ReturnsTotal()
         {
