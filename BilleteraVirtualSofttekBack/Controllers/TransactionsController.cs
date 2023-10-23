@@ -17,7 +17,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         private readonly ITransactionService _service;
         private readonly ILogger<TransactionsController> _logger;
-        //private readonly ITransactionValidator _validator;
 
         /// <summary>
         /// Initializes an instance of TransactionController using dependency injection with its parameters.
@@ -165,6 +164,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
+            if(dto.SourceAccountId == dto.DestinationAccountId)
+            {
+                _logger.LogInformation($"The transaction source and origin accounts were the same, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction accounts cant be the same!");
+            }
+
             var flag = await _service.CreateTransactionAsync(dto);
 
             if(flag == false)
@@ -211,7 +216,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
             {
                 _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
+            }
 
+            if (dto.SourceAccountId == dto.DestinationAccountId)
+            {
+                _logger.LogInformation($"The transaction source and origin accounts were the same, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction accounts cant be the same!");
             }
 
             var flag = await _service.UpdateTransaction(dto);
@@ -257,7 +267,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var transaction = await _service.DeleteTransactionAsync(id);
 
-            if (transaction == null)
+            if (transaction == false)
             {
                 _logger.LogInformation($"The transaction was not found, id = {id}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The transaction was not found!");
