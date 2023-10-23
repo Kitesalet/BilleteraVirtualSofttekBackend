@@ -1,6 +1,7 @@
 ﻿using BilleteraVirtualSofttekBack.Controllers;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Client;
+using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Infrastructure;
@@ -805,6 +806,318 @@ namespace VirtualWalletUnitTesting
 
         }
 
-        
+        [TestMethod]
+        public async Task TransferAsync_InvalidAmount_ReturnError()
+        {
+
+            //Arrange
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 2,
+                Concept = "Concept",
+                Amount = 0m
+
+            };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.TransferAsync(transfer)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("Amount must be greater than 1", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task TransferAsync_SameAccountIds_ReturnError()
+        {
+
+            //Arrange
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 1,
+                Concept = "Concept",
+                Amount = 1000m
+
+            };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.TransferAsync(transfer)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("The accounts cant be the same!", responseResult);
+
+        }
+
+
+        [TestMethod]
+        public async Task TransferAsync_AccountNotFound_ReturnError()
+        {
+
+            //Arrange
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 2,
+                Concept = "Concept",
+                Amount = 1000m
+
+            };
+
+            AccountGetDto account = null;
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("The selected origin account doesnt exist!", responseResult);
+
+        }
+
+
+
+        [TestMethod]
+        public async Task TransferAsync_TokenMismatch_ReturnError()
+        {
+
+            //Arrange
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 2,
+                Concept = "Concept",
+                Amount = 1000m
+
+            };
+
+            AccountGetDto account = new AccountGetDto { Id = 2, ClientId = 2 };
+
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.TransferAsync(transfer)).ReturnsAsync(false);
+            mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+               new Claim("NameIdentifier", "1"),
+            }));
+            mockHttpContext.Setup(context => context.User).Returns(mockUser);
+
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("The user in the token doesnt match with the account user!", responseResult);
+
+        }
+
+
+        [TestMethod]
+        public async Task TransferAsync_NotEnoughFunds_ReturnError()
+        {
+
+            //Arrange
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 2,
+                Concept = "Concept",
+                Amount = 1000m
+
+            };
+
+            AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2, Balance = 500 };
+
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.TransferAsync(transfer)).ReturnsAsync(false);
+            mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+               new Claim("NameIdentifier", "2"),
+            }));
+            mockHttpContext.Setup(context => context.User).Returns(mockUser);
+
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("There arent enough funds to make this transaction!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task ExtractAsync_GeneralInvalid_ReturnTransaction()
+        {
+
+            //Arrange
+
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 2,
+                Concept = "Concept",
+                Amount = 1000m
+
+            };
+
+            AccountGetDto account = new AccountGetDto { Id = 2, ClientId = 1 , Balance = 1500m};
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.TransferAsync(transfer)).ReturnsAsync(false);
+            mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
+
+            //Mocking the httpContext
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+               new Claim("NameIdentifier", "1"),
+            }));
+            mockHttpContext.Setup(context => context.User).Returns(mockUser);
+            mockHttpContext.Setup(context => context.Request.Headers["Authorization"]).Returns("xxxxxx");
+
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("There was a problem with the transfer!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task TransferAsync_Valid_ReturnTransaction()
+        {
+
+            //Arrange
+
+            TransferDto transfer = new TransferDto()
+            {
+                OriginAccountId = 1,
+                DestinationAccountId = 2,
+                Concept = "Concept",
+                Amount = 1000m
+
+            };
+
+            AccountGetDto account = new AccountGetDto { Id = 2, ClientId = 2, Balance = 20000 };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.TransferAsync(transfer)).ReturnsAsync(true);
+            mockService.Setup(service => service.GetAccountByIdAsync(1)).ReturnsAsync(account);
+
+            //Mocking the httpContext
+            var mockHttpContext = new Mock<HttpContext>();
+            var mockUser = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+               new Claim("NameIdentifier", "2"),
+            }));
+            mockHttpContext.Setup(context => context.User).Returns(mockUser);
+            mockHttpContext.Setup(context => context.Request.Headers["Authorization"]).Returns("xxxxxx");
+
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            controller.ControllerContext.HttpContext = mockHttpContext.Object;
+
+
+            //Act
+
+            var result = await controller.TransferAsync(transfer);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiSuccessResponse;
+            var responseResult = response.StatusCode;
+
+            ///Assert
+
+            Assert.AreEqual(HttpStatusCode.OK, responseResult);
+
+        }
+
+
     }
 }

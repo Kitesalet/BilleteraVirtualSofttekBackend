@@ -420,6 +420,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
+           
+
             if (clientId != acc.ClientId)
             {
                 _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {transferDto}");
@@ -427,7 +429,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
-            if (acc.Balance <= transferDto.Amount)
+            if (acc.Balance < transferDto.Amount)
             {
                 _logger.LogInformation($"There werent enough funds to make the perceived transaction, dto = {transferDto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There arent enough funds to make this transaction!");
