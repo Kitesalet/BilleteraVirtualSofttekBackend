@@ -213,7 +213,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(id <= 0)
             {
                 _logger.LogInformation($"The id introduced was invalid, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The id introduces was invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The id introduces was invalid!");
             }
 
             var result = await _service.DeleteAccountAsync(id);
@@ -222,7 +222,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             {
 
                 _logger.LogInformation($"Account was not deleted or not found, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The account submited was not found!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account submited was not found!");
 
             }
 
@@ -248,14 +248,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (depositDto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {depositDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
 
             }
 
             if(depositDto.Id != id)
             {
                 _logger.LogInformation($"The ids introduced didnt match, id = {id}, dto = {depositDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Ids dont match!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Ids dont match!");
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
@@ -271,7 +271,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (clientId != acc.ClientId)
             {
                 _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {depositDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
             }
 
             var flag = await _service.DepositAsync(depositDto);
@@ -279,7 +279,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogInformation($"There was a problem with the deposit, dto = {depositDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem with the deposit!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem with the deposit!");
             }
 
             //Add transaction
@@ -324,14 +324,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (extractionDto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {extractionDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
 
             }
 
             if (extractionDto.Id != id)
             {
                 _logger.LogInformation($"The ids introduced didnt match, id = {id}, dto = {extractionDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Ids dont match!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Ids dont match!");
             }
 
             var acc = await _service.GetAccountByIdAsync(id);
@@ -339,7 +339,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (acc == null)
             {
                 _logger.LogInformation($"The selected account didnt exist!, dto = {extractionDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
@@ -347,7 +347,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (clientId != acc.ClientId)
             {
                 _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {extractionDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
             }
 
             var flag = await _service.ExtractAsync(extractionDto);
@@ -355,7 +355,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem with the extraction, dto = {extractionDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem with the extraction!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem with the extraction!");
             }
 
             //Add Transaction
@@ -394,14 +394,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (transferDto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {transferDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
 
             }
 
             if (transferDto.DestinationAccountId == transferDto.OriginAccountId)
             {
                 _logger.LogInformation($"The accounts introduced as origin and destination were the same, dto = {transferDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The accounts cant be the same!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The accounts cant be the same!");
 
             }
 
@@ -410,7 +410,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (acc == null)
             {
                 _logger.LogInformation($"The account selected as origin didnt exist in the database, dto = {transferDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The selected origin account doesnt exist!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The selected origin account doesnt exist!");
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
@@ -418,14 +418,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (clientId != acc.ClientId)
             {
                 _logger.LogInformation($"The user in the token doesnt match with the account client id!, dto = {transferDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The user in the token doesnt match with the account user!");
 
             }
 
             if (acc.Balance <= transferDto.Amount)
             {
                 _logger.LogInformation($"There werent enough funds to make the perceived transaction, dto = {transferDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There arent enough funds to make this transaction!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There arent enough funds to make this transaction!");
 
             }
 
@@ -434,7 +434,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem with the transfer, dto = {transferDto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem with the transfer!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem with the transfer!");
             }
 
             //Add Transaction

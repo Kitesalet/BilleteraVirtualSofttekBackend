@@ -47,7 +47,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (page < 1 || units < 1)
             {
                 _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
             }
 
             var clients = await _service.GetAllClientsAsync(page, units);
@@ -79,7 +79,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (id <= 0)
             {
                 _logger.LogInformation($"The client id was invalid, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
             }
 
             var client = await _service.GetClientByIdAsync(id);
@@ -87,7 +87,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (client == null)
             {
                 _logger.LogInformation($"The client was not found, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The client was not found!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The client was not found!");
             }
 
             _logger.LogInformation($"Client was retrieved, id = {id}.");
@@ -103,15 +103,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 201 Created response if client creation is successful.
         /// |
         /// 400 Bad Request response if client creation fails.
-        /// |
-        /// 409 Conflict if client was found in the database.
         /// </returns>
 
         [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("client/register")]
@@ -121,19 +118,19 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (String.IsNullOrEmpty(dto.Email))
             {
                 _logger.LogInformation($"The email was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The email is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The email entered is invalid!");
             }
 
             if (String.IsNullOrEmpty(dto.Name))
             {
                 _logger.LogInformation($"The name was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The name is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The name entered is invalid!");
             }
 
             if (String.IsNullOrEmpty(dto.Password))
             {
                 _logger.LogInformation($"The password was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The password is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered password is invalid!");
             }
 
             var flag = await _service.CreateClientAsync(dto);
@@ -141,7 +138,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogInformation($"There was a problem in the creation of the client, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email may be in use.");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email is in use.");
             }
 
             _logger.LogInformation($"Client was created, Email = {dto.Email}");
@@ -173,20 +170,20 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             if (String.IsNullOrEmpty(dto.Email))
             {
-                _logger.LogInformation($"The email was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The email is invalid!");
+                _logger.LogInformation($"The entered email was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered email is invalid!");
             }
 
             if (String.IsNullOrEmpty(dto.Name))
             {
-                _logger.LogInformation($"The name was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The name is invalid!");
+                _logger.LogInformation($"The entered name was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered name is invalid!");
             }
 
             if (String.IsNullOrEmpty(dto.Password))
             {
-                _logger.LogInformation($"The password was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The password is invalid!");
+                _logger.LogInformation($"The entered password was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered password is invalid!");
             }
 
             var flag = await _service.UpdateClient(dto);
@@ -194,7 +191,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem in the update of the client, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt updated!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email is in use.");
             }
 
             _logger.LogInformation($"Client was properly updated, id = {id}");
@@ -226,15 +223,15 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (id <= 0)
             {
                 _logger.LogInformation($"The client id was invalid, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
             }
 
             var client = await _service.DeleteClientAsync(id);
 
             if (client == null)
             {
-                _logger.LogInformation($"The transaction was not found, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The transaction was not found!");
+                _logger.LogInformation($"The client was not found, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The client was not found!");
             }
 
             _logger.LogInformation($"Client was deleted, id = {id}");

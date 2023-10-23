@@ -50,7 +50,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(page < 1 || units < 1)
             {
                 _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
             }
 
             var transactions = await _service.GetAllTransactionsAsync(page, units);
@@ -79,7 +79,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (accountId <= 0)
             {
                 _logger.LogInformation($"The account id was invalid, id = {accountId}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
             }
 
             var transactions = await _service.GetTransactionByAccountAsync(accountId);
@@ -87,7 +87,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(transactions == null)
             {
                 _logger.LogInformation($"The account was not found, id = {accountId}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The account was not found!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account was not found!");
             }
 
             _logger.LogInformation("All Transactions by client were retrieved!");
@@ -116,7 +116,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (id <= 0)
             {
                 _logger.LogInformation($"The transaction id was invalid, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction id is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction id is invalid!");
             }
 
             var transaction = await _service.GetTransactionByIdAsync(id);
@@ -124,7 +124,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (transaction == null)
             {
                 _logger.LogInformation($"The transaction was not found, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The transaction was not found!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The transaction was not found!");
             }
 
             _logger.LogInformation($"Transaction was retrieved, transaction = {transaction}.");
@@ -154,14 +154,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (dto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
 
             }
 
             if (dto.Type != TransactionType.Transfer && dto.Type != TransactionType.Withdrawal && dto.Type != TransactionType.Deposit)
             {
                 _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
 
             }
 
@@ -170,7 +170,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogInformation($"There was a problem with the transaction creation, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There is a problem with the transaction creation, check if the client and the accounts were valid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There is a problem with the transaction creation, check if the client and the accounts were valid!");
             }
 
             _logger.LogInformation($"Transaction was created, dto = {dto}");
@@ -203,14 +203,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (dto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
 
             }
 
             if (dto.Type != TransactionType.Transfer && dto.Type != TransactionType.Withdrawal && dto.Type != TransactionType.Deposit)
             {
                 _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
 
             }
 
@@ -219,7 +219,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem with the transaction update, dto = {dto}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "There is a problem with the transaction update, check if the client and the accounts were valid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There is a problem with the transaction update, check if the client and the accounts were valid!");
             }
 
             _logger.LogInformation($"Transaction was properly updated, dto = {dto}");
@@ -251,7 +251,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(id <= 0)
             {
                 _logger.LogInformation($"The transaction id was invalid, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.BadRequest, "The transaction id is invalid!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction id is invalid!");
             }
 
 
@@ -260,7 +260,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (transaction == null)
             {
                 _logger.LogInformation($"The transaction was not found, id = {id}");
-                return ResponseFactory.CreateSuccessResponse(HttpStatusCode.NotFound, "The transaction was not found!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The transaction was not found!");
             }
 
             _logger.LogInformation($"Transaction was deleted, id = {id}");
