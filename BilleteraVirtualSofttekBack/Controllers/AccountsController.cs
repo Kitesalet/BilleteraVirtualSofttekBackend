@@ -250,6 +250,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         public async Task<IActionResult> DepositAsync(int id, AccountDepositDto depositDto)
         {
+           
+
             if (depositDto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {depositDto}");
@@ -403,6 +405,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         public async Task<IActionResult> TransferAsync(TransferDto transferDto)
         {
+            if(transferDto.DestinationAccountId < 1 || transferDto.DestinationAccountId < 1)
+            {
+                _logger.LogInformation($"One of the accounts introduced was invalid, dto = {transferDto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "One or both of the accounts introduced was invalid or it doesnt exist!");
+            }
+
             if (transferDto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {transferDto}");
