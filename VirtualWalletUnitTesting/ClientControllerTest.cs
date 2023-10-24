@@ -22,10 +22,10 @@ namespace VirtualWalletUnitTesting
 
             var clients = new List<ClientGetDto>
             {
-                new ClientGetDto { Name = "Client 1", Email = "client1@example.com", Password = "password1", Id = 1 },
-                new ClientGetDto { Name = "Client 2", Email = "client2@example.com", Password = "password2", Id = 2 },
-                new ClientGetDto { Name = "Client 3", Email = "client3@example.com", Password = "password3", Id = 3 },
-                new ClientGetDto { Name = "Client 4", Email = "client4@example.com", Password = "password4", Id = 4 }
+                new ClientGetDto { Name = "Client 1", Email = "client1@example.com", Id = 1 },
+                new ClientGetDto { Name = "Client 2", Email = "client2@example.com", Id = 2 },
+                new ClientGetDto { Name = "Client 3", Email = "client3@example.com",  Id = 3 },
+                new ClientGetDto { Name = "Client 4", Email = "client4@example.com",  Id = 4 }
             };
 
             var mockService = new Mock<IClientService>();
@@ -54,10 +54,10 @@ namespace VirtualWalletUnitTesting
 
             var clients = new List<ClientGetDto>
             {
-                new ClientGetDto { Name = "Client 1", Email = "client1@example.com", Password = "password1", Id = 1 },
-                new ClientGetDto { Name = "Client 2", Email = "client2@example.com", Password = "password2", Id = 2 },
-                new ClientGetDto { Name = "Client 3", Email = "client3@example.com", Password = "password3", Id = 3 },
-                new ClientGetDto { Name = "Client 4", Email = "client4@example.com", Password = "password4", Id = 4 }
+                new ClientGetDto { Name = "Client 1", Email = "client1@example.com",  Id = 1 },
+                new ClientGetDto { Name = "Client 2", Email = "client2@example.com",  Id = 2 },
+                new ClientGetDto { Name = "Client 3", Email = "client3@example.com",  Id = 3 },
+                new ClientGetDto { Name = "Client 4", Email = "client4@example.com",  Id = 4 }
             };
 
             var mockService = new Mock<IClientService>();
@@ -88,7 +88,7 @@ namespace VirtualWalletUnitTesting
             {
                 Name = "Client 1",
                 Email = "client1@example.com",
-                Password = "password1",
+               
                 Id = 1
             };
 
@@ -146,7 +146,7 @@ namespace VirtualWalletUnitTesting
             {
                 Name = "Client 1",
                 Email = "client1@example.com",
-                Password = "password1",
+               
                 Id = 1
             };
 
