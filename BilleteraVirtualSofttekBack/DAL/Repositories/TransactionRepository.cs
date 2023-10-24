@@ -17,11 +17,10 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
         /// Initializes an instance of UsuarioRepository using dependency injection with its parameters.
         /// </summary>
         /// <param name="context">An AppDbContext with DI.</param>
-        public TransactionRepository(AppDbContext context, IConfiguration configuration) : base(context)
+        public TransactionRepository(AppDbContext context) : base(context)
         {
 
             _context = context;
-            _configuration = configuration;
 
         }
 
@@ -34,7 +33,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
                                                 .Where(t => (t.SourceAccountId == accountId 
                                                 || t.DestinationAccountId == accountId) 
                                                 && t.DeletedDate == null)
-                                                .OrderBy(t => t.CreatedDate)
+                                                .OrderByDescending(t => t.CreatedDate)
                                                 .ToListAsync();
 
         }

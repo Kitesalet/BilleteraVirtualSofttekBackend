@@ -4,6 +4,7 @@ using IntegradorSofttekImanol.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BilleteraVirtualSofttekBack.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231023161920_335")]
+    partial class _335
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,7 +114,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 897, DateTimeKind.Local).AddTicks(5669),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 43, DateTimeKind.Local).AddTicks(7418),
                             Email = "1@1.com",
                             Name = "random",
                             Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
@@ -120,7 +122,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 897, DateTimeKind.Local).AddTicks(5789),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 43, DateTimeKind.Local).AddTicks(7480),
                             Email = "2@2.com",
                             Name = "random",
                             Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
@@ -196,18 +198,18 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 3,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 901, DateTimeKind.Local).AddTicks(5474),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 47, DateTimeKind.Local).AddTicks(482),
                             Type = 3,
-                            UUID = new Guid("9166b17b-2620-4556-8b12-b7a2c9fb9c52")
+                            UUID = new Guid("0e58f61c-cd60-49f1-b212-457d00756849")
                         },
                         new
                         {
                             Id = 6,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 901, DateTimeKind.Local).AddTicks(5483),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 47, DateTimeKind.Local).AddTicks(486),
                             Type = 3,
-                            UUID = new Guid("f6379cbd-e1d6-41c2-8127-a75c207a17c9")
+                            UUID = new Guid("1d5cb823-f51b-4cd3-8220-c91e53771665")
                         });
                 });
 
@@ -241,10 +243,10 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 2,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 900, DateTimeKind.Local).AddTicks(5614),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 46, DateTimeKind.Local).AddTicks(1318),
                             Type = 2,
                             AccountNumber = 2,
-                            Alias = "Trial.Hamen.Ryu",
+                            Alias = "roca",
                             CBU = 234567891
                         },
                         new
@@ -252,10 +254,10 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 5,
                             Balance = 4000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 900, DateTimeKind.Local).AddTicks(5616),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 46, DateTimeKind.Local).AddTicks(1322),
                             Type = 2,
-                            AccountNumber = 56564345,
-                            Alias = "Accordion.Lupin.Extract",
+                            AccountNumber = 5,
+                            Alias = "acor",
                             CBU = 654334523
                         });
                 });
@@ -290,10 +292,10 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 1,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 899, DateTimeKind.Local).AddTicks(1928),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 44, DateTimeKind.Local).AddTicks(9984),
                             Type = 1,
-                            AccountNumber = 134567544,
-                            Alias = "Rock.Spy.Pink",
+                            AccountNumber = 1,
+                            Alias = "espada",
                             CBU = 123456789
                         },
                         new
@@ -301,10 +303,10 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 4,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 13, 25, 55, 899, DateTimeKind.Local).AddTicks(1931),
+                            CreatedDate = new DateTime(2023, 10, 23, 13, 19, 20, 44, DateTimeKind.Local).AddTicks(9988),
                             Type = 1,
-                            AccountNumber = 434567346,
-                            Alias = "Sword.Javelin.Coconut",
+                            AccountNumber = 4,
+                            Alias = "riccad",
                             CBU = 532456234
                         });
                 });

@@ -25,7 +25,7 @@ namespace IntegradorSofttekImanol.DAL.UnitOfWork
             _context = context;
             ClientRepository = new ClientRepository(context, configuration);
             AccountRepository = new AccountRepository(context);
-            TransactionRepository = new TransactionRepository(context, configuration);
+            TransactionRepository = new TransactionRepository(context);
 
         }
 

@@ -42,11 +42,6 @@ namespace IntegradorSofttekImanol.Services
                     return false;
                 }
 
-                if(await _unitOfWork.ClientRepository.VerifyExistingEmail(clientDto.Email))
-                {
-                    return false;
-                }
-
                 client.Password = EncrypterHelper.Encrypter(client.Password, _configuration["EncryptKey"] );
 
                 await _unitOfWork.ClientRepository.AddAsync(client);
@@ -110,6 +105,11 @@ namespace IntegradorSofttekImanol.Services
         public async Task<bool> UpdateClient(ClientUpdateDto clientDto)
         {
             var client = await _unitOfWork.ClientRepository.GetByIdAsync(clientDto.Id);
+
+            if(client == null)
+            {
+                return false;
+            }
 
             try
             {
