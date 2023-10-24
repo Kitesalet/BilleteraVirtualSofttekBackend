@@ -164,7 +164,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
-            if(dto.SourceAccountId == dto.DestinationAccountId)
+            if(dto.Type == TransactionType.Transfer && (dto.SourceAccountId == dto.DestinationAccountId))
             {
                 _logger.LogInformation($"The transaction source and origin accounts were the same, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction accounts cant be the same!");
