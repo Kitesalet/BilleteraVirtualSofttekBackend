@@ -191,7 +191,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem in the update of the client, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created! Email is in use.");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created!");
             }
 
             _logger.LogInformation($"Client was properly updated, id = {id}");
@@ -228,7 +228,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var client = await _service.DeleteClientAsync(id);
 
-            if (client == null)
+            if (client == false)
             {
                 _logger.LogInformation($"The client was not found, id = {id}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The client was not found!");

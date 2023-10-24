@@ -82,7 +82,9 @@ namespace IntegradorSofttekImanol.DAL.Repositories
         /// <inheritdoc/>
         public virtual async Task<T> GetByIdAsync(int id)
         {
-            return await _set.FindAsync(id);
+            var entity = _set.FirstOrDefault(e => e.Id == id && e.DeletedDate == null);
+
+            return entity;
         }
 
         /// <inheritdoc/>

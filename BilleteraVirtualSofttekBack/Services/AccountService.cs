@@ -38,6 +38,15 @@ namespace BilleteraVirtualSofttekBack.Services
 
             try
             {
+
+                var client =await _unitOfWork.ClientRepository.GetByIdAsync(accountDto.ClientId);
+
+                if(client == null)
+                {
+                    return false;
+                }
+
+
                 var baseAccount = _accountFactory.CreateAccount(accountDto);
 
                 if (baseAccount != null)
@@ -150,6 +159,7 @@ namespace BilleteraVirtualSofttekBack.Services
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountDto.AccountId);
 
             
+
             try
             {
 

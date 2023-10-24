@@ -40,7 +40,8 @@ namespace BilleteraVirtualSofttekBack.Controllers.ApiHelper
             var response = await client.PostAsJsonAsync(controllerName, model);
 
             var content = await response.Content.ReadAsStringAsync();
-            return Ok(content);
+
+            return Content(content, "application/json");
 
 
         }

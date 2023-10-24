@@ -25,8 +25,8 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                 new PesoAccount
                 {
                     Id = 1,
-                    AccountNumber = 1,
-                    Alias = "espada",
+                    AccountNumber = 134567544,
+                    Alias = "Rock.Spy.Pink",
                     Balance = 1000,
                     CBU = 123456789,
                     Type = AccountType.Peso,
@@ -35,8 +35,8 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                 }, new PesoAccount
                 {
                     Id = 4,
-                    AccountNumber = 4,
-                    Alias = "riccad",
+                    AccountNumber = 434567346,
+                    Alias = "Sword.Javelin.Coconut",
                     Balance = 2000,
                     CBU = 532456234,
                     Type = AccountType.Peso,
@@ -53,7 +53,7 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                 {
                     Id = 2,
                     AccountNumber = 2,
-                    Alias = "roca",
+                    Alias = "Trial.Hamen.Ryu",
                     Balance = 2000,
                     CBU = 234567891,
                     Type = AccountType.Dollar,
@@ -62,8 +62,8 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                 }, new DollarAccount
                 {
                     Id = 5,
-                    AccountNumber = 5,
-                    Alias = "acor",
+                    AccountNumber = 56564345,
+                    Alias = "Accordion.Lupin.Extract",
                     Balance = 4000,
                     CBU = 654334523,
                     Type = AccountType.Dollar,

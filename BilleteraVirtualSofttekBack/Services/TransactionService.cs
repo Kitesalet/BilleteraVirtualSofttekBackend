@@ -33,8 +33,19 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<bool> CreateTransactionAsync(TransactionCreateDto transactionDto)
         {
+
+            var origin = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
+            var destination = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
+
+            if(origin == null || destination == null)
+            {
+                return false;
+            }
+
+
             try
             {
+
                 var transaction = _mapper.Map<Transaction>(transactionDto);
 
                 await _unitOfWork.TransactionRepository.AddAsync(transaction);
@@ -115,6 +126,19 @@ namespace BilleteraVirtualSofttekBack.Services
         public async Task<bool> UpdateTransaction(TransactionUpdateDto transactionDto)
         {
             var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionDto.Id);
+
+            if(transaction == null)
+            {
+                return false;
+            }
+
+            var origin = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
+            var destination = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
+
+            if (origin == null || destination == null)
+            {
+                return false;
+            }
 
             try
             {

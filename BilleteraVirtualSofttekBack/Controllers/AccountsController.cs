@@ -347,6 +347,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The selected account doesnt exist!");
             }
 
+            if (extractionDto.Amount > acc.Balance)
+            {
+                _logger.LogInformation($"The amount introduced was higher than the account balance, dto = {extractionDto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "You dont have enough funds for that extraction!");
+
+            }
+
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
 
             if (clientId != acc.ClientId)
@@ -403,6 +410,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
+            if (String.IsNullOrEmpty(transferDto.Concept))
+            {
+                _logger.LogInformation($"The concept introduced was invalid, dto = {transferDto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "You have to introduce a concept");
+
+            }
+
             if (transferDto.DestinationAccountId == transferDto.OriginAccountId)
             {
                 _logger.LogInformation($"The accounts introduced as origin and destination were the same, dto = {transferDto}");
@@ -441,7 +455,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem with the transfer, dto = {transferDto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem with the transfer!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, 
+                    "There was a problem with the transfer! You can't buy Crypto with Pesos or Pesos with Crypto!");
             }
 
             //Add Transaction
@@ -460,7 +475,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var token = HttpContext.Request.Headers["Authorization"].ToString();
 
-            var transaction = baseApi.PostToApi("transaction/create", transactionCreate, token);
+            var transaction = await baseApi.PostToApi("transaction/create", transactionCreate, token);
 
 
             _logger.LogInformation($"Transaction was completed!, id = {transferDto.OriginAccountId}, transaction = {transaction}");

@@ -6,7 +6,7 @@ namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
     public abstract class FiduciaryAccount : BaseAccount
     {
 
-        [Column("account_date")]
+        [Column("account_cbu")]
         public int CBU { get; set; }
 
         [Column("account_number")]
