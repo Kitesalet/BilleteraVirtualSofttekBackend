@@ -38,7 +38,7 @@ namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
                 Extract(amount);
 
                 //Dollars to deposit
-                decimal newPesos = amount * 500;
+                decimal newPesos = amount * 400;
                 toAccount.Deposit(newPesos);
             }
 

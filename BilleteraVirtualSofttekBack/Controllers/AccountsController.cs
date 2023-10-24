@@ -463,7 +463,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             TransactionCreateDto transactionCreate = new TransactionCreateDto()
             {
-                SourceAccountId = 1,
+                SourceAccountId = transferDto.OriginAccountId,
                 DestinationAccountId = transferDto.DestinationAccountId,
                 Concept = transferDto.Concept,
                 Amount = transferDto.Amount,
