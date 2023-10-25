@@ -15,6 +15,10 @@ namespace BilleteraVirtualSofttekBack.Controllers
     [Authorize]
     [Route("api")]
     [ApiController]
+
+    /// <summary>
+    /// Generates a Controller responsible for account operations and account actions.
+    /// </summary>
     public class AccountsController : ControllerBase
     {
 
