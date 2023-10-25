@@ -5,21 +5,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
 {
+    /// <summary>
+    /// Represents a crypto account.
+    /// </summary>
     public sealed class CryptoAccount : BaseAccount
     {
+        /// <summary>
+        /// The UUID of this crypto account.
+        /// </summary>
 
         [Column("accound_uuid")]
         public Guid UUID { get; set; }
+
+        /// <inheritdoc/>
 
         public override void Deposit(decimal amount)
         {
             Balance = amount + Balance;
         }
 
+        /// <inheritdoc/>
+
         public override void Extract(decimal amount)
         {
             Balance = Balance - amount;
         }
+
+        /// <inheritdoc/>
 
         public override void Transfer(BaseAccount toAccount, decimal amount)
         {

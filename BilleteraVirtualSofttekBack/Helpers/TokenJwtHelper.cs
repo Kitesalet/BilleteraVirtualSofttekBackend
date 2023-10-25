@@ -8,11 +8,18 @@ using System.Text;
 
 namespace BilleteraVirtualSofttekBack.Helpers
 {
+    /// <summary>
+    /// Helper class for generating JWT security tokens.
+    /// </summary>
     public class TokenJwtHelper
     {
 
         private readonly JwtSettings _jwtSettings;
 
+        /// <summary>
+        /// A initializer for instantiating TokenJwtHelper classes.
+        /// </summary>
+        /// <param name="jwtSettings">A IOptions configuration file with JwtSettings data.</param>
         public TokenJwtHelper(IOptions<JwtSettings> jwtSettings)
         {
             _jwtSettings = jwtSettings.Value;

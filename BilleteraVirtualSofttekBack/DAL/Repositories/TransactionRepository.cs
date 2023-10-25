@@ -8,6 +8,10 @@ using System.Linq.Expressions;
 
 namespace BilleteraVirtualSofttekBack.DAL.Repositories
 {
+
+    /// <summary>
+    /// The interface implementation to access to transaction data.
+    /// </summary>
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
         private readonly AppDbContext _context;

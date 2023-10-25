@@ -188,6 +188,7 @@ namespace BilleteraVirtualSofttekBack.Services
 
         }
 
+        /// <inheritdoc/>
         public async Task<bool> DepositAsync(AccountDepositDto transactionDTO)
         {
 
@@ -216,6 +217,9 @@ namespace BilleteraVirtualSofttekBack.Services
            
         }
 
+
+        /// <inheritdoc/>
+
         public async Task<bool> TransferAsync(TransferDto transactionDTO)
         {
 
@@ -243,6 +247,8 @@ namespace BilleteraVirtualSofttekBack.Services
             }
         }
 
+
+        /// <inheritdoc/>
 
         public async Task<bool> ExtractAsync(AccountExtractDto transactionDTO)
         {

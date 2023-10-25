@@ -1,5 +1,9 @@
 ﻿namespace BilleteraVirtualSofttekBack.Models.HelperClasses
 {
+    /// <summary>
+    /// Contains settings for JWT.
+    /// </summary>
+
     public class JwtSettings
     {
         public string Key { get; set; }

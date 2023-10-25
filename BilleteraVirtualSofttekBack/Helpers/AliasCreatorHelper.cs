@@ -1,8 +1,15 @@
 ﻿namespace BilleteraVirtualSofttekBack.Helpers
 {
+
+    /// <summary>
+    /// A statis class that creates Aliases for the new accounts.
+    /// </summary>
     public static class AliasCreatorHelper
     {
-
+        /// <summary>
+        /// A method that creates aliases from a string array.
+        /// </summary>
+        /// <returns>Returns a three word compounded alias.</returns>
         public static string CreateAlias()
         {
             Random rng = new Random();
@@ -48,6 +55,7 @@
                     completeAlias = completeAlias + word + ".";
 
                 }
+
 
             }
 
