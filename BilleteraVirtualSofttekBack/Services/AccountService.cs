@@ -17,17 +17,19 @@ namespace BilleteraVirtualSofttekBack.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly AccountFactory _accountFactory;
+        private readonly ILogger<IAccountService> _logger;
 
         /// <summary>
         /// Initializes an instance of AccountService using dependency injection with its parameters.
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork with DI.</param>
         /// <param name="mapper">IMapper with DI.</param>
-        public AccountService(AccountFactory accountFactory, IUnitOfWork unitOfWork, IMapper mapper)
+        public AccountService(AccountFactory accountFactory, IUnitOfWork unitOfWork, IMapper mapper, ILogger<IAccountService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _accountFactory = accountFactory;
+            _logger = logger;
 
         }
 
@@ -39,7 +41,7 @@ namespace BilleteraVirtualSofttekBack.Services
             try
             {
 
-                var client =await _unitOfWork.ClientRepository.GetByIdAsync(accountDto.ClientId);
+                var client = await _unitOfWork.ClientRepository.GetByIdAsync(accountDto.ClientId);
 
                 if(client == null)
                 {
@@ -68,7 +70,7 @@ namespace BilleteraVirtualSofttekBack.Services
                         FiduciaryAccount fiduciary = (FiduciaryAccount)baseAccount;
                         fiduciary.CreatedDate = DateTime.Now;
 
-                        #region database validatons
+                        #region database validatons and creationHelpers
                         var newAlias = AliasCreatorHelper.CreateAlias();
                         while(await _unitOfWork.AccountRepository.VerifyExistingAlias(newAlias))
                         {
@@ -108,7 +110,7 @@ namespace BilleteraVirtualSofttekBack.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + " - Error");
+                _logger.LogInformation(ex.Message + " - Error");
             }
 
             return false;
@@ -158,12 +160,16 @@ namespace BilleteraVirtualSofttekBack.Services
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountDto.AccountId);
 
-            
+            if(account == null)
+            {
+                return false;
+            }
+
+
 
             try
             {
-
-                
+             
                 account.ModifiedDate = DateTime.Now;
 
                 _unitOfWork.AccountRepository.Update(account);
@@ -173,8 +179,9 @@ namespace BilleteraVirtualSofttekBack.Services
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation(ex.Message);
                 return false;
             }
             
@@ -201,8 +208,9 @@ namespace BilleteraVirtualSofttekBack.Services
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                _logger.LogInformation(ex.Message);
                 return false;
             }
            
@@ -228,8 +236,9 @@ namespace BilleteraVirtualSofttekBack.Services
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                _logger.LogInformation(ex.Message);
                 return false;
             }
         }
@@ -254,8 +263,9 @@ namespace BilleteraVirtualSofttekBack.Services
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                _logger.LogInformation(ex.Message);
                 return false;
             }
         }

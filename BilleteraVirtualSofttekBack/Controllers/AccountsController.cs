@@ -154,45 +154,69 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
 
-        
-        //[HttpPut]
-        //[Authorize]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[ProducesResponseType(StatusCodes.Status403Forbidden)]
-        //[Route("account/{id:int}")]
-        //public async Task<IActionResult> UpdateAccount(int id, AccountUpdateDto dto)
-        //{
 
-        //    /*
-        //    #region Validations
-        //    var validation = await _validator.UpdateAccountValidator(id, dto);
-        //    if (validation != null)
-        //    {
-        //        return validation;
-        //    }
-        //    #endregion
-        //    */
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [Route("account/{id:int}")]
+        public async Task<IActionResult> UpdateAccount(int id, AccountUpdateDto dto)
+        {
 
-        //    var result = await _service.UpdateAccount(dto);
+            if (dto.Type != AccountType.Crypto && dto.Type != AccountType.Dollar && dto.Type != AccountType.Peso)
+            {
+                _logger.LogError($"The account type was incorrect!, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account type submitted was incorrect!");
+            }
+            else if (dto.Type == AccountType.Crypto)
+            {
+                if (string.IsNullOrEmpty(dto.UUID))
+                {
+                    _logger.LogError($"A Crypto account needs a valid UUID, dto = {dto}");
+                    return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Crypto account needs a valid UUID!");
+                }
+                else if (dto.AccountNumber > 0 || dto.AccountId > 0 || dto.CBU > 0)
+                {
+                    _logger.LogError($"A Crypto account can't have fiduciary values, dto = {dto}");
+                    return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Crypto account can't have fiduciary values!");
+                }
+            }
+            else if (dto.Type == AccountType.Dollar || dto.Type == AccountType.Peso)
+            {
+                if (dto.AccountNumber <= 0 || dto.AccountId <= 0 || dto.CBU <= 0)
+                {
+                    _logger.LogError($"A Fiduciary account needs a valid Account number, AccountId, and CBU, dto = {dto}");
+                    return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Fiduciary account needs a valid Account number, AccountId, and CBU");
+                }
+                else if (string.IsNullOrEmpty(dto.UUID) == false)
+                {
+                    _logger.LogError($"A Fiduciary account can't have a UUID, dto = {dto}");
+                    return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Fiduciary account can't have a UUID!");
+                }
+            }
 
-        //    /*
-        //    #region Errors
-        //    var error = _validator.UpdateError(result, dto);
-        //    if (error != null)
-        //    {
-        //        return error;
-        //    }
-        //    #endregion
-        //    */
+            if (dto.Balance <= 1)
+            {
+                _logger.LogInformation($"The amount introduced was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "Amount must be greater than 1");
+            }
 
-        //    _logger.LogInformation($"Account was properly updated, id = {id}");
-        //    return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Account was properly updated!");
+            var flag = await _service.UpdateAccount(dto);
+         
+            if(flag == false)
+            {
+                _logger.LogInformation($"There was an error with UUID | ALIAS | ACCOUNTID | CBU, or account was null, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound), "There was an error with the data you introduced, Account wasn't created!");
+            }
 
-        //}
-    
+            _logger.LogInformation($"Account was properly updated, id = {id}");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Account was properly updated!");
+
+        }
+
 
         /// <summary>
         /// Deletes a account by their ID.
@@ -490,6 +514,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, $"The transaction was completed! Your account balance is {acc.Balance - transferDto.Amount}");
 
         }
+
+
 
     }
 }

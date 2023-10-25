@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BilleteraVirtualSofttekBack.Helpers;
+using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
 using BilleteraVirtualSofttekBack.Models.Entities;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
@@ -16,28 +17,30 @@ namespace BilleteraVirtualSofttekBack.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<ITransactionService> _logger;
 
         /// <summary>
         /// Initializes an instance of TransactionService using dependency injection with its parameters.
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork with DI.</param>
         /// <param name="mapper">IMapper with DI.</param>
-        public TransactionService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public TransactionService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, ILogger<ITransactionService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+            _logger = logger;
 
         }
 
         /// <inheritdoc/>
         public async Task<bool> CreateTransactionAsync(TransactionCreateDto transactionDto)
         {
+            var client = await _unitOfWork.ClientRepository.GetByIdAsync(transactionDto.ClientId);
+            var origin = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
+            var destination = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
 
-            var origin = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
-            var destination = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
-
-            if(origin == null || destination == null)
+            if(origin == null || destination == null || client == null)
             {
                 return false;
             }
@@ -58,7 +61,7 @@ namespace BilleteraVirtualSofttekBack.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + " - Error");
+                _logger.LogInformation(ex.Message);
             }
 
             return false;
@@ -81,10 +84,9 @@ namespace BilleteraVirtualSofttekBack.Services
         public async Task<IEnumerable<TransactionGetMinDto>> GetAllTransactionsAsync(int page, int units)
         {
 
-            var transactions = await _unitOfWork.TransactionRepository.GetAllAsync(page, units, e => e.DestinationAccount, equals=> equals.DestinationAccount);
+            var transactions = await _unitOfWork.TransactionRepository.GetAllAsync(page, units);
 
             var transactionsDto = _mapper.Map<List<TransactionGetMinDto>>(transactions);
-
 
             return transactionsDto;
 
@@ -93,7 +95,7 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int clientId)
         {
-            var client = _unitOfWork.ClientRepository.GetByIdAsync(clientId);
+            var client = await _unitOfWork.ClientRepository.GetByIdAsync(clientId);
 
             if(client == null)
             {
@@ -114,12 +116,22 @@ namespace BilleteraVirtualSofttekBack.Services
 
             var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(id);
 
-            if (transaction == null || transaction.DeletedDate != null)
+            if (transaction == null)
             {
                 return null;
             }
 
-            return _mapper.Map<TransactionGetDto>(transaction);
+            var transactionDto = _mapper.Map<TransactionGetDto>(transaction);
+
+            var sourceAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transaction.SourceAccountId);
+            var destinationAccount = await _unitOfWork.AccountRepository.GetByIdAsync(transaction.DestinationAccountId);
+            var sAccountDto = _mapper.Map<AccountGetDto>(sourceAccount);
+            var dAccountDto = _mapper.Map<AccountGetDto>(destinationAccount);
+
+            transactionDto.DestinationAccount = sAccountDto;
+            transactionDto.SourceAccount = dAccountDto;
+
+            return transactionDto;
 
         }
 
@@ -127,16 +139,16 @@ namespace BilleteraVirtualSofttekBack.Services
         public async Task<bool> UpdateTransaction(TransactionUpdateDto transactionDto)
         {
             var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionDto.Id);
+            var client = await _unitOfWork.ClientRepository.GetByIdAsync(transactionDto.ClientId);
+            var origin = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
+            var destination = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
 
-            if(transaction == null)
-            {
-                return false;
-            }
-
-            var origin = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
-            var destination = _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
-
-            if (origin == null || destination == null)
+            if (
+                  origin == null 
+               || destination == null 
+               || client == null 
+               || transaction == null              
+               )
             {
                 return false;
             }
@@ -155,8 +167,9 @@ namespace BilleteraVirtualSofttekBack.Services
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogInformation(ex.Message);
                 return false;
             }
 

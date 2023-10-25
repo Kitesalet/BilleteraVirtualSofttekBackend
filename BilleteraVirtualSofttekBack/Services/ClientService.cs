@@ -2,6 +2,7 @@
 using BilleteraVirtualSofttekBack.Helpers;
 using BilleteraVirtualSofttekBack.Models.DTOs.Client;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces;
 
@@ -16,17 +17,19 @@ namespace IntegradorSofttekImanol.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<IAccountService> _logger;
 
         /// <summary>
         /// Initializes an instance of ClientService using dependency injection with its parameters.
         /// </summary>
         /// <param name="unitOfWork">IUnitOfWork with DI.</param>
         /// <param name="mapper">IMapper with DI.</param>
-        public ClientService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public ClientService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, ILogger<IAccountService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+            _logger = logger;
 
         }
 
@@ -47,7 +50,6 @@ namespace IntegradorSofttekImanol.Services
                 await _unitOfWork.ClientRepository.AddAsync(client);
 
                 client.CreatedDate = DateTime.Now;
-                
 
                 await _unitOfWork.Complete();
 
@@ -55,6 +57,7 @@ namespace IntegradorSofttekImanol.Services
             }
             catch(Exception ex)
             {
+                _logger.LogInformation(ex.Message);
                 Console.WriteLine(ex.Message + " - Error");
             }
 
@@ -92,7 +95,7 @@ namespace IntegradorSofttekImanol.Services
             
             var client = await _unitOfWork.ClientRepository.GetByIdAsync(id);
 
-            if (client == null || client.DeletedDate != null)
+            if (client == null)
             {
                 return null;
             }
@@ -125,8 +128,10 @@ namespace IntegradorSofttekImanol.Services
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+
+                _logger.LogInformation(ex.Message);
                 return false;
             }
 
