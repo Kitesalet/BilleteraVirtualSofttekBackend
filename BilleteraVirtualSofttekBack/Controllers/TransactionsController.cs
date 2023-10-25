@@ -74,15 +74,16 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <param name="accountId">ID of the account for which to retrieve transactions.</param>
         /// <returns>
         /// 200 OK response with the list of Transactions with the account if successful.
+        /// 400 Bad Request if the account id is invalid.
+        /// 404 Not Found if the account doesnt exist.
         /// 401 Unauthorized response if the user is not authenticated.
-        /// 404 Not Found response if the specified account does not exist.
         /// </returns>
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("transactions/account/{accountId:int}")]
         public async Task<IActionResult> GetAllTransactionsByAccount(int accountId)
         {
@@ -107,6 +108,44 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
+        /// Gets all Transactions associated client.
+        /// </summary>
+        /// <param name="clientId">ID of the client for which to retrieve transactions.</param>
+        /// <returns>
+        /// 200 OK response with the list of Transactions with the client if successful.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 404 Not Found response if the specified account does not exist.
+        /// </returns>
+
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("transactions/client/{clientId:int}")]
+        public async Task<IActionResult> GetAllTransactionsByClient(int clientId)
+        {
+
+            if (clientId <= 0)
+            {
+                _logger.LogInformation($"The account id was invalid, id = {clientId}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
+            }
+
+            var transactions = await _service.GetTransactionByClientAsync(clientId);
+
+            if (transactions == null)
+            {
+                _logger.LogInformation($"The account was not found, id = {clientId}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account was not found!");
+            }
+
+            _logger.LogInformation("All Transactions by client were retrieved!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transactions);
+
+        }
+
+        /// <summary>
         /// Gets a specific Transaction by its ID.
         /// </summary>
         /// <param name="id">ID of the Transaction to retrieve.</param>
@@ -114,12 +153,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 200 OK response with the Transaction if found.
         /// 401 Unauthorized response if the user is not authenticated.
         /// 404 Not Found response if no Transaction is found for the specified ID.
+        /// 400 Bad Request response if the transaction id is invalid.
         /// </returns>
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("transaction/{id:int}")]
         public async Task<IActionResult> GetTransaction([FromRoute] int id)
@@ -150,14 +191,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <returns>
         /// 201 Created response if Transaction creation is successful.
         /// 401 Unauthorized response if the user is not authenticated.
-        /// 403 Forbidden response if the Transaction creation is forbidden.
+        /// 400 Bad Request response if some of the data is invalid.
         /// </returns>
 
         [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("transaction/create")]
         public async Task<IActionResult> CreateTransaction(TransactionCreateDto dto)
         {
@@ -169,6 +210,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
+            if (dto.Concept < (TransactionConcept)1 || dto.Concept > (TransactionConcept)8)
+            {
+                _logger.LogInformation($"The concept introduced was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The concept introduced was invalid!");
+            }
+
             if (dto.Type != TransactionType.Transfer && dto.Type != TransactionType.Withdrawal && dto.Type != TransactionType.Deposit)
             {
                 _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
@@ -178,8 +225,19 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             if(dto.Type == TransactionType.Transfer && (dto.SourceAccountId == dto.DestinationAccountId))
             {
-                _logger.LogInformation($"The transaction source and origin accounts were the same, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction accounts cant be the same!");
+                _logger.LogInformation($"The transfer source and origin accounts were the same, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transfer accounts cant be the same!");
+            }
+
+            if (dto.Type == TransactionType.Deposit || dto.Type == TransactionType.Withdrawal)
+            {
+
+                if (dto.SourceAccountId != dto.DestinationAccountId)
+                {
+                    _logger.LogInformation($"The extraction and deposit accounts must be the same, dto = {dto}");
+                    return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The extraction and deposit accounts must be the same!");
+                }
+
             }
 
             var flag = await _service.CreateTransactionAsync(dto);
@@ -209,7 +267,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -226,17 +284,42 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
+            if(id != dto.Id)
+            {
+                _logger.LogInformation($"The IDs were not the same, dto = {dto}, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction ids were not the same");
+            }
+
+            if(dto.Concept < (TransactionConcept)1 || dto.Concept > (TransactionConcept)8)
+            {
+                _logger.LogInformation($"The concept introduced was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The concept introduced was invalid!");
+            }
+
             if (dto.Type != TransactionType.Transfer && dto.Type != TransactionType.Withdrawal && dto.Type != TransactionType.Deposit)
             {
                 _logger.LogInformation($"The transaction type entered was invalid, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction type entered is invalid!");
             }
 
-            if (dto.SourceAccountId == dto.DestinationAccountId)
+            if (dto.Type == TransactionType.Transfer && (dto.SourceAccountId == dto.DestinationAccountId))
             {
-                _logger.LogInformation($"The transaction source and origin accounts were the same, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transaction accounts cant be the same!");
+                _logger.LogInformation($"The transfer source and origin accounts were the same, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The transfer accounts cant be the same!");
             }
+            
+            if(dto.Type == TransactionType.Deposit || dto.Type == TransactionType.Withdrawal)
+            {
+
+                if(dto.SourceAccountId != dto.DestinationAccountId)
+                {
+                    _logger.LogInformation($"The extraction and deposit accounts must be the same, dto = {dto}");
+                    return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The extraction and deposit accounts must be the same!");
+                }
+
+            }
+
+            
 
             var flag = await _service.UpdateTransaction(dto);
 
@@ -264,7 +347,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpDelete]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

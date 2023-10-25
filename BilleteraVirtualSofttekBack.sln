@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BilleteraVirtualSofttekBack", "BilleteraVirtualSofttekBack\BilleteraVirtualSofttekBack.csproj", "{76DD838C-7F5D-4EA5-862E-90C53DA55999}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualWalletUnitTesting", "VirtualWalletUnitTesting\VirtualWalletUnitTesting.csproj", "{F515940D-3174-45C4-8E2E-7BDADB166CA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtualWalletUnitTesting", "VirtualWalletUnitTesting\VirtualWalletUnitTesting.csproj", "{F515940D-3174-45C4-8E2E-7BDADB166CA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

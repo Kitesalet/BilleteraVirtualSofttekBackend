@@ -64,7 +64,7 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Id = 5,
                     AccountNumber = 56564345,
                     Alias = "Accordion.Lupin.Extract",
-                    Balance = 4000,
+                    Balance = 0,
                     CBU = 654334523,
                     Type = AccountType.Dollar,
                     ClientId = 1,

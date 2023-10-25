@@ -1,4 +1,5 @@
 ﻿using BilleteraVirtualSofttekBack.Models.DTOs.Account;
+using BilleteraVirtualSofttekBack.Models.Enums;
 
 namespace BilleteraVirtualSofttekBack.Models.DTOs.Transactions
 {

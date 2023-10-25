@@ -9,15 +9,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace VirtualWalletUnitTesting
 {
@@ -816,7 +810,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 0m
 
             };
@@ -851,7 +845,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 1,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -887,7 +881,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -926,7 +920,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -976,7 +970,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -1026,7 +1020,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -1077,7 +1071,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };

@@ -7,7 +7,7 @@ namespace BilleteraVirtualSofttekBack.Models.DTOs.Transactions
 
         public decimal Amount { get; set; }
         public TransactionType Type { get; set; }
-        public string Concept { get; set; }
+        public TransactionConcept Concept { get; set; }
         public int ClientId { get; set; }
         public int SourceAccountId { get; set; }
         public int DestinationAccountId { get; set; }

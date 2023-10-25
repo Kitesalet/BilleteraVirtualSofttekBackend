@@ -323,39 +323,6 @@ namespace VirtualWalletUnitTesting
 
         }
 
-
-        [TestMethod]
-        public async Task UpdateClient_InvalidEmail_ReturnsError()
-        {
-
-            //Arrange
-
-            var client = new ClientUpdateDto()
-            {
-                Name = "Client 1",
-                Email = "",
-                Password = "password1",
-                Id = 1
-            };
-
-            var mockService = new Mock<IClientService>();
-            var mockLogger = new Mock<ILogger<ClientsController>>();
-            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(false);
-            var controller = new ClientsController(mockService.Object, mockLogger.Object);
-
-            //Act
-
-            var result = await controller.UpdateClient(client.Id, client);
-            var objectResult = result as ObjectResult;
-            var apiResponse = objectResult.Value as ApiErrorResponse;
-            var errorResult = apiResponse.Errors[0].Error as string;
-
-            //Assert
-
-            Assert.AreEqual("The entered email is invalid!", errorResult);
-
-        }
-
         [TestMethod]
         public async Task UpdateClient_InvalidName_ReturnsError()
         {
@@ -365,7 +332,6 @@ namespace VirtualWalletUnitTesting
             var client = new ClientUpdateDto()
             {
                 Name = "",
-                Email = "client@example.com",
                 Password = "password1",
                 Id = 1
             };
@@ -397,7 +363,6 @@ namespace VirtualWalletUnitTesting
             var client = new ClientUpdateDto()
             {
                 Name = "Client 1",
-                Email = "client@example.com",
                 Password = "",
                 Id = 1
             };
@@ -429,7 +394,6 @@ namespace VirtualWalletUnitTesting
             var client = new ClientUpdateDto()
             {
                 Name = "Client 1",
-                Email = "client@example.com",
                 Password = "password1",
                 Id = 1
             };
@@ -461,7 +425,6 @@ namespace VirtualWalletUnitTesting
             var client = new ClientUpdateDto()
             {
                 Name = "Client 1",
-                Email = "client@example.com",
                 Password = "password1",
                 Id = 1
             };

@@ -27,13 +27,13 @@ namespace VirtualWalletUnitTesting
 
             //Arrange
 
-            var transactions = new List<TransactionGetDto>
+            var transactions = new List<TransactionGetMinDto>
             {
-                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = "Initial deposit", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now },
-                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = "Cash withdrawal", SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 1 }, CreatedDate = DateTime.Now.AddMinutes(15) },
-                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = "Payment", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
-                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = "Incoming funds", SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 404, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 5 }, CreatedDate = DateTime.Now.AddMinutes(45) },
-                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = "Reimbursement", SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now.AddMinutes(60) }
+                new TransactionGetMinDto { Amount = 100.50m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 1, DestinationAccountId = 1, CreatedDate = DateTime.Now },
+                new TransactionGetMinDto { Amount = 300.25m, Type = "Extraction", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 2, DestinationAccountId = 2, CreatedDate = DateTime.Now.AddMinutes(15) },
+                new TransactionGetMinDto { Amount = 50.00m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 3, DestinationAccountId = 3, CreatedDate = DateTime.Now.AddMinutes(30) },
+                new TransactionGetMinDto { Amount = 200.75m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 4, DestinationAccountId = 4, CreatedDate = DateTime.Now.AddMinutes(45) },
+                new TransactionGetMinDto { Amount = 70.20m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 5, DestinationAccountId = 5, CreatedDate = DateTime.Now.AddMinutes(60) }
             };
 
             var mockService = new Mock<ITransactionService>();
@@ -62,13 +62,13 @@ namespace VirtualWalletUnitTesting
 
             //Arrange
 
-            var transactions = new List<TransactionGetDto>
+            var transactions = new List<TransactionGetMinDto>
             {
-                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = "Initial deposit", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now },
-                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = "Cash withdrawal", SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 1 }, CreatedDate = DateTime.Now.AddMinutes(15) },
-                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = "Payment", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
-                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = "Incoming funds", SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 404, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 5 }, CreatedDate = DateTime.Now.AddMinutes(45) },
-                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = "Reimbursement", SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now.AddMinutes(60) }
+                new TransactionGetMinDto { Amount = 100.50m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 1, DestinationAccountId = 1, CreatedDate = DateTime.Now },
+                new TransactionGetMinDto { Amount = 300.25m, Type = "Extraction", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 2, DestinationAccountId = 2, CreatedDate = DateTime.Now.AddMinutes(15) },
+                new TransactionGetMinDto { Amount = 50.00m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 3, DestinationAccountId = 3, CreatedDate = DateTime.Now.AddMinutes(30) },
+                new TransactionGetMinDto { Amount = 200.75m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 4, DestinationAccountId = 4, CreatedDate = DateTime.Now.AddMinutes(45) },
+                new TransactionGetMinDto { Amount = 70.20m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccountId = 5, DestinationAccountId = 5, CreatedDate = DateTime.Now.AddMinutes(60) }
             };
 
             var mockService = new Mock<ITransactionService>();
@@ -99,11 +99,11 @@ namespace VirtualWalletUnitTesting
 
             var transactions = new List<TransactionGetDto>
             {
-                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = "Initial deposit", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now },
-                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = "Cash withdrawal", SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 1, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 1 }, CreatedDate = DateTime.Now.AddMinutes(15) },
-                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = "Payment", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 1, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
-                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = "Incoming funds", SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 1, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 5 }, CreatedDate = DateTime.Now.AddMinutes(45) },
-                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = "Reimbursement", SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 1, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now.AddMinutes(60) }
+                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now },
+                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 1, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 1 }, CreatedDate = DateTime.Now.AddMinutes(15) },
+                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 1, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
+                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 1, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 5 }, CreatedDate = DateTime.Now.AddMinutes(45) },
+                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 1, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now.AddMinutes(60) }
             };
 
             var mockService = new Mock<ITransactionService>();
@@ -162,11 +162,11 @@ namespace VirtualWalletUnitTesting
 
             var transactions = new List<TransactionGetDto>
             {
-                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = "Initial deposit", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now },
-                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = "Cash withdrawal", SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 1, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 1 }, CreatedDate = DateTime.Now.AddMinutes(15) },
-                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = "Payment", SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 1, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
-                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = "Incoming funds", SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 1, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 5 }, CreatedDate = DateTime.Now.AddMinutes(45) },
-                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = "Reimbursement", SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 1, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now.AddMinutes(60) }
+                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now },
+                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 1, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 1 }, CreatedDate = DateTime.Now.AddMinutes(15) },
+                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 1, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
+                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 1, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 5 }, CreatedDate = DateTime.Now.AddMinutes(45) },
+                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 1, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 2 }, CreatedDate = DateTime.Now.AddMinutes(60) }
             };
 
             var mockService = new Mock<ITransactionService>();
@@ -195,7 +195,7 @@ namespace VirtualWalletUnitTesting
 
             //Arrange
 
-            TransactionGetDto transactions = new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = "Initial deposit", 
+            TransactionGetDto transactions = new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), 
                 SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, 
                 DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 },
                 CreatedDate = DateTime.Now 
@@ -260,7 +260,7 @@ namespace VirtualWalletUnitTesting
             {
                 Amount = 100.50m,
                 Type = "Deposit",
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit.ToString(),
                 SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 },
                 DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 2 },
                 CreatedDate = DateTime.Now
@@ -295,7 +295,7 @@ namespace VirtualWalletUnitTesting
             TransactionCreateDto transaction = new TransactionCreateDto
             {
                 Amount = 0,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1,
@@ -331,7 +331,7 @@ namespace VirtualWalletUnitTesting
             TransactionCreateDto transaction = new TransactionCreateDto
             {
                 Amount = 100m,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1
@@ -366,7 +366,7 @@ namespace VirtualWalletUnitTesting
             TransactionCreateDto transaction = new TransactionCreateDto
             {
                 Amount = 100m,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 1,
                 SourceAccountId = 1,
                 ClientId = 1, 
@@ -402,7 +402,7 @@ namespace VirtualWalletUnitTesting
             TransactionCreateDto transaction = new TransactionCreateDto
             {
                 Amount = 100m,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1,
@@ -438,7 +438,7 @@ namespace VirtualWalletUnitTesting
             TransactionCreateDto transaction = new TransactionCreateDto
             {
                 Amount = 100m,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1,
@@ -475,7 +475,7 @@ namespace VirtualWalletUnitTesting
             {   
                 Id = 1,
                 Amount = 0,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1,
@@ -512,7 +512,7 @@ namespace VirtualWalletUnitTesting
             {
                 Id = 1,
                 Amount = 1000,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1
@@ -548,7 +548,7 @@ namespace VirtualWalletUnitTesting
             {
                 Id = 1,
                 Amount = 1000,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 1,
                 SourceAccountId = 1,
                 ClientId = 1,
@@ -585,7 +585,7 @@ namespace VirtualWalletUnitTesting
             {
                 Id = 1,
                 Amount = 100m,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1,
@@ -622,7 +622,7 @@ namespace VirtualWalletUnitTesting
             {
                 Id = 1,
                 Amount = 100m,
-                Concept = "Initial deposit",
+                Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 2,
                 SourceAccountId = 1,
                 ClientId = 1,

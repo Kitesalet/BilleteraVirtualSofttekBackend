@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BilleteraVirtualSofttekBack.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BilleteraVirtualSofttekBack.Models.Entities
@@ -6,6 +7,9 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
     /// <summary>
     /// Represents a client.
     /// </summary>
+    /// 
+
+    [Table("client")]
     public class Client : BaseEntity
     {
         /// <summary>
@@ -28,6 +32,13 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
         [Required]
         [Column("client_password")]
         public string Password { get; set; }
+
+        /// <summary>
+        /// The role associated to this client.
+        /// </summary>
+        [Required]
+        [Column("client_role")]
+        public ClientRole Role { get; set; }
 
         /// <summary>
         /// A list of transactions associated with the client.

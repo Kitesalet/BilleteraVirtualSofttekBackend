@@ -63,7 +63,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("account");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("BaseAccount");
                 });
@@ -104,26 +104,32 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("client_password");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("client_role");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
+                    b.ToTable("client");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 306, DateTimeKind.Local).AddTicks(1195),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 6, DateTimeKind.Local).AddTicks(8246),
                             Email = "1@1.com",
                             Name = "random",
-                            Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
+                            Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf",
+                            Role = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 306, DateTimeKind.Local).AddTicks(1324),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 6, DateTimeKind.Local).AddTicks(8320),
                             Email = "2@2.com",
                             Name = "random",
-                            Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf"
+                            Password = "389aec82d3ce947fd1ba75e52b2b49d5e7ffcebe7d8e059db3bb8c49594d0bbf",
+                            Role = 2
                         });
                 });
 
@@ -137,14 +143,16 @@ namespace BilleteraVirtualSofttekBack.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("transaction_amount");
 
                     b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("transaction_client");
 
-                    b.Property<string>("Concept")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Concept")
+                        .HasColumnType("int")
+                        .HasColumnName("transaction_concept");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2")
@@ -154,18 +162,21 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("deleted_date");
 
-                    b.Property<int?>("DestinationAccountId")
-                        .HasColumnType("int");
+                    b.Property<int>("DestinationAccountId")
+                        .HasColumnType("int")
+                        .HasColumnName("transaction_destination_account");
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("modified_date");
 
-                    b.Property<int?>("SourceAccountId")
-                        .HasColumnType("int");
+                    b.Property<int>("SourceAccountId")
+                        .HasColumnType("int")
+                        .HasColumnName("transaction_source_account");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("transaction_type");
 
                     b.HasKey("Id");
 
@@ -175,7 +186,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
 
                     b.HasIndex("SourceAccountId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("transaction");
                 });
 
             modelBuilder.Entity("BilleteraVirtualSofttekBack.Models.Entities.Accounts.CryptoAccount", b =>
@@ -186,7 +197,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("accound_uuid");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("account");
 
                     b.HasDiscriminator().HasValue("CryptoAccount");
 
@@ -196,18 +207,18 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 3,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 311, DateTimeKind.Local).AddTicks(1151),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 11, DateTimeKind.Local).AddTicks(7961),
                             Type = 3,
-                            UUID = new Guid("c890eb9a-7c2b-4b1f-8c4d-9d7d3151597a")
+                            UUID = new Guid("72d0456f-b299-4efd-9a6e-050652771c13")
                         },
                         new
                         {
                             Id = 6,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 311, DateTimeKind.Local).AddTicks(1156),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 11, DateTimeKind.Local).AddTicks(7970),
                             Type = 3,
-                            UUID = new Guid("66eafada-15e6-4f94-b3da-c065b7f1ea35")
+                            UUID = new Guid("ac028e6e-5753-427c-9064-7e17ccbebea8")
                         });
                 });
 
@@ -231,7 +242,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         .HasColumnType("int")
                         .HasColumnName("account_cbu");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("account");
 
                     b.HasDiscriminator().HasValue("DollarAccount");
 
@@ -241,7 +252,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 2,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 310, DateTimeKind.Local).AddTicks(280),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 9, DateTimeKind.Local).AddTicks(8729),
                             Type = 2,
                             AccountNumber = 2,
                             Alias = "Trial.Hamen.Ryu",
@@ -252,7 +263,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 5,
                             Balance = 4000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 310, DateTimeKind.Local).AddTicks(284),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 9, DateTimeKind.Local).AddTicks(8733),
                             Type = 2,
                             AccountNumber = 56564345,
                             Alias = "Accordion.Lupin.Extract",
@@ -280,7 +291,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                         .HasColumnType("int")
                         .HasColumnName("account_cbu");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("account");
 
                     b.HasDiscriminator().HasValue("PesoAccount");
 
@@ -290,7 +301,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 1,
                             Balance = 1000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 308, DateTimeKind.Local).AddTicks(3371),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 8, DateTimeKind.Local).AddTicks(4996),
                             Type = 1,
                             AccountNumber = 134567544,
                             Alias = "Rock.Spy.Pink",
@@ -301,7 +312,7 @@ namespace BilleteraVirtualSofttekBack.Migrations
                             Id = 4,
                             Balance = 2000m,
                             ClientId = 1,
-                            CreatedDate = new DateTime(2023, 10, 23, 22, 29, 35, 308, DateTimeKind.Local).AddTicks(3376),
+                            CreatedDate = new DateTime(2023, 10, 25, 16, 11, 4, 8, DateTimeKind.Local).AddTicks(5000),
                             Type = 1,
                             AccountNumber = 434567346,
                             Alias = "Sword.Javelin.Coconut",
@@ -331,12 +342,14 @@ namespace BilleteraVirtualSofttekBack.Migrations
                     b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.BaseAccount", "DestinationAccount")
                         .WithMany()
                         .HasForeignKey("DestinationAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("BilleteraVirtualSofttekBack.Models.Entities.BaseAccount", "SourceAccount")
                         .WithMany()
                         .HasForeignKey("SourceAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Client");
 

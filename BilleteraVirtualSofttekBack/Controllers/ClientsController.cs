@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using BilleteraVirtualSofttekBack.Models.Enums;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
@@ -32,6 +33,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             _logger = logger;
            
         }
+
         /// <summary>
         /// Retrieves a list of clients with pagination support.
         /// </summary>
@@ -72,7 +74,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 404 Not Found response if no client is found.
         /// 401 Unauthorized response if the user is not authenticated.
         /// 400 Bad Request response if the client ID is invalid.
-
+        ///</returns>
+        
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -109,17 +112,20 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 201 Created response if client creation is successful.
         /// 400 Bad Request response if client creation fails.
         /// 401 Unauthorized response if the user is not authenticated.
-        /// 403 Forbidden response if the client creation is forbidden.
         /// </returns>
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("client/register")]
         public async Task<IActionResult> CreateClient(ClientCreateDto dto)
         {
+            if(dto.Role != ClientRole.Admin && dto.Role != ClientRole.Base)
+            {
+                _logger.LogInformation($"The client role was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client role entered is invalid!");
+            }
 
             if (String.IsNullOrEmpty(dto.Email))
             {
@@ -166,7 +172,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -176,10 +182,10 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> UpdateClient(int id, ClientUpdateDto dto)
         {
 
-            if (String.IsNullOrEmpty(dto.Email))
+            if(id != dto.Id)
             {
-                _logger.LogInformation($"The entered email was invalid, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered email is invalid!");
+                _logger.LogInformation($"The entered ids dont match!, dto = {dto}, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered ids dont match!");
             }
 
             if (String.IsNullOrEmpty(dto.Name))
@@ -199,7 +205,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (flag == false)
             {
                 _logger.LogInformation($"There was a problem in the update of the client, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt created!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was a problem, the client wasnt updated!");
             }
 
             _logger.LogInformation($"Client was properly updated, id = {id}");
@@ -219,7 +225,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpDelete]
-        [Authorize]
+        [Authorize("Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

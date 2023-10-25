@@ -34,6 +34,16 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
+        public async Task<List<AccountGetDto>> GetAllAccounts(int page, int units)
+        {
+
+            var accounts = await _unitOfWork.AccountRepository.GetAllAsync(page, units);
+
+            return _mapper.Map<List<AccountGetDto>>(accounts);
+
+        }
+
+        /// <inheritdoc/>
         public async Task<bool> CreateAccountAsync(AccountCreateDto accountDto)
         {
             Random random = new Random();
@@ -119,6 +129,12 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<bool> DeleteAccountAsync(int id)
         {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+
+            if(account != null && account.Balance > 1)
+            {
+                return false;
+            }
 
             var flag = await _unitOfWork.AccountRepository.Delete(id);
 
@@ -159,20 +175,109 @@ namespace BilleteraVirtualSofttekBack.Services
         public async Task<bool> UpdateAccount(AccountUpdateDto accountDto)
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountDto.AccountId);
+            var client = await _unitOfWork.ClientRepository.GetByIdAsync(accountDto.ClientId);
 
-            if(account == null)
+
+            if (account == null || client == null)
             {
                 return false;
+
             }
 
-
+            if(accountDto.Type != account.Type)
+            {
+                //Cant change account types
+                return false;
+            }
 
             try
             {
              
-                account.ModifiedDate = DateTime.Now;
+                if(account.Type == AccountType.Peso)
+                {
+                    var newAccount = (PesoAccount)account;
 
-                _unitOfWork.AccountRepository.Update(account);
+                    var numberExists = await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(accountDto.AccountNumber);
+
+
+                    if (newAccount.AccountNumber != accountDto.AccountNumber && numberExists == true)
+                    {
+
+                        return false;
+
+                    }
+
+                    var cbuExists = await _unitOfWork.AccountRepository.VerifyExistingCBU(accountDto.CBU);
+
+                    if (cbuExists == true && newAccount.CBU != accountDto.CBU)
+                    {
+                        return false;
+                    }
+
+                    var aliasExists = await _unitOfWork.AccountRepository.VerifyExistingAlias(accountDto.Alias);
+
+                    if (aliasExists == true && newAccount.Alias != accountDto.Alias)
+                    {
+                        return false;
+                    }
+
+                    newAccount.ModifiedDate = DateTime.Now;
+                    newAccount.Alias = accountDto.Alias;
+                    newAccount.AccountNumber = accountDto.AccountNumber;
+                    newAccount.CBU = accountDto.CBU;
+                    newAccount.Balance = accountDto.Balance;
+                    newAccount.ClientId = accountDto.ClientId;
+
+                }
+                else if(account.Type == AccountType.Dollar)
+                {
+
+
+                    var newAccount = (DollarAccount)account;
+
+                    var numberExists = await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(accountDto.AccountNumber);
+
+
+                    if (numberExists == true && newAccount.AccountNumber != accountDto.AccountNumber)
+                    {
+
+                        return false;
+
+                    }
+
+                    var cbuExists = await _unitOfWork.AccountRepository.VerifyExistingCBU(accountDto.CBU);
+
+                    if (cbuExists == true && newAccount.CBU != accountDto.CBU)
+                    {
+                        return false;
+                    }
+
+                    var aliasExists = await _unitOfWork.AccountRepository.VerifyExistingAlias(accountDto.Alias);
+
+                    if (aliasExists == true && newAccount.Alias != newAccount.Alias)
+                    {
+                        return false;
+                    }
+
+                    newAccount.ModifiedDate = DateTime.Now;
+                    newAccount.Alias = accountDto.Alias;
+                    newAccount.AccountNumber = accountDto.AccountNumber;
+                    newAccount.CBU = accountDto.CBU;
+                    newAccount.Balance = accountDto.Balance;
+                    newAccount.ClientId = accountDto.ClientId;
+                }
+                else
+                {
+                    var newAccount = (CryptoAccount)account;
+
+                    newAccount.ModifiedDate = DateTime.Now;
+                    newAccount.Balance = accountDto.Balance;
+                    newAccount.ClientId = accountDto.ClientId;
+                }
+
+
+
+                 _unitOfWork.AccountRepository.Update(account);
 
                 await _unitOfWork.Complete();
 
@@ -275,5 +380,6 @@ namespace BilleteraVirtualSofttekBack.Services
                 return false;
             }
         }
+
     }
 }

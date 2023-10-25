@@ -3,6 +3,7 @@
 
 using BilleteraVirtualSofttekBack.Helpers;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Enums;
 using IntegradorSofttekImanol.Models.Interfaces.OtherInterfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,7 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Password = EncrypterHelper.Encrypter("random", _configuration["EncryptKey"]),
                     Email = "1@1.com",
                     Name = "random",
+                    Role = ClientRole.Admin,
                     CreatedDate = DateTime.Now
                 }, new Client
                 { 
@@ -41,6 +43,15 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Password = EncrypterHelper.Encrypter("random", _configuration["EncryptKey"]),
                     Email = "2@2.com",
                     Name = "random",
+                    Role = ClientRole.Base,
+                    CreatedDate = DateTime.Now
+                }, new Client
+                {
+                    Id = 3,
+                    Password = EncrypterHelper.Encrypter("random", _configuration["EncryptKey"]),
+                    Email = "3@3.com",
+                    Name = "random",
+                    Role = ClientRole.Base,
                     CreatedDate = DateTime.Now
                 }
                 ); 

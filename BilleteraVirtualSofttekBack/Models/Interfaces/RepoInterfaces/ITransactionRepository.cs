@@ -17,6 +17,11 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
         /// <returns>Returns a collection of transactions associated with the specified account.</returns>
         public Task<IEnumerable<Transaction>> GetTransactionByAccount(int accountId);
 
-
+        /// <summary>
+        /// Gets a collection of transactions associated with a specific client.
+        /// </summary>
+        /// <param name="accountId">The ID of the client to get transactions for.</param>
+        /// <returns>Returns a collection of transactions associated with the specified client.</returns>
+        public Task<IEnumerable<Transaction>> GetTransactionByClient(int clientId);
     }
 }

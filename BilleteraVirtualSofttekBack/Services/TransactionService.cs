@@ -40,11 +40,17 @@ namespace BilleteraVirtualSofttekBack.Services
             var origin = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
             var destination = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
 
+            
+
             if(origin == null || destination == null || client == null)
             {
                 return false;
             }
 
+            if (client.Id != origin.ClientId || client.Id == origin.ClientId)
+            {
+                return false;
+            }
 
             try
             {
@@ -93,21 +99,38 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int clientId)
+        public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int accountId)
         {
-            var client = await _unitOfWork.ClientRepository.GetByIdAsync(clientId);
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
 
-            if(client == null)
+            if(account == null)
             {
-                return null;   
+                return null;
             }
 
-            var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(clientId);
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(accountId);
 
             var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
 
             return transactionsDto;
 
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<TransactionGetDto>> GetTransactionByClientAsync(int clientId)
+        {
+            var client = _unitOfWork.ClientRepository.GetByIdAsync(clientId);
+
+            if(client == null)
+            {
+                return null;
+            }
+
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionByClient(clientId);
+
+            var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
+
+            return transactionsDto;
         }
 
         /// <inheritdoc/>
@@ -143,12 +166,19 @@ namespace BilleteraVirtualSofttekBack.Services
             var origin = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
             var destination = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
 
+            
+
             if (
                   origin == null 
                || destination == null 
                || client == null 
                || transaction == null              
                )
+            {
+                return false;
+            }
+
+            if (client.Id != origin.ClientId || client.Id == origin.ClientId)
             {
                 return false;
             }

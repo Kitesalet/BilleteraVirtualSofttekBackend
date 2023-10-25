@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +49,7 @@ builder.Services.AddHttpClient("useApi", config =>
 
 Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/VirtualWalletLogs.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 builder.Services.AddLogging(logging => logging.AddSerilog());
+
 
 
 #region Scoped Services
@@ -121,6 +123,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 #endregion
+
+#region JWT Authentication
+
+// Adds authorization based on policies and roles in our JWT.
+builder.Services.AddAuthorization(option =>
+{
+    //Creates policies for both the Admin and Base roles,based on their PKs
+    option.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+    option.AddPolicy("Base", policy => policy.RequireClaim(ClaimTypes.Role, "Base"));
+
+    //Creates a policy that authorizes a token if their Role claim is either 1 or 2 ( Admin or Base )
+    option.AddPolicy("AdminOrBase", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "Base"));
+
+});
+
+#endregion
+
 
 
 var app = builder.Build();

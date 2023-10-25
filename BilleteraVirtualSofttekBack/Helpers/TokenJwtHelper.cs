@@ -39,7 +39,8 @@ namespace BilleteraVirtualSofttekBack.Helpers
                 new Claim("NameIdentifier", client.Id.ToString()),
                 new Claim(ClaimTypes.Actor, $"{client.Id}"),
                 new Claim(ClaimTypes.Name, client.Name),
-                new Claim(ClaimTypes.Email, $"{client.Email}")
+                new Claim(ClaimTypes.Email, $"{client.Email}"),
+                new Claim(ClaimTypes.Role, $"{client.Role}")
             };
 
 

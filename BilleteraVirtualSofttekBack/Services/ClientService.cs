@@ -44,6 +44,7 @@ namespace IntegradorSofttekImanol.Services
                 {
                     return false;
                 }
+                
 
                 client.Password = EncrypterHelper.Encrypter(client.Password, _configuration["EncryptKey"] );
 
@@ -109,14 +110,14 @@ namespace IntegradorSofttekImanol.Services
         {
             var client = await _unitOfWork.ClientRepository.GetByIdAsync(clientDto.Id);
 
-            if(client == null)
+            if (client == null )
             {
                 return false;
             }
 
             try
             {
-
+                client.Role = clientDto.Role;
                 client.Name = clientDto.Name;
                 client.Password = EncrypterHelper.Encrypter(clientDto.Password, _configuration["EncryptKey"]);
                 client.ModifiedDate = DateTime.Now;
