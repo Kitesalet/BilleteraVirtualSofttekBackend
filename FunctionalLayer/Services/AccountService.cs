@@ -178,11 +178,16 @@ namespace BilleteraVirtualSofttekBack.Services
 
             }
 
-            if(accountDto.Type != account.Type)
+            if(accountDto.Type == AccountType.Crypto)
             {
-                //Cant change account types
-                return false;
+                var uuidExists = await _unitOfWork.AccountRepository.VerifyExistingUUID(accountDto.UUID);
+
+                if(uuidExists == true)
+                {
+                    return false;
+                }
             }
+
 
             if(accountDto.Type == AccountType.Dollar || accountDto.Type == AccountType.Peso)
             {
@@ -247,7 +252,7 @@ namespace BilleteraVirtualSofttekBack.Services
 
 
 
-                 _unitOfWork.AccountRepository.Update(account);
+                _unitOfWork.AccountRepository.Update(account);
 
                 await _unitOfWork.Complete();
 

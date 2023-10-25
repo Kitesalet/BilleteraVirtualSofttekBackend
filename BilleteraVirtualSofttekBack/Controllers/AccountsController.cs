@@ -203,11 +203,18 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> UpdateAccount(int id, AccountUpdateDto dto)
         {
 
+            if(dto.AccountId != id)
+            {
+                _logger.LogError($"The ids didnt match!, dto = {dto}, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The entered ids dont match!");
+            }
+
             if (dto.Type != AccountType.Crypto && dto.Type != AccountType.Dollar && dto.Type != AccountType.Peso)
             {
                 _logger.LogError($"The account type was incorrect!, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account type submitted was incorrect!");
             }
+
             else if (dto.Type == AccountType.Crypto)
             {
                 if (string.IsNullOrEmpty(dto.UUID))
@@ -215,7 +222,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                     _logger.LogError($"A Crypto account needs a valid UUID, dto = {dto}");
                     return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Crypto account needs a valid UUID!");
                 }
-                else if (dto.AccountNumber > 0 || dto.AccountId > 0 || dto.CBU > 0)
+                else if (dto.AccountNumber > 0 || string.IsNullOrEmpty(dto.Alias) == false || dto.CBU > 0)
                 {
                     _logger.LogError($"A Crypto account can't have fiduciary values, dto = {dto}");
                     return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Crypto account can't have fiduciary values!");
@@ -223,7 +230,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             }
             else if (dto.Type == AccountType.Dollar || dto.Type == AccountType.Peso)
             {
-                if (dto.AccountNumber <= 0 || dto.AccountId <= 0 || dto.CBU <= 0)
+                if (dto.AccountNumber <= 0 || string.IsNullOrEmpty(dto.Alias) == true || dto.CBU <= 0)
                 {
                     _logger.LogError($"A Fiduciary account needs a valid Account number, AccountId, and CBU, dto = {dto}");
                     return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "A Fiduciary account needs a valid Account number, AccountId, and CBU");
