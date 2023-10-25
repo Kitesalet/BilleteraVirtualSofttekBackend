@@ -15,6 +15,23 @@ namespace BilleteraVirtualSofttekBack.Infrastructure
             _mapper = mapper;
         }
 
+        public BaseAccount ConvertAccount(BaseAccount account)
+        {
+            
+            if(account is PesoAccount)
+            {
+                return (PesoAccount)account;
+            }else if(account is DollarAccount)
+            {
+                return (DollarAccount)account;
+            }
+            else
+            {
+                return (CryptoAccount)account;
+            }
+
+        }
+
         public BaseAccount CreateAccount(AccountCreateDto accountDto)
         {
             BaseAccount account;

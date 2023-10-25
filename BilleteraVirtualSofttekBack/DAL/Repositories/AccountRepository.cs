@@ -87,5 +87,20 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
 
         }
 
+        /// <inheritdoc />
+        public async Task<bool> VerifyExistingUUID(string UUID)
+        {
+
+            bool flag = await _context.Accounts.OfType<CryptoAccount>().AnyAsync(c => $"{c.UUID}" == UUID);
+
+            if(flag == true)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
     }
     }

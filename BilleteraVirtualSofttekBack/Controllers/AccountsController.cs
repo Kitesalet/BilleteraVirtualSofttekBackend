@@ -12,6 +12,7 @@ using System.Security.Claims;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
+
     [Authorize]
     [Route("api")]
     [ApiController]
@@ -40,6 +41,39 @@ namespace BilleteraVirtualSofttekBack.Controllers
             _logger = logger;
         }
 
+
+        /// <summary>
+        /// Retrieves a list of clients with pagination support.
+        /// </summary>
+        /// <param name="page">The page number for pagination</param>
+        /// <param name="units">The number of units to display per page.</param>
+        /// <returns>
+        /// 200 OK response with the list of accounts if successful.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 400 Bad Request response if the pagination parameters are invalid.
+        /// </returns>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Route("accounts")]
+        public async Task<IActionResult> GetAllAccounts([FromQuery] int page = 1, [FromQuery] int units = 10)
+        {
+            if (page < 1 || units < 1)
+            {
+                _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
+            }
+
+            var clients = await _service.GetAllAccounts(page, units);
+
+            _logger.LogInformation("All accounts were retrieved!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, clients);
+
+        }
+
+
         /// <summary>
         /// Retrieves all accounts belonging to a client with the specified ID.
         /// </summary>
@@ -49,7 +83,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 400 Bad Request response if the client ID is invalid.
         /// 401 Unauthorized response if the request is not authorized.
         /// </returns>
-        
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -211,7 +245,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
          
             if(flag == false)
             {
-                _logger.LogInformation($"There was an error with UUID | ALIAS | ACCOUNTID | CBU, or account was null, dto = {dto}");
+                _logger.LogInformation($"There was an error with UUID | ALIAS | ACCOUNTID | CBU, or account or client was null, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "There was an error with the data you introduced, Account wasn't created!");
             }
 

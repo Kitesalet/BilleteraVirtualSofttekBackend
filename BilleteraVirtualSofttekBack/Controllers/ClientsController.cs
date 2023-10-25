@@ -32,6 +32,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             _logger = logger;
            
         }
+
         /// <summary>
         /// Retrieves a list of clients with pagination support.
         /// </summary>
@@ -72,7 +73,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 404 Not Found response if no client is found.
         /// 401 Unauthorized response if the user is not authenticated.
         /// 400 Bad Request response if the client ID is invalid.
-
+        ///</returns>
+        
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
