@@ -6,6 +6,9 @@ namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
     public sealed class DollarAccount : FiduciaryAccount
     {
 
+
+        /// <inheritdoc/>
+
         public override void Transfer(BaseAccount toAccount, decimal amount)
         {
 

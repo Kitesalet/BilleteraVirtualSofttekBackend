@@ -44,6 +44,7 @@ namespace BilleteraVirtualSofttekBack.Helpers
             CreateMap<Transaction, TransactionGetDto>().ReverseMap();
             CreateMap<Transaction, TransactionUpdateDto>().ReverseMap();
             CreateMap<Transaction, TransferDto>().ReverseMap();
+            CreateMap<Transaction, TransactionGetMinDto>().ReverseMap();
 
             #endregion
         }

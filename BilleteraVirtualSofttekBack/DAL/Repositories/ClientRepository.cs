@@ -8,8 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BilleteraVirtualSofttekBack.DAL.Repositories
 {
+
     /// <summary>
-    /// The implemmentation that defines extra repository operations related to the Client entity.
+    /// The interface implementation to access to client data.
     /// </summary>
     public class ClientRepository : Repository<Client>, IClientRepository
     {
@@ -48,6 +49,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
             return flag;
         }
 
+        /// <inheritdoc/>
         public async Task<bool> VerifyExistingEmail(string email)
         {
             var flag = await _context.Clients.AnyAsync(e => e.Email == email);

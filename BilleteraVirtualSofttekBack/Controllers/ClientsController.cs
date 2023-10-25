@@ -8,6 +8,11 @@ using System.Net;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
+
+    /// <summary>
+    /// Generates a Controller responsible for client operations and client actions.
+    /// </summary>
+
     [Route("api")]
     [ApiController]
     public class ClientsController : ControllerBase
@@ -15,7 +20,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         private readonly IClientService _service;
         private readonly ILogger<ClientsController> _logger;
-        //private readonly IClientValidator _validator;
 
         /// <summary>
         /// Initializes an instance of ClientController using dependency injection with its parameters.
@@ -28,14 +32,16 @@ namespace BilleteraVirtualSofttekBack.Controllers
             _logger = logger;
            
         }
-
         /// <summary>
-        /// Gets all clients adding pagination.
+        /// Retrieves a list of clients with pagination support.
         /// </summary>
+        /// <param name="page">The page number for pagination</param>
+        /// <param name="units">The number of units to display per page.</param>
         /// <returns>
         /// 200 OK response with the list of clients if successful.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 400 Bad Request response if the pagination parameters are invalid.
         /// </returns>
-
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,14 +64,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
-        /// Gets a client by their ID.
+        /// Retrieves a client by their ID.
         /// </summary>
-        /// <param name="id">ID of the client to get.</param>
+        /// <param name="id">ID of the client to retrieve.</param>
         /// <returns>
         /// 200 OK response with the client if found.
-        /// |
         /// 404 Not Found response if no client is found.
-        /// </returns>
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 400 Bad Request response if the client ID is invalid.
 
         [HttpGet]
         [Authorize]
@@ -101,8 +107,9 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <param name="dto">Client data in a DTO.</param>
         /// <returns>
         /// 201 Created response if client creation is successful.
-        /// |
         /// 400 Bad Request response if client creation fails.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the client creation is forbidden.
         /// </returns>
 
         [HttpPost]
@@ -149,11 +156,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// Updates an existing client by their ID.
         /// </summary>
         /// <param name="id">ID of the client to update.</param>
-        /// <param name="dto">Updated client data in a DTO.</param>
+        /// <param name="dto">Updated client data in a DTO </param>
         /// <returns>
         /// 204 No Content response if client update is successful.
-        /// |
-        /// 400 Bad Request response if client update fails.
+        /// 400 Bad Request response if client update fails due to invalid data.
+        /// 404 Not Found response if the client to update is not found.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the client update is forbidden.
         /// </returns>
 
         [HttpPut]
@@ -197,15 +206,16 @@ namespace BilleteraVirtualSofttekBack.Controllers
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, "Client was properly updated!");
 
         }
-
         /// <summary>
         /// Deletes a client by their ID.
         /// </summary>
         /// <param name="id">ID of the client to delete.</param>
         /// <returns>
         /// 204 No Content response if client deletion is successful.
-        /// |
         /// 404 Not Found response if client deletion fails.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the client deletion is forbidden.
+        /// 400 Bad Request response if the client deletion fails due to invalid data.
         /// </returns>
 
         [HttpDelete]

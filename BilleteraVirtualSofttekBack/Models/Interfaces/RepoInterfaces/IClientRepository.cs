@@ -15,7 +15,6 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
         /// <param name="dto">AuthenticateDTO.</param>
         /// <returns> 
         ///  A Usuario instance if the authentication is successful
-        ///  |
         ///  A null value if the authentication is not successful
         /// </returns>
         public Task<Client?> AuthenticateCredentials(ClientAuthenticateDto dto);
@@ -26,11 +25,18 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
         /// <param name="dto">AuthenticateDTO.</param>
         /// <returns> 
         /// A true value if the query is a success
-        /// |
         /// A false value if it fails
         /// </returns>
         Task<bool> ClientExists(ClientCreateDto dto);
 
+        /// <summary>
+        /// Evaluates the existence of an email.
+        /// </summary>
+        /// <param name="dto">A string containing the email of the user to check.</param>
+        /// <returns> 
+        /// A true value if the query is a success
+        /// A false value if it fails
+        /// </returns>
         Task<bool> VerifyExistingEmail(string email);
 
 

@@ -9,6 +9,10 @@ using System.Linq.Expressions;
 
 namespace BilleteraVirtualSofttekBack.DAL.Repositories
 {
+
+    /// <summary>
+    /// The interface implementation to access to account-related data.
+    /// </summary>
     public class AccountRepository : Repository<BaseAccount>, IAccountRepository
     {
         private readonly AppDbContext _context;
@@ -24,6 +28,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
 
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<BaseAccount>> GetAllAccountsByClient(int clientId)
         {
             var accountsByUser = await _context.Accounts.Where(a => a.ClientId == clientId && a.DeletedDate == null).OrderBy(a => a.Type).ToListAsync();
@@ -31,6 +36,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
             return accountsByUser;
         }
 
+        /// <inheritdoc />
         public async Task<bool> VerifyExistingAccountNumber(int accountNumber)
         {
             bool accountNumberExistsInPeso = await _context.Accounts.OfType<PesoAccount>().AnyAsync(a => a.AccountNumber == accountNumber);
@@ -46,6 +52,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
             return true;
         }
 
+        /// <inheritdoc />
         public async Task<bool> VerifyExistingAlias(string alias)
         {
 
@@ -63,6 +70,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
             
         }
 
+        /// <inheritdoc />
         public async Task<bool> VerifyExistingCBU(int cbu)
         {
 

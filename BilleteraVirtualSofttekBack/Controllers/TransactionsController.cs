@@ -10,6 +10,11 @@ using System.Net;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
+
+    /// <summary>
+    /// Generates a Controller responsible for Transactions operations and transaction actions.
+    /// </summary>
+    /// 
     [Route("api")]
     [ApiController]
     public class TransactionsController : ControllerBase
@@ -31,10 +36,14 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
-        /// Gets all Transactions adding pagination.
+        /// Gets all Transactions with optional pagination.
         /// </summary>
+        /// <param name="page">Page number for pagination</param>
+        /// <param name="units">Number of Transactions per page.</param>
         /// <returns>
-        /// 200 OK response with the list of Transactions if successful.
+        /// 200 OK response with the list of Transactions if succesful.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 400 Bad Request response if the pagination parameters are invalid.
         /// </returns>
 
         [HttpGet]
@@ -60,10 +69,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
-        /// Gets all Transactions by account.
+        /// Gets all Transactions associated account.
         /// </summary>
+        /// <param name="accountId">ID of the account for which to retrieve transactions.</param>
         /// <returns>
-        /// 200 OK response with the list of Transactions by account if successful.
+        /// 200 OK response with the list of Transactions with the account if successful.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 404 Not Found response if the specified account does not exist.
         /// </returns>
 
         [HttpGet]
@@ -95,13 +107,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
-        /// Gets a Transaction by their ID.
+        /// Gets a specific Transaction by its ID.
         /// </summary>
-        /// <param name="id">ID of the Transaction to get.</param>
+        /// <param name="id">ID of the Transaction to retrieve.</param>
         /// <returns>
         /// 200 OK response with the Transaction if found.
-        /// |
-        /// 404 Not Found response if no Transaction is found.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 404 Not Found response if no Transaction is found for the specified ID.
         /// </returns>
 
         [HttpGet]
@@ -137,8 +149,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <param name="dto">Transaction data in a DTO.</param>
         /// <returns>
         /// 201 Created response if Transaction creation is successful.
-        /// |
-        /// 401 Unauthorized
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the Transaction creation is forbidden.
         /// </returns>
 
         [HttpPost]
@@ -190,8 +202,10 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <param name="dto">Updated Transaction data in a DTO.</param>
         /// <returns>
         /// 204 No Content response if Transaction update is successful.
-        /// |
         /// 400 Bad Request response if Transaction update fails.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the Transaction update is forbidden.
+        /// 404 Not Found response if no Transaction is found.
         /// </returns>
 
         [HttpPut]
@@ -243,8 +257,10 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <param name="id">ID of the Transaction to delete.</param>
         /// <returns>
         /// 204 No Content response if Transaction deletion is successful.
-        /// |
         /// 404 Not Found response if Transaction deletion fails.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the Transaction deletion is forbidden.
+        /// 400 Bad Request response if the request is invalid.
         /// </returns>
 
         [HttpDelete]

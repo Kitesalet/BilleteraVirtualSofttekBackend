@@ -11,8 +11,8 @@ namespace IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces
         /// <summary>
         /// Gets a collection of Transaction data that hasnt been soft deleted with pagination.
         /// </summary>
-        /// <returns>All of the TransactionGetDto entities.</returns>
-        Task<IEnumerable<TransactionGetDto>> GetAllTransactionsAsync(int page, int units);
+        /// <returns>All of the TransactionGetMinDto entities.</returns>
+        Task<IEnumerable<TransactionGetMinDto>> GetAllTransactionsAsync(int page, int units);
 
         /// <summary>
         /// Gets Transaction data by its id.

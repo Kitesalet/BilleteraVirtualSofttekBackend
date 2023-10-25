@@ -44,15 +44,32 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces
             /// <param name="id">An int.</param>
             /// <returns>A boolean value based on the Deletion of the Account, true if it was soft or hard deleted.</returns>
             Task<bool> DeleteAccountAsync(int id);
+
+            /// <summary>
+            /// Updates an account adding money to it in the effect of a deposit.
+            /// </summary>
+            /// <param name="transactionDTO">A AccountDepositDto that has the information of the account to deposit</param>
+            /// <returns>A boolean value based on the deposit of an account.</returns>
             public Task<bool> DepositAsync(AccountDepositDto transactionDTO);
 
+            /// <summary>
+            /// Updates twi accounts transfering money from one account to the other.
+            /// </summary>
+            /// <param name="transactionDTO">A transferDto that has the information of the account transfer money into and the origin account as well.</param>
+            /// <returns>A boolean value based on the transfer between two account.</returns>
             public Task<bool> TransferAsync(TransferDto transactionDTO);
 
+
+            /// <summary>
+            /// Updates an account withdrawing money out of it in the effect of an extraction.
+            /// </summary>
+            /// <param name="transactionDTO">AccountExtractDto that has the information of the account to withdraw</param>
+            /// <returns>A boolean value based on the extraction of an account.</returns>
             public Task<bool> ExtractAsync(AccountExtractDto transactionDTO);
 
 
 
-    }
+        }
 
 
 }
