@@ -23,25 +23,29 @@ namespace BilleteraVirtualSofttekBack.Controllers
         private readonly IHttpClientFactory _httpClient;
 
         /// <summary>
-        /// Initializes an instance of AccountController using dependency injection with its parameters.
+        /// Initializes an instance of the AccountsController using dependency injection with its parameters.
         /// </summary>
-        /// <param name="service">An IAccountService.</param>
-        /// <param name="logger">An ILogger.</param>
-        public AccountsController(IAccountService service, IHttpClientFactory httpClient , ILogger<AccountsController> logger)
+        /// <param name="service">An IAccountService for account-related operations.</param>
+        /// <param name="httpClient">An IHttpClientFactory for making HTTP requests.</param>
+        /// <param name="logger">An ILogger for logging and monitoring.</param>
+        
+        public AccountsController(IAccountService service, IHttpClientFactory httpClient, ILogger<AccountsController> logger)
         {
             _service = service;
-            _logger = logger;
             _httpClient = httpClient;
-
+            _logger = logger;
         }
 
         /// <summary>
-        /// Gets all Accounts from a client.
+        /// Retrieves all accounts belonging to a client with the specified ID.
         /// </summary>
+        /// <param name="id">An int id.</param>
         /// <returns>
-        /// 200 OK response with the list of Accounts if successful.
+        /// 200 OK response with the list of accounts if successful.
+        /// 400 Bad Request response if the client ID is invalid.
+        /// 401 Unauthorized response if the request is not authorized.
         /// </returns>
-
+        
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,30 +53,29 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("accounts/{id:int}")]
         public async Task<IActionResult> GetAllAccountsByClient(int id)
         {
-
-            if(id < 1)
+            if (id < 1)
             {
-                _logger.LogInformation($"Client id was invalid, id = {id}!");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client id was invalid");
+                _logger.LogInformation($"Client ID was invalid, id = {id}!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client ID was invalid");
             }
-        
+
             var accounts = await _service.GetAllAccountsByClientAsync(id);
 
             _logger.LogInformation("All accounts were retrieved!");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, accounts);
-
         }
 
         /// <summary>
-        /// Gets an account by their ID.
+        /// Retrieves an account by its unique ID.
         /// </summary>
-        /// <param name="id">ID of the account to get.</param>
+        /// <param name="id">The unique identifier of the account to retrieve.</param>
         /// <returns>
         /// 200 OK response with the account if found.
-        /// |
-        /// 404 Not Found response if no account is found.
+        /// 404 Not Found response if no account with the specified ID is found.
+        /// 400 Bad Request response if the ID introduced is invalid.
+        /// 401 Unauthorized response if the request is not authorized.
         /// </returns>
-
+        
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,35 +85,33 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("account/{id:int}")]
         public async Task<IActionResult> GetAccount([FromRoute] int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
-                _logger.LogError($"Invalid id introduced, id = {id}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The id introduced was invalid");
+                _logger.LogError($"Invalid ID introduced, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The ID introduced was invalid");
             }
 
             var account = await _service.GetAccountByIdAsync(id);
 
-            if(account == null)
+            if (account == null)
             {
-                _logger.LogError($"The account wasnt found!, id = {id}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, $"The account introduced wasn't found!");
+                _logger.LogError($"The account wasn't found!, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, $"The account with the specified ID wasn't found!");
             }
 
             _logger.LogInformation($"Account was retrieved, id = {id}.");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, account);
-
         }
 
         /// <summary>
         /// Creates a new account.
         /// </summary>
-        /// <param name="dto">account data in a DTO.</param>
+        /// <param name="dto">Account data in a DTO (Data Transfer Object).</param>
         /// <returns>
-        /// 201 Created response if account creation is successful.
-        /// |
-        /// 400 Bad Request response if account creation fails.
-        /// |
-        /// 409 Conflict if account was found in the database.
+        /// 201 Created response if the account creation is successful.
+        /// 400 Bad Request response if the account creation fails due to invalid data.
+        /// 401 Unauthorized response if the request is not authorized.
+        /// 403 Forbidden response if the request is forbidden.
         /// </returns>
 
         [HttpPost]
@@ -146,14 +147,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// Updates an existing account by their ID.
         /// </summary>
         /// <param name="id">ID of the account to update.</param>
-        /// <param name="dto">Updated account data in a DTO.</param>
+        /// <param name="dto">Updated account data in a DTO (Data Transfer Object).</param>
         /// <returns>
         /// 204 No Content response if account update is successful.
-        /// |
-        /// 400 Bad Request response if account update fails.
+        /// 400 Bad Request response if account update fails due to invalid data.
+        /// 404 Not Found response if account update feilss due to not found data.
         /// </returns>
-
-
 
         [HttpPut]
         [Authorize]
@@ -209,7 +208,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogInformation($"There was an error with UUID | ALIAS | ACCOUNTID | CBU, or account was null, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound), "There was an error with the data you introduced, Account wasn't created!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "There was an error with the data you introduced, Account wasn't created!");
             }
 
             _logger.LogInformation($"Account was properly updated, id = {id}");
@@ -217,15 +216,16 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         }
 
-
         /// <summary>
-        /// Deletes a account by their ID.
+        /// Deletes an account by their ID.
         /// </summary>
         /// <param name="id">ID of the account to delete.</param>
         /// <returns>
         /// 204 No Content response if account deletion is successful.
-        /// |
         /// 404 Not Found response if account deletion fails.
+        /// 401 Unauthorized response if the user is not authorized.
+        /// 403 Forbidden response if the user is forbidden from performing this action.
+        /// 400 Bad Request response if the request is invalid.
         /// </returns>
 
         [HttpDelete]
@@ -261,13 +261,23 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
-        /// Makes a deposit of money into a single account
+        /// Makes a deposit of money into a single account.
         /// </summary>
-        /// <returns>Return a transaction object</returns>
+        /// <param name="id">ID of the account to deposit into.</param>
+        /// <param name="depositDto">DTO with deposit details.</param>
+        /// <returns>
+        /// 200 OK response with a transaction object if the deposit is successful.
+        /// 400 Bad Request response if the deposit data is invalid.
+        /// 401 Unauthorized response if the user is not authorized.
+        /// 403 Forbidden response if the user is forbidden from performing this action.
+        /// 404 Not Found response if the account or user is not found.
+        /// </returns>
 
         [HttpPut]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/deposit/{id:int}")]
@@ -339,13 +349,23 @@ namespace BilleteraVirtualSofttekBack.Controllers
         }
 
         /// <summary>
-        /// Makes an extraction of money from a single account
+        /// Makes an extraction of money from a single account.
         /// </summary>
-        /// <returns>Return a transaction object</returns>
+        /// <param name="id">ID of the account to extract from.</param>
+        /// <param name="extractionDto">DTO (Data Transfer Object) with extraction details.</param>
+        /// <returns>
+        /// 200 OK response with a transaction object if the extraction is successful.
+        /// 400 Bad Request response if the extraction data is invalid.
+        /// 401 Unauthorized response if the user is not authorized.
+        /// 403 Forbidden response if the user is forbidden from performing this action.
+        /// 404 Not Found response if the account, user, or extracted amount is not found.
+        /// </returns>
 
         [HttpPut]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/extract/{id:int}")]
@@ -420,9 +440,24 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
         }
 
+
+        /// <summary>
+        /// Initiates a funds transfer between two accounts.
+        /// </summary>
+        /// <param name="transferDto">DTO (Data Transfer Object) with transfer details.</param>
+        /// <returns>
+        /// 200 OK response with a transaction object if the transfer is successful.
+        /// 400 Bad Request response if the transfer data is invalid or the user is not authorized.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 403 Forbidden response if the user is forbidden from performing this action.
+        /// 404 Not Found response if one or both of the accounts, amount, or concept is not found.
+        /// </returns>
+
         [HttpPut]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/transfer")]
@@ -461,7 +496,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if (acc == null)
             {
                 _logger.LogInformation($"The account selected as origin didnt exist in the database, dto = {transferDto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The selected origin account doesnt exist!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The selected origin account doesnt exist!");
             }
 
             var clientId = int.Parse(User.FindFirst("NameIdentifier").Value);
