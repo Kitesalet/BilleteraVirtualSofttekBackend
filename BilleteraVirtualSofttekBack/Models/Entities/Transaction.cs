@@ -34,7 +34,7 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
         
         [Required]
         [Column("transaction_concept")]
-        public TransferConcept Concept { get; set; }
+        public TransactionConcept Concept { get; set; }
 
         /// <summary>
         /// The ID of the client associated with this transaction.

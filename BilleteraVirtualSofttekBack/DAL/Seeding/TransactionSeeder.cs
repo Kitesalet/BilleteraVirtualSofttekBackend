@@ -30,7 +30,7 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     ClientId = 1,
                     CreatedDate = DateTime.Now,
                     Type = TransactionType.Deposit,
-                    Concept = "Deposit"
+                    Concept = TransactionConcept.Deposit
                 });
 
             

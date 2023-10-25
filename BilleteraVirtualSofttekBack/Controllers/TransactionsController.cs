@@ -47,7 +47,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpGet]
-        [Authorize("Admin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -75,14 +75,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// <returns>
         /// 200 OK response with the list of Transactions with the account if successful.
         /// 401 Unauthorized response if the user is not authenticated.
-        /// 404 Not Found response if the specified account does not exist.
         /// </returns>
 
         [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("transactions/account/{accountId:int}")]
         public async Task<IActionResult> GetAllTransactionsByAccount(int accountId)
         {
@@ -95,9 +93,41 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var transactions = await _service.GetTransactionByAccountAsync(accountId);
 
-            if(transactions == null)
+            _logger.LogInformation("All Transactions by client were retrieved!");
+            return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transactions);
+
+        }
+
+        /// <summary>
+        /// Gets all Transactions associated client.
+        /// </summary>
+        /// <param name="clientId">ID of the client for which to retrieve transactions.</param>
+        /// <returns>
+        /// 200 OK response with the list of Transactions with the client if successful.
+        /// 401 Unauthorized response if the user is not authenticated.
+        /// 404 Not Found response if the specified account does not exist.
+        /// </returns>
+
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("transactions/client/{clientId:int}")]
+        public async Task<IActionResult> GetAllTransactionsByClient(int clientId)
+        {
+
+            if (clientId <= 0)
             {
-                _logger.LogInformation($"The account was not found, id = {accountId}");
+                _logger.LogInformation($"The account id was invalid, id = {clientId}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
+            }
+
+            var transactions = await _service.GetTransactionByClientAsync(clientId);
+
+            if (transactions == null)
+            {
+                _logger.LogInformation($"The account was not found, id = {clientId}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account was not found!");
             }
 
@@ -117,7 +147,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpGet]
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -169,7 +199,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
-            if (dto.Concept < (TransferConcept)1 || dto.Concept > (TransferConcept)6)
+            if (dto.Concept < (TransactionConcept)1 || dto.Concept > (TransactionConcept)8)
             {
                 _logger.LogInformation($"The concept introduced was invalid, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The concept introduced was invalid!");
@@ -232,7 +262,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
-            if(dto.Concept < (TransferConcept)1 || dto.Concept > (TransferConcept)6)
+            if(dto.Concept < (TransactionConcept)1 || dto.Concept > (TransactionConcept)8)
             {
                 _logger.LogInformation($"The concept introduced was invalid, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The concept introduced was invalid!");

@@ -42,6 +42,14 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
 
         }
 
-        
+        public async Task<IEnumerable<Transaction>> GetTransactionByClient(int clientId)
+        {
+            return await _context.Transactions.Include(e => e.SourceAccount)
+                                                 .Include(t => t.DestinationAccount)
+                                                 .Where(t => t.ClientId == clientId
+                                                 && t.DeletedDate == null)
+                                                 .OrderByDescending(t => t.CreatedDate)
+                                                 .ToListAsync();
+        }
     }
     }

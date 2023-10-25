@@ -378,7 +378,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 Amount = depositDto.Amount,
                 ClientId = clientId,
                 Type = TransactionType.Deposit,
-                Concept = ""
+                Concept = TransactionConcept.Deposit
             };
 
             var baseApi = new BaseApi(_httpClient);
@@ -471,7 +471,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 Amount = extractionDto.Amount,
                 ClientId = clientId,
                 Type = TransactionType.Withdrawal,
-                Concept = ""
+                Concept = TransactionConcept.Extraction
             };
             
             var baseApi = new BaseApi(_httpClient);
@@ -523,12 +523,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             }
 
-            if (String.IsNullOrEmpty(transferDto.Concept))
-            {
-                _logger.LogInformation($"The concept introduced was invalid, dto = {transferDto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "You have to introduce a concept");
-
-            }
 
             if (transferDto.DestinationAccountId == transferDto.OriginAccountId)
             {

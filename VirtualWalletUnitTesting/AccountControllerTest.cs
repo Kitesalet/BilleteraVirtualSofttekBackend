@@ -810,7 +810,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 0m
 
             };
@@ -845,7 +845,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 1,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -881,7 +881,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -920,7 +920,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -970,7 +970,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -1020,7 +1020,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
@@ -1071,7 +1071,7 @@ namespace VirtualWalletUnitTesting
             {
                 OriginAccountId = 1,
                 DestinationAccountId = 2,
-                Concept = "Concept",
+                Concept = TransactionConcept.Gambling,
                 Amount = 1000m
 
             };
