@@ -1,13 +1,14 @@
 ﻿using BilleteraVirtualSofttekBack.Controllers.ApiHelper;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Transactions;
+using BilleteraVirtualSofttekBack.Models.Entities;
 using BilleteraVirtualSofttekBack.Models.Enums;
 using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-
+using System.Security.Claims;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
@@ -116,7 +117,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("account/register")]
@@ -134,7 +134,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(flag == false)
             {
                 _logger.LogError($"There was a problem with the creation of the account, dto = {dto}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.Conflict, $"The account couldn't be created!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, $"The account couldn't be created!");
             }
 
             _logger.LogInformation($"Account was created, dto = ${dto}");
