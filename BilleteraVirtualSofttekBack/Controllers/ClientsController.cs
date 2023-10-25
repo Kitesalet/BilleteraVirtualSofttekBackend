@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using BilleteraVirtualSofttekBack.Models.Enums;
 
 namespace BilleteraVirtualSofttekBack.Controllers
 {
@@ -44,7 +45,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 400 Bad Request response if the pagination parameters are invalid.
         /// </returns>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -122,6 +123,11 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [Route("client/register")]
         public async Task<IActionResult> CreateClient(ClientCreateDto dto)
         {
+            if(dto.Role != ClientRole.Admin && dto.Role != ClientRole.Base)
+            {
+                _logger.LogInformation($"The client role was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client role entered is invalid!");
+            }
 
             if (String.IsNullOrEmpty(dto.Email))
             {
@@ -168,7 +174,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -221,7 +227,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpDelete]
-        [Authorize]
+        [Authorize("Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

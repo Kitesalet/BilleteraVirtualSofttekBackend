@@ -13,13 +13,13 @@ using System.Security.Claims;
 namespace BilleteraVirtualSofttekBack.Controllers
 {
 
-    [Authorize]
-    [Route("api")]
-    [ApiController]
 
     /// <summary>
     /// Generates a Controller responsible for account operations and account actions.
     /// </summary>
+    
+    [Route("api")]
+    [ApiController]
     public class AccountsController : ControllerBase
     {
 
@@ -53,7 +53,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 400 Bad Request response if the pagination parameters are invalid.
         /// </returns>
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -85,6 +85,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -115,7 +116,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
         
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -193,7 +194,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpPut]
-        [Authorize]
+        [Authorize("Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -295,8 +296,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
             if(result == false)
             {
 
-                _logger.LogInformation($"Account was not deleted or not found, id = {id}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account submited was not found!");
+                _logger.LogInformation($"Account was not deleted or not found or had balance left, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account submited has balance left, or was not found!");
 
             }
 

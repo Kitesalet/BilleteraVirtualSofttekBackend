@@ -44,6 +44,7 @@ namespace IntegradorSofttekImanol.Services
                 {
                     return false;
                 }
+                
 
                 client.Password = EncrypterHelper.Encrypter(client.Password, _configuration["EncryptKey"] );
 

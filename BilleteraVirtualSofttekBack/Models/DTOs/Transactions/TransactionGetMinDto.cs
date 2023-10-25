@@ -1,4 +1,5 @@
 ﻿using BilleteraVirtualSofttekBack.Models.DTOs.Account;
+using BilleteraVirtualSofttekBack.Models.Enums;
 
 namespace BilleteraVirtualSofttekBack.Models.DTOs.Transactions
 {
@@ -7,7 +8,7 @@ namespace BilleteraVirtualSofttekBack.Models.DTOs.Transactions
 
         public decimal Amount { get; set; }
         public string Type { get; set; }
-        public string Concept { get; set; }
+        public TransferConcept Concept { get; set; }
         public int SourceAccountId { get; set; }
         public int DestinationAccountId { get; set; }
         public DateTime CreatedDate { get; set; }

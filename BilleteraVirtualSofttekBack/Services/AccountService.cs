@@ -129,6 +129,12 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<bool> DeleteAccountAsync(int id)
         {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
+
+            if(account.Balance > 1)
+            {
+                return false;
+            }
 
             var flag = await _unitOfWork.AccountRepository.Delete(id);
 

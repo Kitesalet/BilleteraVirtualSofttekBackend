@@ -1,4 +1,5 @@
 ﻿using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Enums;
 
 namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
 {
@@ -10,6 +11,7 @@ namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
 
         public string Password { get; set; }
 
+        public ClientRole Role { get; set; }
 
     }
 }

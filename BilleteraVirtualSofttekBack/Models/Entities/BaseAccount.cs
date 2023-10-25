@@ -7,6 +7,8 @@ namespace BilleteraVirtualSofttekBack.Models.Entities
     /// <summary>
     /// Represents a base account with common properties and methods.
     /// </summary>
+
+    [Table("account")]
     public abstract class BaseAccount : BaseEntity
     {
         /// <summary>
