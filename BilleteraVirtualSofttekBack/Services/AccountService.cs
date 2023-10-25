@@ -131,7 +131,7 @@ namespace BilleteraVirtualSofttekBack.Services
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(id);
 
-            if(account.Balance > 1)
+            if(account != null && account.Balance > 1)
             {
                 return false;
             }
@@ -190,38 +190,36 @@ namespace BilleteraVirtualSofttekBack.Services
                 return false;
             }
 
-            if(accountDto.Type == AccountType.Dollar || accountDto.Type == AccountType.Peso)
-            {
-               var numberExists = await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(accountDto.AccountNumber);
-               
-               if (numberExists == true)
-               { 
-                 
-                    return false;
-               
-               }
-
-                var cbuExists = await _unitOfWork.AccountRepository.VerifyExistingCBU(accountDto.CBU);
-
-                if(cbuExists == true)
-                {
-                    return false;
-                }
-
-                var aliasExists = await _unitOfWork.AccountRepository.VerifyExistingAlias(accountDto.Alias);
-
-                if(aliasExists == true)
-                {
-                    return false;
-                }
-            }
-
             try
             {
              
                 if(account.Type == AccountType.Peso)
                 {
                     var newAccount = (PesoAccount)account;
+
+                    var numberExists = await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(accountDto.AccountNumber);
+
+
+                    if (newAccount.AccountNumber != accountDto.AccountNumber && numberExists == true)
+                    {
+
+                        return false;
+
+                    }
+
+                    var cbuExists = await _unitOfWork.AccountRepository.VerifyExistingCBU(accountDto.CBU);
+
+                    if (cbuExists == true && newAccount.CBU != accountDto.CBU)
+                    {
+                        return false;
+                    }
+
+                    var aliasExists = await _unitOfWork.AccountRepository.VerifyExistingAlias(accountDto.Alias);
+
+                    if (aliasExists == true && newAccount.Alias != accountDto.Alias)
+                    {
+                        return false;
+                    }
 
                     newAccount.ModifiedDate = DateTime.Now;
                     newAccount.Alias = accountDto.Alias;
@@ -233,7 +231,33 @@ namespace BilleteraVirtualSofttekBack.Services
                 }
                 else if(account.Type == AccountType.Dollar)
                 {
+
+
                     var newAccount = (DollarAccount)account;
+
+                    var numberExists = await _unitOfWork.AccountRepository.VerifyExistingAccountNumber(accountDto.AccountNumber);
+
+
+                    if (numberExists == true && newAccount.AccountNumber != accountDto.AccountNumber)
+                    {
+
+                        return false;
+
+                    }
+
+                    var cbuExists = await _unitOfWork.AccountRepository.VerifyExistingCBU(accountDto.CBU);
+
+                    if (cbuExists == true && newAccount.CBU != accountDto.CBU)
+                    {
+                        return false;
+                    }
+
+                    var aliasExists = await _unitOfWork.AccountRepository.VerifyExistingAlias(accountDto.Alias);
+
+                    if (aliasExists == true && newAccount.Alias != newAccount.Alias)
+                    {
+                        return false;
+                    }
 
                     newAccount.ModifiedDate = DateTime.Now;
                     newAccount.Alias = accountDto.Alias;

@@ -53,7 +53,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 400 Bad Request response if the pagination parameters are invalid.
         /// </returns>
         [HttpGet]
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -116,7 +116,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
         
         [HttpGet]
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -150,7 +150,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 201 Created response if the account creation is successful.
         /// 400 Bad Request response if the account creation fails due to invalid data.
         /// 401 Unauthorized response if the request is not authorized.
-        /// 403 Forbidden response if the request is forbidden.
         /// </returns>
 
         [HttpPost]
@@ -158,7 +157,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [Route("account/register")]
         public async Task<IActionResult> CreateAccount(AccountCreateDto dto)
         {
@@ -315,7 +313,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 200 OK response with a transaction object if the deposit is successful.
         /// 400 Bad Request response if the deposit data is invalid.
         /// 401 Unauthorized response if the user is not authorized.
-        /// 403 Forbidden response if the user is forbidden from performing this action.
         /// 404 Not Found response if the account or user is not found.
         /// </returns>
 
@@ -324,13 +321,17 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/deposit/{id:int}")]
 
         public async Task<IActionResult> DepositAsync(int id, AccountDepositDto depositDto)
         {
            
+            if(id != depositDto.Id)
+            {
+                _logger.LogInformation($"The ids introduced didnt match, dto = {depositDto}, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The ids introduced dont match");
+            }
 
             if (depositDto.Amount <= 1)
             {
@@ -403,7 +404,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 200 OK response with a transaction object if the extraction is successful.
         /// 400 Bad Request response if the extraction data is invalid.
         /// 401 Unauthorized response if the user is not authorized.
-        /// 403 Forbidden response if the user is forbidden from performing this action.
         /// 404 Not Found response if the account, user, or extracted amount is not found.
         /// </returns>
 
@@ -412,12 +412,17 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/extract/{id:int}")]
 
         public async Task<IActionResult> ExtractionAsync(int id, AccountExtractDto extractionDto)
         {
+            if (id < 1)
+            {
+                _logger.LogInformation($"The ids introduced didnt match, dto = {extractionDto}, id = {id}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The ids introduced dont match");
+            }
+
             if (extractionDto.Amount <= 1)
             {
                 _logger.LogInformation($"The amount introduced was invalid, dto = {extractionDto}");
@@ -495,7 +500,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// 200 OK response with a transaction object if the transfer is successful.
         /// 400 Bad Request response if the transfer data is invalid or the user is not authorized.
         /// 401 Unauthorized response if the user is not authenticated.
-        /// 403 Forbidden response if the user is forbidden from performing this action.
         /// 404 Not Found response if one or both of the accounts, amount, or concept is not found.
         /// </returns>
 
@@ -504,7 +508,6 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("account/transfer")]
 
@@ -556,6 +559,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There arent enough funds to make this transaction!");
 
             }
+
+
 
             var flag = await _service.TransferAsync(transferDto);
 

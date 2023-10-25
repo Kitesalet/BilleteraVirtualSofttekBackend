@@ -40,11 +40,17 @@ namespace BilleteraVirtualSofttekBack.Services
             var origin = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
             var destination = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
 
+            
+
             if(origin == null || destination == null || client == null)
             {
                 return false;
             }
 
+            if (client.Id != origin.ClientId || client.Id == origin.ClientId)
+            {
+                return false;
+            }
 
             try
             {
@@ -95,7 +101,12 @@ namespace BilleteraVirtualSofttekBack.Services
         /// <inheritdoc/>
         public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int accountId)
         {
+            var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
 
+            if(account == null)
+            {
+                return null;
+            }
 
             var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(accountId);
 
@@ -155,12 +166,19 @@ namespace BilleteraVirtualSofttekBack.Services
             var origin = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
             var destination = await _unitOfWork.AccountRepository.GetByIdAsync(transactionDto.SourceAccountId);
 
+            
+
             if (
                   origin == null 
                || destination == null 
                || client == null 
                || transaction == null              
                )
+            {
+                return false;
+            }
+
+            if (client.Id != origin.ClientId || client.Id == origin.ClientId)
             {
                 return false;
             }

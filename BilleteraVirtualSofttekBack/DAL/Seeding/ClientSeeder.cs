@@ -45,6 +45,14 @@ namespace IntegradorSofttekImanol.DAL.DBSeeding
                     Name = "random",
                     Role = ClientRole.Base,
                     CreatedDate = DateTime.Now
+                }, new Client
+                {
+                    Id = 3,
+                    Password = EncrypterHelper.Encrypter("random", _configuration["EncryptKey"]),
+                    Email = "3@3.com",
+                    Name = "random",
+                    Role = ClientRole.Base,
+                    CreatedDate = DateTime.Now
                 }
                 ); 
         }

@@ -7,9 +7,6 @@ namespace BilleteraVirtualSofttekBack.Models.DTOs.Client
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public string Email { get; set; }
-
         public ClientRole Role { get; set; }
 
         public string Password { get; set; }
