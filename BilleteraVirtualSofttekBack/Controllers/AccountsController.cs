@@ -587,7 +587,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             var token = HttpContext.Request.Headers["Authorization"].ToString();
 
-            var transaction = await baseApi.PostToApi("transaction/create", transactionCreate, token);
+            var transaction = baseApi.PostToApi("transaction/create", transactionCreate, token);
 
 
             _logger.LogInformation($"Transaction was completed!, id = {transferDto.OriginAccountId}, transaction = {transaction}");

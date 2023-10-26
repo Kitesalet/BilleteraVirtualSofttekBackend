@@ -94,7 +94,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
             }
 
-            var transactions = await _service.GetTransactionByAccountAsync(accountId);
+            var transactions = await _service.GetTransactionsByClient(accountId);
 
             if(transactions == null)
             {
@@ -102,7 +102,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account was not found!");
             }
 
-            _logger.LogInformation("All Transactions by client were retrieved!");
+            _logger.LogInformation("All Transactions by account were retrieved!");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, transactions);
 
         }
@@ -128,16 +128,16 @@ namespace BilleteraVirtualSofttekBack.Controllers
 
             if (clientId <= 0)
             {
-                _logger.LogInformation($"The account id was invalid, id = {clientId}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
+                _logger.LogInformation($"The client id was invalid, id = {clientId}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
             }
 
-            var transactions = await _service.GetTransactionByClientAsync(clientId);
+            var transactions = await _service.GetTransactionsByClient(clientId);
 
             if (transactions == null)
             {
-                _logger.LogInformation($"The account was not found, id = {clientId}");
-                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The account was not found!");
+                _logger.LogInformation($"The client was not found, id = {clientId}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.NotFound, "The client was not found!");
             }
 
             _logger.LogInformation("All Transactions by client were retrieved!");

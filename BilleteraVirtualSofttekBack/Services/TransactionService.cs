@@ -99,7 +99,7 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<TransactionGetDto>> GetTransactionByAccountAsync(int accountId)
+        public async Task<List<TransactionGetDto>> GetTransactionsByClient(int accountId)
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
 
@@ -108,29 +108,12 @@ namespace BilleteraVirtualSofttekBack.Services
                 return null;
             }
 
-            var transactions = await _unitOfWork.TransactionRepository.GetTransactionByAccount(accountId);
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByAccount(accountId);
 
             var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
 
             return transactionsDto;
 
-        }
-
-        /// <inheritdoc/>
-        public async Task<List<TransactionGetDto>> GetTransactionByClientAsync(int clientId)
-        {
-            var client = _unitOfWork.ClientRepository.GetByIdAsync(clientId);
-
-            if(client == null)
-            {
-                return null;
-            }
-
-            var transactions = await _unitOfWork.TransactionRepository.GetTransactionByClient(clientId);
-
-            var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
-
-            return transactionsDto;
         }
 
         /// <inheritdoc/>

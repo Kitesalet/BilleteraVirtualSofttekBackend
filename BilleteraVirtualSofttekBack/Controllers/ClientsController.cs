@@ -182,6 +182,12 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> UpdateClient(int id, ClientUpdateDto dto)
         {
 
+            if(dto.Role != ClientRole.Admin || dto.Role != ClientRole.Admin)
+            {
+                _logger.LogInformation($"The client role was invalid, dto = {dto}");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client role entered is invalid!");
+            }
+
             if(id != dto.Id)
             {
                 _logger.LogInformation($"The entered ids dont match!, dto = {dto}, id = {id}");

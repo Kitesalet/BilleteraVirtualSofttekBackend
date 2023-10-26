@@ -20,6 +20,80 @@ namespace VirtualWalletUnitTesting
     {
 
         [TestMethod]
+        public async Task GetAllAccountsBy_InvalidPagination_ReturnError()
+        {
+
+            //Arrange
+
+            var accounts = new List<AccountGetDto>
+            {
+                new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Alias1", Balance = 1000.00m, Type = "Peso", ClientId = 1 },
+                new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 2, CBU = 5678, Alias = "Alias2", Balance = 2000.00m, Type = "Dollar", ClientId = 1 },
+                new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 3, CBU = 1234, Alias = "Alias3", Balance = 3000.00m, Type = "Crypto", ClientId = 1 },
+                new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 4, CBU = 4321, Alias = "Alias4", Balance = 4000.00m, Type = "Peso", ClientId = 1 },
+                new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 5, CBU = 7890, Alias = "Alias5", Balance = 5000.00m, Type = "Dollar", ClientId = 1 },
+                new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 3, CBU = 4321, Alias = "Alias3", Balance = 6000.00m, Type = "Crypto", ClientId = 1 },
+            };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.GetAllAccounts(1,10)).ReturnsAsync(accounts);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.GetAllAccounts(0,0);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("There was an error in the pagination!", responseResult);
+
+
+        }
+
+        [TestMethod]
+        public async Task GetAllAccountsBy_Valid_ReturnAccounts()
+        {
+
+            //Arrange
+
+            var accounts = new List<AccountGetDto>
+            {
+                new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Alias1", Balance = 1000.00m, Type = "Peso", ClientId = 1 },
+                new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 2, CBU = 5678, Alias = "Alias2", Balance = 2000.00m, Type = "Dollar", ClientId = 1 },
+                new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 3, CBU = 1234, Alias = "Alias3", Balance = 3000.00m, Type = "Crypto", ClientId = 1 },
+                new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 4, CBU = 4321, Alias = "Alias4", Balance = 4000.00m, Type = "Peso", ClientId = 1 },
+                new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 5, CBU = 7890, Alias = "Alias5", Balance = 5000.00m, Type = "Dollar", ClientId = 1 },
+                new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 3, CBU = 4321, Alias = "Alias3", Balance = 6000.00m, Type = "Crypto", ClientId = 1 },
+            };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.GetAllAccounts(1, 10)).ReturnsAsync(accounts);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.GetAllAccounts(1, 10);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiSuccessResponse;
+            var responseResult = response.Data as List<AccountGetDto>;
+
+            ///Assert
+
+            Assert.AreEqual(accounts, responseResult);
+
+
+        }
+
+        [TestMethod]
         public async Task GetAllAccountsByClient_InvalidClientId_ReturnError()
         {
 
@@ -51,7 +125,7 @@ namespace VirtualWalletUnitTesting
 
             ///Assert
 
-            Assert.AreEqual("The client id was invalid", responseResult);
+            Assert.AreEqual("The client ID was invalid", responseResult);
 
 
         }
@@ -117,7 +191,7 @@ namespace VirtualWalletUnitTesting
 
             ///Assert
 
-            Assert.AreEqual("The id introduced was invalid", responseResult);
+            Assert.AreEqual("The ID introduced was invalid", responseResult);
 
         }
 
@@ -173,7 +247,7 @@ namespace VirtualWalletUnitTesting
 
             ///Assert
 
-            Assert.AreEqual("The account introduced wasn't found!", responseResult);
+            Assert.AreEqual("The account with the specified ID wasn't found!", responseResult);
 
         }
 
@@ -258,6 +332,258 @@ namespace VirtualWalletUnitTesting
             ///Assert
 
             Assert.AreEqual("The account was created!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_InvalidIds_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Type = AccountType.Crypto, ClientId = 1, AccountId = 1 };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(2, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("The entered ids dont match!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_InvalidAccountType_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto {  ClientId = 1, AccountId = 1 };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("The account type submitted was incorrect!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_CryptoNeedsUUID_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Type = AccountType.Crypto, ClientId = 1, AccountId = 1 };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("A Crypto account needs a valid UUID!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_CryptoAlias_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Type = AccountType.Crypto, ClientId = 1, AccountId = 1, UUID = "xxxxx", Alias = "xxxxx" };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("A Crypto account can't have fiduciary values!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_FiduciaryIncomplete_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Type = AccountType.Dollar, ClientId = 1, AccountId = 1, Alias = "xxxxx" };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("A Fiduciary account needs a valid Account number, AccountId, and CBU", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_FiduciaryWithUUID_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Type = AccountType.Dollar, ClientId = 1, AccountId = 1,UUID = "xxxxx", CBU = 23, AccountNumber = 42 ,Alias = "xxxxx" };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("A Fiduciary account can't have a UUID!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_InvalidBalance_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Balance = 0, Type = AccountType.Dollar, ClientId = 1, AccountId = 1, CBU = 23, AccountNumber = 42, Alias = "xxxxx" };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("Amount must be greater than 1", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_GeneralInvalid_ReturnError()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Balance = 100, Type = AccountType.Dollar, ClientId = 1, AccountId = 1, CBU = 23, AccountNumber = 42, Alias = "xxxxx" };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(false);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiErrorResponse;
+            var responseResult = response.Errors[0].Error as string;
+
+            ///Assert
+
+            Assert.AreEqual("There was an error with the data you introduced, Account wasn't created!", responseResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateAccount_ValidUpdate_ReturnUpdated()
+        {
+
+            //Arrange
+
+            AccountUpdateDto account = new AccountUpdateDto { Balance = 100, Type = AccountType.Dollar, ClientId = 1, AccountId = 1, CBU = 23, AccountNumber = 42, Alias = "xxxxx" };
+
+            var mockService = new Mock<IAccountService>();
+            var mockFactory = new Mock<IHttpClientFactory>();
+            var mockLogger = new Mock<ILogger<AccountsController>>();
+
+            mockService.Setup(service => service.UpdateAccount(account)).ReturnsAsync(true);
+            var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateAccount(1, account);
+            var objectResult = result as ObjectResult;
+            var response = objectResult.Value as ApiSuccessResponse;
+            var responseResult = response.Data as string;
+
+            ///Assert
+
+            Assert.AreEqual("Account was properly updated!", responseResult);
 
         }
 
@@ -375,7 +701,7 @@ namespace VirtualWalletUnitTesting
 
             ///Assert
 
-            Assert.AreEqual("Ids dont match!", responseResult);
+            Assert.AreEqual("The ids introduced dont match", responseResult);
 
         }
 
@@ -660,7 +986,7 @@ namespace VirtualWalletUnitTesting
 
         
         [TestMethod]
-        public async Task ExtractAsync_InvalidDeposit_ReturnError()
+        public async Task ExtractAsync_TokenMismatch_ReturnError()
         {
 
             //Arrange
@@ -671,7 +997,7 @@ namespace VirtualWalletUnitTesting
                 Amount = 1000m
             };
 
-            AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2 };
+            AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2, Balance = 2000 };
 
 
             var mockService = new Mock<IAccountService>();
@@ -707,7 +1033,7 @@ namespace VirtualWalletUnitTesting
 
         
         [TestMethod]
-        public async Task ExtractAsync_TokenMismatch_ReturnError()
+        public async Task ExtractAsync_InvalidDeposit_ReturnError()
         {
 
             //Arrange
@@ -748,7 +1074,7 @@ namespace VirtualWalletUnitTesting
 
             ///Assert
 
-            Assert.AreEqual("There was a problem with the extraction!", responseResult);
+            Assert.AreEqual("You dont have enough funds for that extraction!", responseResult);
 
         }
 
@@ -764,7 +1090,7 @@ namespace VirtualWalletUnitTesting
                 Amount = 1000m
             };
 
-            AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2 };
+            AccountGetDto account = new AccountGetDto { Id = 1, ClientId = 2, Balance = 2000 };
 
             var mockService = new Mock<IAccountService>();
             var mockFactory = new Mock<IHttpClientFactory>();
@@ -1057,7 +1383,7 @@ namespace VirtualWalletUnitTesting
 
             ///Assert
 
-            Assert.AreEqual("There was a problem with the transfer!", responseResult);
+            Assert.AreEqual("There was a problem with the transfer! You can't buy Crypto with Pesos or Pesos with Crypto!", responseResult);
 
         }
 
