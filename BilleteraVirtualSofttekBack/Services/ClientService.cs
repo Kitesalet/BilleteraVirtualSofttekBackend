@@ -40,7 +40,9 @@ namespace IntegradorSofttekImanol.Services
             {
                 var client = _mapper.Map<Client>(clientDto);
 
-                if(await _unitOfWork.ClientRepository.ClientExists(clientDto) == true)
+                var clientExists = await _unitOfWork.ClientRepository.ClientExists(clientDto);
+
+                if (await _unitOfWork.ClientRepository.ClientExists(clientDto) == true)
                 {
                     return false;
                 }

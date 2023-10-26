@@ -44,7 +44,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
         public async Task<bool> ClientExists(ClientCreateDto dto)
         {
 
-            var flag = await _context.Clients.AnyAsync(c => c.Email == dto.Email || c.DeletedDate != null);
+            var flag = await _context.Clients.AnyAsync(c => c.Email == dto.Email && c.DeletedDate == null);
 
             return flag;
         }

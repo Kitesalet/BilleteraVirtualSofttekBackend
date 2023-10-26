@@ -94,7 +94,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
             }
 
-            var transactions = await _service.GetTransactionsByClient(accountId);
+            var transactions = await _service.GetTransactionsByAccount(accountId);
 
             if(transactions == null)
             {

@@ -15,13 +15,13 @@ namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
             else if (toAccount.Type == AccountType.Dollar)
             {
 
-                //Dollar value is hardcoded to 500 pesos
+                //Dollar value is hardcoded to 400 pesos
 
                 //Pesos to extract
                 Extract(amount);
 
                 //Dollars to deposit
-                decimal newDollar = amount / 500;
+                decimal newDollar = amount / 400;
                 toAccount.Deposit(newDollar);
 
             }
