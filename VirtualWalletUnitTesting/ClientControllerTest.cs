@@ -2,6 +2,7 @@ using BilleteraVirtualSofttekBack.Controllers;
 using BilleteraVirtualSofttekBack.Models.DTOs.Account;
 using BilleteraVirtualSofttekBack.Models.DTOs.Client;
 using BilleteraVirtualSofttekBack.Models.Entities;
+using BilleteraVirtualSofttekBack.Models.Enums;
 using IntegradorSofttekImanol.Infrastructure;
 using IntegradorSofttekImanol.Models.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -179,6 +180,7 @@ namespace VirtualWalletUnitTesting
                 Name = "Client 1",
                 Email = "",
                 Password = "password1",
+                Role = ClientRole.Base
             };
 
             var mockService = new Mock<IClientService>();
@@ -210,6 +212,7 @@ namespace VirtualWalletUnitTesting
                 Name = "",
                 Email = "client@example.com",
                 Password = "password1",
+                Role = ClientRole.Base
             };
 
             var mockService = new Mock<IClientService>();
@@ -241,6 +244,7 @@ namespace VirtualWalletUnitTesting
                 Name = "Client 1",
                 Email = "client@example.com",
                 Password = "",
+                Role = ClientRole.Base
             };
 
             var mockService = new Mock<IClientService>();
@@ -261,6 +265,37 @@ namespace VirtualWalletUnitTesting
 
         }
 
+        public async Task CreateClient_InvalidRole_ReturnsError()
+        {
+
+            //Arrange
+
+            var client = new ClientCreateDto()
+            {
+                Name = "Client 1",
+                Email = "client@example.com",
+                Password = "password1",
+                Role = (ClientRole)99
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.CreateClientAsync(client)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.CreateClient(client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var errorResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("The client role entered is invalid!", errorResult);
+
+        }
+
         [TestMethod]
         public async Task CreateClient_EmailExisted_ReturnsError()
         {
@@ -272,6 +307,7 @@ namespace VirtualWalletUnitTesting
                 Name = "Client 1",
                 Email = "client@example.com",
                 Password = "password1",
+                Role = ClientRole.Base
             };
 
             var mockService = new Mock<IClientService>();
@@ -303,6 +339,7 @@ namespace VirtualWalletUnitTesting
                 Name = "Client 1",
                 Email = "client@example.com",
                 Password = "password1",
+                Role = ClientRole.Admin
             };
 
             var mockService = new Mock<IClientService>();
@@ -324,7 +361,7 @@ namespace VirtualWalletUnitTesting
         }
 
         [TestMethod]
-        public async Task UpdateClient_InvalidName_ReturnsError()
+        public async Task UpdateClient_InvalidRole_ReturnsError()
         {
 
             //Arrange
@@ -334,6 +371,38 @@ namespace VirtualWalletUnitTesting
                 Name = "",
                 Password = "password1",
                 Id = 1
+            };
+
+            var mockService = new Mock<IClientService>();
+            var mockLogger = new Mock<ILogger<ClientsController>>();
+            mockService.Setup(service => service.UpdateClient(client)).ReturnsAsync(false);
+            var controller = new ClientsController(mockService.Object, mockLogger.Object);
+
+            //Act
+
+            var result = await controller.UpdateClient(client.Id, client);
+            var objectResult = result as ObjectResult;
+            var apiResponse = objectResult.Value as ApiErrorResponse;
+            var errorResult = apiResponse.Errors[0].Error as string;
+
+            //Assert
+
+            Assert.AreEqual("The client role entered is invalid!", errorResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateClient_InvalidName_ReturnsError()
+        {
+
+            //Arrange
+
+            var client = new ClientUpdateDto()
+            {
+                Name = "",
+                Password = "password1",
+                Id = 1,
+                Role = ClientRole.Admin
             };
 
             var mockService = new Mock<IClientService>();
@@ -364,7 +433,8 @@ namespace VirtualWalletUnitTesting
             {
                 Name = "Client 1",
                 Password = "",
-                Id = 1
+                Id = 1,
+                Role = ClientRole.Admin
             };
 
             var mockService = new Mock<IClientService>();
@@ -395,7 +465,8 @@ namespace VirtualWalletUnitTesting
             {
                 Name = "Client 1",
                 Password = "password1",
-                Id = 1
+                Id = 1,
+                Role = ClientRole.Admin
             };
 
             var mockService = new Mock<IClientService>();
@@ -412,7 +483,7 @@ namespace VirtualWalletUnitTesting
 
             //Assert
 
-            Assert.AreEqual("There was a problem, the client wasnt created! Email is in use.", errorResult);
+            Assert.AreEqual("There was a problem, the client wasnt updated!", errorResult);
 
         }
 
@@ -426,7 +497,8 @@ namespace VirtualWalletUnitTesting
             {
                 Name = "Client 1",
                 Password = "password1",
-                Id = 1
+                Id = 1,
+                Role = ClientRole.Admin
             };
 
             var mockService = new Mock<IClientService>();

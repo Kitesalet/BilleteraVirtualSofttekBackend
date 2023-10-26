@@ -29,7 +29,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
         }
 
 
-        public async Task<IEnumerable<Transaction>> GetTransactionByAccount(int accountId)
+        public async Task<IEnumerable<Transaction>> GetTransactionsByAccount(int accountId)
         {
 
             return await _context.Transactions.Include(e => e.SourceAccount)
@@ -42,7 +42,7 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
 
         }
 
-        public async Task<IEnumerable<Transaction>> GetTransactionByClient(int clientId)
+        public async Task<IEnumerable<Transaction>> GetTransactionsByClient(int clientId)
         {
             return await _context.Transactions.Include(e => e.SourceAccount)
                                                  .Include(t => t.DestinationAccount)

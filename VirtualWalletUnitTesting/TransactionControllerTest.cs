@@ -108,7 +108,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionByAccountAsync(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -127,6 +127,97 @@ namespace VirtualWalletUnitTesting
         }
 
         [TestMethod]
+        public async Task GetAllTransactionsByClient_ClientNotdFound_ReturnError()
+        {
+
+            //Arrange
+
+            List<TransactionGetDto> transactions = null;
+
+            var mockService = new Mock<ITransactionService>();
+            var mockLogger = new Mock<ILogger<TransactionsController>>();
+            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            var controller = new TransactionsController(mockService.Object, mockLogger.Object);
+
+
+            //Act
+
+            var result = await controller.GetAllTransactionsByClient(1);
+            var objectResult = result as ObjectResult;
+            var value = objectResult.Value as ApiErrorResponse;
+            var finalResult = value.Errors[0].Error;
+
+
+            //Assert
+
+            Assert.AreEqual("The client was not found!", finalResult);
+
+        }
+
+        [TestMethod]
+        public async Task GetAllTransactionsByClient_InvalidId_ReturnError()
+        {
+
+            //Arrange
+
+            List<TransactionGetDto> transactions = null;
+
+            var mockService = new Mock<ITransactionService>();
+            var mockLogger = new Mock<ILogger<TransactionsController>>();
+            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            var controller = new TransactionsController(mockService.Object, mockLogger.Object);
+
+
+            //Act
+
+            var result = await controller.GetAllTransactionsByClient(0);
+            var objectResult = result as ObjectResult;
+            var value = objectResult.Value as ApiErrorResponse;
+            var finalResult = value.Errors[0].Error;
+
+
+            //Assert
+
+            Assert.AreEqual("The client id is invalid!", finalResult);
+
+        }
+
+        [TestMethod]
+        public async Task GetAllTransactionsByClient_Valid_ReturnTransactions()
+        {
+
+            //Arrange
+
+            var transactions = new List<TransactionGetDto>
+            {
+                new TransactionGetDto { Amount = 100.50m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 1, CBU = 9876, Alias = "Account1", Balance = 2500.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4500.00m, Type = "Dollar", ClientId = 3 }, CreatedDate = DateTime.Now },
+                new TransactionGetDto { Amount = 300.25m, Type = "Extraction", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 1, CBU = 5678, Alias = "Account2", Balance = 4200.00m, Type = "Dollar", ClientId = 2 }, DestinationAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 9876, Alias = "Account1", Balance = 2700.00m, Type = "Peso", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(15) },
+                new TransactionGetDto { Amount = 50.00m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 1, UUID = "12345", AccountNumber = 101, CBU = 1, Alias = "Account1", Balance = 2650.00m, Type = "Peso", ClientId = 1 }, DestinationAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 303, CBU = 1234, Alias = "Account3", Balance = 3500.00m, Type = "Crypto", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(30) },
+                new TransactionGetDto { Amount = 200.75m, Type = "Deposit", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 4, UUID = "98765", AccountNumber = 1, CBU = 4321, Alias = "Account4", Balance = 3200.00m, Type = "Peso", ClientId = 4 }, DestinationAccount = new AccountGetDto { Id = 5, UUID = "24680", AccountNumber = 505, CBU = 7890, Alias = "Account5", Balance = 5600.00m, Type = "Dollar", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(45) },
+                new TransactionGetDto { Amount = 70.20m, Type = "Transfer", Concept = TransactionConcept.Deposit.ToString(), SourceAccount = new AccountGetDto { Id = 3, UUID = "67890", AccountNumber = 1, CBU = 1234, Alias = "Account3", Balance = 3450.00m, Type = "Crypto", ClientId = 3 }, DestinationAccount = new AccountGetDto { Id = 2, UUID = "54321", AccountNumber = 202, CBU = 5678, Alias = "Account2", Balance = 4400.00m, Type = "Dollar", ClientId = 3 }, CreatedDate = DateTime.Now.AddMinutes(60) }
+            };
+
+            var mockService = new Mock<ITransactionService>();
+            var mockLogger = new Mock<ILogger<TransactionsController>>();
+            mockService.Setup(service => service.GetTransactionsByClient(3)).ReturnsAsync(transactions);
+            var controller = new TransactionsController(mockService.Object, mockLogger.Object);
+
+
+            //Act
+
+            var result = await controller.GetAllTransactionsByAccount(3);
+            var objectResult = result as ObjectResult;
+            var value = objectResult.Value as ApiSuccessResponse;
+            var finalResult = value.Data;
+
+
+            //Assert
+
+            CollectionAssert.Equals(transactions, finalResult);
+
+        }
+
+        [TestMethod]
         public async Task GetAllTransactionsByAccount_AccountNotdFound_ReturnError()
         {
 
@@ -136,7 +227,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionByAccountAsync(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -171,7 +262,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionByAccountAsync(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -358,7 +449,7 @@ namespace VirtualWalletUnitTesting
         }
 
         [TestMethod]
-        public async Task CreateTransaction_SameAccount_ReturnError()
+        public async Task CreateTransaction_SameAccountTransfer_ReturnError()
         {
 
             //Arrange
@@ -389,7 +480,43 @@ namespace VirtualWalletUnitTesting
 
             //Assert
 
-            Assert.AreEqual("The transaction accounts cant be the same!", finalResult);
+            Assert.AreEqual("The transfer accounts cant be the same!", finalResult);
+
+        }
+
+        [TestMethod]
+        public async Task CreateTransaction_DifferentAccountDeposit_ReturnError()
+        {
+
+            //Arrange
+
+            TransactionCreateDto transaction = new TransactionCreateDto
+            {
+                Amount = 100m,
+                Concept = TransactionConcept.Deposit,
+                DestinationAccountId = 2,
+                SourceAccountId = 1,
+                ClientId = 1,
+                Type = TransactionType.Deposit
+            };
+
+            var mockService = new Mock<ITransactionService>();
+            var mockLogger = new Mock<ILogger<TransactionsController>>();
+            mockService.Setup(service => service.CreateTransactionAsync(transaction)).ReturnsAsync(true);
+            var controller = new TransactionsController(mockService.Object, mockLogger.Object);
+
+
+            //Act
+
+            var result = await controller.CreateTransaction(transaction);
+            var objectResult = result as ObjectResult;
+            var value = objectResult.Value as ApiErrorResponse;
+            var finalResult = value.Errors[0].Error;
+
+
+            //Assert
+
+            Assert.AreEqual("The extraction and deposit accounts must be the same!", finalResult);
 
         }
 
@@ -539,7 +666,7 @@ namespace VirtualWalletUnitTesting
         }
 
         [TestMethod]
-        public async Task UpdateTransaction_MatchingAccountIds_ReturnError()
+        public async Task UpdateTransaction_MatchingTransferAccountIds_ReturnError()
         {
 
             //Arrange
@@ -551,6 +678,43 @@ namespace VirtualWalletUnitTesting
                 Concept = TransactionConcept.Deposit,
                 DestinationAccountId = 1,
                 SourceAccountId = 1,
+                ClientId = 1,
+                Type = TransactionType.Transfer
+            };
+
+            var mockService = new Mock<ITransactionService>();
+            var mockLogger = new Mock<ILogger<TransactionsController>>();
+            mockService.Setup(service => service.UpdateTransaction(transaction)).ReturnsAsync(true);
+            var controller = new TransactionsController(mockService.Object, mockLogger.Object);
+
+
+            //Act
+
+            var result = await controller.UpdateTransaction(1, transaction);
+            var objectResult = result as ObjectResult;
+            var value = objectResult.Value as ApiErrorResponse;
+            var finalResult = value.Errors[0].Error;
+
+
+            //Assert
+
+            Assert.AreEqual("The transfer accounts cant be the same!", finalResult);
+
+        }
+
+        [TestMethod]
+        public async Task UpdateTransaction_NotMatchingDepositAccounts_ReturnError()
+        {
+
+            //Arrange
+
+            TransactionUpdateDto transaction = new TransactionUpdateDto
+            {
+                Id = 1,
+                Amount = 1000,
+                Concept = TransactionConcept.Deposit,
+                DestinationAccountId = 1,
+                SourceAccountId = 2,
                 ClientId = 1,
                 Type = TransactionType.Deposit
             };
@@ -571,7 +735,7 @@ namespace VirtualWalletUnitTesting
 
             //Assert
 
-            Assert.AreEqual("The transaction accounts cant be the same!", finalResult);
+            Assert.AreEqual("The extraction and deposit accounts must be the same!", finalResult);
 
         }
 
