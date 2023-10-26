@@ -145,10 +145,10 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<AccountGetDto>> GetAllAccountsByClientAsync(int id)
+        public async Task<IEnumerable<AccountGetDto>> GetAllAccountsByClientAsync(int id, int page, int units)
         {
 
-            var accounts = await _unitOfWork.AccountRepository.GetAllAccountsByClient(id);
+            var accounts = await _unitOfWork.AccountRepository.GetAllAccountsByClient(id, page, units);
 
             var accountsDto = _mapper.Map<List<AccountGetDto>>(accounts);
 

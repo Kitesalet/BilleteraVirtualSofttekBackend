@@ -47,6 +47,7 @@ namespace BilleteraVirtualSofttekBack.Services
                 return false;
             }
 
+            //The accounts must be from the same client
             if (client.Id != origin.ClientId)
             {
                 return false;
@@ -99,7 +100,7 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<TransactionGetDto>> GetTransactionsByClient(int accountId)
+        public async Task<List<TransactionGetDto>> GetTransactionsByClient(int accountId, int page, int units)
         {
             var client = await _unitOfWork.ClientRepository.GetByIdAsync(accountId);
 
@@ -108,7 +109,7 @@ namespace BilleteraVirtualSofttekBack.Services
                 return null;
             }
 
-            var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByClient(accountId);
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByClient(accountId, page, units);
 
             var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
 
@@ -117,7 +118,7 @@ namespace BilleteraVirtualSofttekBack.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<TransactionGetDto>> GetTransactionsByAccount(int accountId)
+        public async Task<List<TransactionGetDto>> GetTransactionsByAccount(int accountId, int page, int units)
         {
             var account = await _unitOfWork.AccountRepository.GetByIdAsync(accountId);
 
@@ -126,7 +127,7 @@ namespace BilleteraVirtualSofttekBack.Services
                 return null;
             }
 
-            var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByAccount(accountId);
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByAccount(accountId, page, units);
 
             var transactionsDto = _mapper.Map<List<TransactionGetDto>>(transactions);
 
@@ -179,7 +180,7 @@ namespace BilleteraVirtualSofttekBack.Services
                 return false;
             }
 
-            if (client.Id != origin.ClientId || client.Id == origin.ClientId)
+            if (client.Id != origin.ClientId || client.Id == destination.ClientId)
             {
                 return false;
             }

@@ -29,9 +29,13 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<BaseAccount>> GetAllAccountsByClient(int clientId)
+        public async Task<IEnumerable<BaseAccount>> GetAllAccountsByClient(int clientId, int page, int units)
         {
-            var accountsByUser = await _context.Accounts.Where(a => a.ClientId == clientId && a.DeletedDate == null).OrderBy(a => a.Type).ToListAsync();
+            var accountsByUser = await _context.Accounts.Where(a => a.ClientId == clientId && a.DeletedDate == null)
+                                                        .OrderBy(a => a.Type)
+                                                        .Skip((page - 1) * units)
+                                                        .Take(units)
+                                                        .ToListAsync();
 
             return accountsByUser;
         }

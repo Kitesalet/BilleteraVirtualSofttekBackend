@@ -35,7 +35,7 @@ namespace BilleteraVirtualSofttekBack.Models.Entities.Accounts
             }
             else
             {
-                //Dollar value is hardcoded to 500 pesos
+                //Dollar value is hardcoded to 400 pesos
 
                 //Dollars to extract
                 Extract(amount);

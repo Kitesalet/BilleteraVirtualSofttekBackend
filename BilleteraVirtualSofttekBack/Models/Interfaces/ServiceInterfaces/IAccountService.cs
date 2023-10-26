@@ -14,7 +14,7 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces
             /// Gets a collection of Account data that hasnt been soft deleted with pagination.
             /// </summary>
             /// <returns>All of the AccountGetDto entities.</returns>
-            Task<IEnumerable<AccountGetDto>> GetAllAccountsByClientAsync(int id);
+            Task<IEnumerable<AccountGetDto>> GetAllAccountsByClientAsync(int id, int page, int units);
 
             /// <summary>
             /// Gets Account data by its id.
