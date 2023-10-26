@@ -1,0 +1,2896 @@
+{
+	"info": {
+		"_postman_id": "b18b53ef-c609-4173-a9d5-24cf47a319ac",
+		"name": "Softtek Virtual Wallet Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27565801"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Login Controller (Get Token First)",
+					"item": [
+						{
+							"name": "200 - Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"1@1.com\",\r\n  \"password\": \"random\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://localhost:7243/api/login"
+							},
+							"response": []
+						},
+						{
+							"name": "401 - Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"@1.com\",\r\n  \"password\": \"random\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://localhost:7243/api/login"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Client Controller",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "200 - GetAllClients",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/clients?page=1&units=10",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"clients"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "units",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAllClients",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/clients?page=0&units=10\n",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"clients"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "units",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetClient",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetClient",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/999999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetClient",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "200 - CreateAccount",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"role\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/register"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateClient Client Exists",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"role\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/register"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateClient Client Invalid Parameters",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"\",\r\n  \"email\": \"\",\r\n  \"password\": \"\",\r\n  \"role\": -1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/register"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Update",
+							"item": [
+								{
+									"name": "400 - Update - Invalid Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 0,\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"role\": 1,\r\n  \"password\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Data",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"\",\r\n  \"email\": \"\",\r\n  \"role\": 0,\r\n  \"password\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Not Created",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1000,\r\n  \"name\": \"Arrombero\",\r\n  \"role\": 1,\r\n  \"password\": \"aaaa\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1000"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Update - Successful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"Arrombero\",\r\n  \"email\": \"1@2.com\",\r\n  \"role\": 2,\r\n  \"password\": \"aaaa\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "400 - Delete - Invalid Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Client Not Found",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Delete - Client Deleted",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/2\n"
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This is the folder that contains all of the requests to the Client Controller in the Wallet Api Backend"
+				},
+				{
+					"name": "Account Controller",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "200 - GetAllAccounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/accounts?page=1&units=10",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"accounts"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "units",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAllAccounts - Bad Pagination",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/accounts?page=0&units=10\n",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"accounts"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "units",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetAccount - Successful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetAccount - Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/999999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAccount - Invalid id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAccountByClient - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/accounts/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetAccountByClient - Client Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetAccountByClient - Successful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/1\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "400 - CreateAccount - Invalid Account Type",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"type\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/register"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateAccount - General Error",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"type\": 1,\r\n  \"clientId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/register"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - CreateClient - Successful",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"type\": 3,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/register"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Put",
+							"item": [
+								{
+									"name": "400 - Update - Invalid Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 0,\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"role\": 1,\r\n  \"password\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Type",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"string\",\r\n  \"accountNumber\": 0,\r\n  \"cbu\": 0,\r\n  \"alias\": \"string\",\r\n  \"accountId\": 1,\r\n  \"balance\": 0,\r\n  \"type\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Crypto Info",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 0,\r\n  \"cbu\": 0,\r\n  \"alias\": \"string\",\r\n  \"accountId\": 1,\r\n  \"balance\": 1,\r\n  \"type\": 3,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Fiduciary Info",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"asdsadsa\",\r\n  \"accountNumber\": 0,\r\n  \"cbu\": 0,\r\n  \"alias\": \"\",\r\n  \"accountId\": 1,\r\n  \"balance\": 1,\r\n  \"type\": 1,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Account Balance",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 1,\r\n  \"cbu\": 1,\r\n  \"alias\": \"asds\",\r\n  \"accountId\": 1,\r\n  \"balance\": 1,\r\n  \"type\": 1,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid General ( Probable Non Found Client  or account)",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 1,\r\n  \"cbu\": 1,\r\n  \"alias\": \"asds\",\r\n  \"accountId\": 1,\r\n  \"balance\": 100,\r\n  \"type\": 1,\r\n  \"clientId\": 100\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Successful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 2655434774,\r\n  \"cbu\": 654535343345,\r\n  \"alias\": \"sdfdsfsd\",\r\n  \"accountId\": 1,\r\n  \"balance\": 10000,\r\n  \"type\": 1,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Deposit - InvalidAmount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Deposit - Invalid ID",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Deposit - Ids dont match",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Deposit - Account Not Found",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1000,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1000\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Deposit - Succesful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Extraction - InvalidAmount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/extract/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Extraction - Invalid ID",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Extraction - Ids dont match",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Extraction - Account Not Found",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1000,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1000\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Extraction - Succesful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Invalid Accounts Id",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"destinationAccountId\": 0,\r\n  \"originAccountId\": 0,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Invalid Amount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 1,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 1,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Same Account Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 2,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Transfer - Origin Account Not Found",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 2999,\r\n  \"originAccountId\": 2,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Origin Account Not Enough Funds",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 1000000,\r\n  \"destinationAccountId\": 3,\r\n  \"originAccountId\": 2,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Crypto vs Peso",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 1,\r\n  \"originAccountId\": 3,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Successful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 3,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "400 - Delete - Invalid Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/account/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Account Not Found or Has Funds",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Delete - Successful",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/1\n"
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This is the folder that contains all of the requests to the Account Controller in the Wallet Api Backend"
+				},
+				{
+					"name": "Transaction Controller",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "200 - GetAllTransactions - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/transactions?page=1&units=10",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"transactions"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "units",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAllTransactions - Bad Pagination",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/clients?page=0&units=10\n",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"clients"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "units",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetTransaction - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetTransaction - Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/999999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransaction - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransactionByClient - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetTransactionByClient - Client Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/67\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetTransactionByClient - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/2\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransactionByAccount - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransactionByAccount - Account Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetTransactionByAccount - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/3\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "400 - CreateTransaction - Invalid Amount",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - Invalid Concept",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 100,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - Invalid Transaction Type",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 100,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - Invalid Transfer Accounts",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 4,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - General Invalid Transaction",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 4,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 3,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - CreateTransaction - Succesful Transaction",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 4,\r\n  \"clientId\": 3,\r\n  \"sourceAccountId\": 4,\r\n  \"destinationAccountId\": 5\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "400 - Delete - Invalid Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Transaction Not Found",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Delete - Transaction Deleted",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/10\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Update",
+							"item": [
+								{
+									"name": "400 - UpdateTransaction - Invalid Amount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Not same Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Concept",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1000,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Transaction Type",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 100,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Transfer Accounts",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Deposit Extraction Accounts",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - General Invalid Code",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - UpdateTransaction - Succesful Transaction",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 5,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 3,\r\n  \"sourceAccountId\": 4,\r\n  \"destinationAccountId\": 5\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/5"
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This is the folder that contains all of the requests to the Tranfer Controller in the Wallet Api Backend"
+				}
+			]
+		},
+		{
+			"name": "Base Client ( Add Migration / Update again if used All Admin) / Incomplete",
+			"item": [
+				{
+					"name": "Login Controller (Get Token First)",
+					"item": [
+						{
+							"name": "200 - Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"1@1.com\",\r\n  \"password\": \"random\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://localhost:7243/api/login"
+							},
+							"response": []
+						},
+						{
+							"name": "401 - Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"@1.com\",\r\n  \"password\": \"random\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://localhost:7243/api/login"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Client Controller",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "200 - GetAllClients",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/clients?page=1&units=10",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"clients"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "units",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAllClients",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/clients?page=0&units=10\n",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"clients"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "units",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetClient",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetClient",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/999999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetClient",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "200 - CreateAccount",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"stringer\",\r\n  \"email\": \"stringer\",\r\n  \"password\": \"string\",\r\n  \"role\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/register"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateClient Client Exists",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"password\": \"string\",\r\n  \"role\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/register"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateClient Client Invalid Parameters",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"name\": \"\",\r\n  \"email\": \"\",\r\n  \"password\": \"\",\r\n  \"role\": -1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/register"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Update",
+							"item": [
+								{
+									"name": "400 - Update - Invalid Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 0,\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"role\": 1,\r\n  \"password\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Data",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"\",\r\n  \"email\": \"\",\r\n  \"role\": 0,\r\n  \"password\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Not Created",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1000,\r\n  \"name\": \"Arrombero\",\r\n  \"role\": 1,\r\n  \"password\": \"aaaa\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1000"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Update - Successful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"Arrombero\",\r\n  \"email\": \"1@2.com\",\r\n  \"role\": 2,\r\n  \"password\": \"aaaa\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "400 - Delete - Invalid Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Client Not Found",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Delete - Client Deleted",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/2\n"
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This is the folder that contains all of the requests to the Client Controller in the Wallet Api Backend"
+				},
+				{
+					"name": "Account Controller",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "200 - GetAllAccounts",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/accounts?page=1&units=10",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"accounts"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "units",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAllAccounts - Bad Pagination",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/accounts?page=0&units=10\n",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"accounts"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "units",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetAccount - Successful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetAccount - Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/999999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAccount - Invalid id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAccountByClient - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/accounts/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetAccountByClient - Client Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetAccountByClient - Successful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/account/1\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "400 - CreateAccount - Invalid Account Type",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"type\": 2,\r\n  \"clientId\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/register"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateAccount - General Error",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"type\": 1,\r\n  \"clientId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/register"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - CreateClient - Successful",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"type\": 3,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/register"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Put",
+							"item": [
+								{
+									"name": "400 - Update - Invalid Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 0,\r\n  \"name\": \"string\",\r\n  \"email\": \"string\",\r\n  \"role\": 1,\r\n  \"password\": \"string\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/client/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Type",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"string\",\r\n  \"accountNumber\": 0,\r\n  \"cbu\": 0,\r\n  \"alias\": \"string\",\r\n  \"accountId\": 1,\r\n  \"balance\": 0,\r\n  \"type\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Crypto Info",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 0,\r\n  \"cbu\": 0,\r\n  \"alias\": \"string\",\r\n  \"accountId\": 1,\r\n  \"balance\": 1,\r\n  \"type\": 3,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Fiduciary Info",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"asdsadsa\",\r\n  \"accountNumber\": 0,\r\n  \"cbu\": 0,\r\n  \"alias\": \"\",\r\n  \"accountId\": 1,\r\n  \"balance\": 1,\r\n  \"type\": 1,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid Account Balance",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 1,\r\n  \"cbu\": 1,\r\n  \"alias\": \"asds\",\r\n  \"accountId\": 1,\r\n  \"balance\": 1,\r\n  \"type\": 1,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Invalid General ( Probable Non Found Client  or account)",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 1,\r\n  \"cbu\": 1,\r\n  \"alias\": \"asds\",\r\n  \"accountId\": 1,\r\n  \"balance\": 100,\r\n  \"type\": 1,\r\n  \"clientId\": 100\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Update - Successful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"uuid\": \"\",\r\n  \"accountNumber\": 2655434774,\r\n  \"cbu\": 654535343345,\r\n  \"alias\": \"sdfdsfsd\",\r\n  \"accountId\": 1,\r\n  \"balance\": 10000,\r\n  \"type\": 1,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Deposit - InvalidAmount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Deposit - Invalid ID",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Deposit - Ids dont match",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Deposit - Account Not Found",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1000,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1000\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Deposit - Succesful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 2,\r\n  \"amount\": 10,\r\n  \"clientId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/2\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Extraction - InvalidAmount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 0,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/extract/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Extraction - Invalid ID",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Extraction - Ids dont match",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Extraction - Account Not Found",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1000,\r\n  \"amount\": 10,\r\n  \"clientId\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1000\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Extraction - Succesful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"id\": 1,\r\n  \"amount\": 10,\r\n  \"clientId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/deposit/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Invalid Accounts Id",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"destinationAccountId\": 0,\r\n  \"originAccountId\": 0,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Invalid Amount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 1,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 1,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Same Account Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 2,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Transfer - Origin Account Not Found",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 2,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Origin Account Not Enough Funds",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 2,\r\n  \"originAccountId\": 2,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Crypto vs Peso",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 1,\r\n  \"originAccountId\": 3,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - Transfer - Successful",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"destinationAccountId\": 1,\r\n  \"originAccountId\": 3,\r\n  \"concept\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/account/transfer"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "400 - Delete - Invalid Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Account Not Found or Has Funds",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Account Not Found Copy",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/account/5"
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This is the folder that contains all of the requests to the Account Controller in the Wallet Api Backend"
+				},
+				{
+					"name": "Transaction Controller",
+					"item": [
+						{
+							"name": "Get",
+							"item": [
+								{
+									"name": "200 - GetAllTransactions - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/transactions?page=1&units=10",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"transactions"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1"
+												},
+												{
+													"key": "units",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetAllTransactions - Bad Pagination",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://localhost:7243/api/clients?page=0&units=10\n",
+											"protocol": "https",
+											"host": [
+												"localhost"
+											],
+											"port": "7243",
+											"path": [
+												"api",
+												"clients"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "0"
+												},
+												{
+													"key": "units",
+													"value": "10\n"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetTransaction - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetTransaction - Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/999999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransaction - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransactionByClient - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - GetTransactionByClient - Client Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/67\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetTransactionByClient - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/2\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransactionByAccount - Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - GetTransactionByAccount - Account Not Found",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - GetTransactionByAccount - Succesful",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": "https://localhost:7243/api/client/-1\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Post",
+							"item": [
+								{
+									"name": "400 - CreateTransaction - Invalid Amount",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - Invalid Concept",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - Invalid Transaction Type",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 100,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - Invalid Transfer Accounts",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 4,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - CreateTransaction - General Invalid Transaction",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 4,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - CreateTransaction - Succesful Transaction",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 10,\r\n  \"type\": 3,\r\n  \"concept\": 4,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/create"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Delete",
+							"item": [
+								{
+									"name": "400 - Delete - Invalid Id",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/0\n"
+									},
+									"response": []
+								},
+								{
+									"name": "404 - Delete - Transaction Not Found",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/transaction/9999\n"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - Delete - Transaction Deleted",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": "https://localhost:7243/api/client/1\n"
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Update",
+							"item": [
+								{
+									"name": "400 - UpdateTransaction - Invalid Amount",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Not same Ids",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"amount\": 0,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Concept",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1000,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Transaction Type",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 100,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Transfer Accounts",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 100,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 0,\r\n  \"destinationAccountId\": 0\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - Invalid Deposit Extraction Accounts",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 3\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "400 - UpdateTransaction - General Invalid Code",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								},
+								{
+									"name": "200 - UpdateTransaction - Succesful Transaction",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\" : 1,\r\n  \"amount\": 10,\r\n  \"type\": 1,\r\n  \"concept\": 1,\r\n  \"clientId\": 0,\r\n  \"sourceAccountId\": 2,\r\n  \"destinationAccountId\": 2\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": "https://localhost:7243/api/transaction/1"
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This is the folder that contains all of the requests to the Tranfer Controller in the Wallet Api Backend"
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{baseToken}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNeVN1YiIsIk5hbWVJZGVudGlmaWVyIjoiMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDkvMDkvaWRlbnRpdHkvY2xhaW1zL2FjdG9yIjoiMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJyYW5kb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiIxQDEuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3NTgyNTc5NDl9.7LniBaB049-VP0upwwy2XCfB4r6F_yYMtpXv3nvczeE",
+			"type": "string"
+		},
+		{
+			"key": "baseToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNeVN1YiIsIk5hbWVJZGVudGlmaWVyIjoiMiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDkvMDkvaWRlbnRpdHkvY2xhaW1zL2FjdG9yIjoiMiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJyYW5kb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiIyQDIuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQmFzZSIsImV4cCI6MTc1ODI3MDM2MH0.kFRE0gbxrIgYkPiks-XXPhiN3Wx4LzzIr9hJmcTurQk",
+			"type": "string"
+		}
+	]
+}

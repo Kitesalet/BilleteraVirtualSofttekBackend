@@ -29,26 +29,31 @@ namespace BilleteraVirtualSofttekBack.DAL.Repositories
         }
 
 
-        public async Task<IEnumerable<Transaction>> GetTransactionsByAccount(int accountId)
+        /// <inheritdoc/>
+        public async Task<IEnumerable<Transaction>> GetTransactionsByAccount(int accountId, int page, int units)
         {
 
-            return await _context.Transactions.Include(e => e.SourceAccount)
-                                                .Include(t => t.DestinationAccount)
-                                                .Where(t => (t.SourceAccountId == accountId 
-                                                || t.DestinationAccountId == accountId) 
-                                                && t.DeletedDate == null)
-                                                .OrderByDescending(t => t.CreatedDate)
-                                                .ToListAsync();
+            return await _context.Transactions
+                                                        .Include(e => e.SourceAccount)
+                                                        .Include(t => t.DestinationAccount)
+                                                        .Where(t => (t.SourceAccountId == accountId || t.DestinationAccountId == accountId) && t.DeletedDate == null)
+                                                        .OrderByDescending(t => t.CreatedDate)
+                                                        .Skip((page - 1) * units)
+                                                        .Take(units) 
+                                                        .ToListAsync();
 
         }
 
-        public async Task<IEnumerable<Transaction>> GetTransactionsByClient(int clientId)
+        /// <inheritdoc/>
+        public async Task<IEnumerable<Transaction>> GetTransactionsByClient(int clientId, int page, int units)
         {
             return await _context.Transactions.Include(e => e.SourceAccount)
                                                  .Include(t => t.DestinationAccount)
                                                  .Where(t => t.ClientId == clientId
                                                  && t.DeletedDate == null)
                                                  .OrderByDescending(t => t.CreatedDate)
+                                                 .Skip((page - 1) * units)
+                                                 .Take(units)
                                                  .ToListAsync();
         }
     }

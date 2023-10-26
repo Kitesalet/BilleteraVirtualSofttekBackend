@@ -182,7 +182,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         public async Task<IActionResult> UpdateClient(int id, ClientUpdateDto dto)
         {
 
-            if(dto.Role != ClientRole.Admin || dto.Role != ClientRole.Admin)
+            if(dto.Role != ClientRole.Base && dto.Role != ClientRole.Admin)
             {
                 _logger.LogInformation($"The client role was invalid, dto = {dto}");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client role entered is invalid!");
@@ -231,7 +231,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpDelete]
-        [Authorize("Admin")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

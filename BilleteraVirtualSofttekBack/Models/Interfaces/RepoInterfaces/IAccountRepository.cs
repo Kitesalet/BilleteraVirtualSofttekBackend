@@ -15,7 +15,7 @@ namespace BilleteraVirtualSofttekBack.Models.Interfaces.RepoInterfaces
         /// </summary>
         /// <param name="clientId">The clients ID for which you want to retrieve accounts.</param>
         /// <returns>Returns a collection of accounts owned by a client identified by their ID.</returns>
-        Task<IEnumerable<BaseAccount>> GetAllAccountsByClient(int clientId);
+        Task<IEnumerable<BaseAccount>> GetAllAccountsByClient(int clientId, int page, int units);
 
         /// <summary>
         /// Check if a specific CBU number exists.

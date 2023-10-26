@@ -72,6 +72,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// Gets all Transactions associated account.
         /// </summary>
         /// <param name="accountId">ID of the account for which to retrieve transactions.</param>
+        /// <param name="page">Page number for pagination</param>
+        /// <param name="units">Number of Transactions per page.</param>
         /// <returns>
         /// 200 OK response with the list of Transactions with the account if successful.
         /// 400 Bad Request if the account id is invalid.
@@ -85,8 +87,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("transactions/account/{accountId:int}")]
-        public async Task<IActionResult> GetAllTransactionsByAccount(int accountId)
+        public async Task<IActionResult> GetAllTransactionsByAccount(int accountId, [FromQuery] int page = 1, [FromQuery] int units = 99)
         {
+            if (page < 1 || units < 1)
+            {
+                _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
+            }
 
             if (accountId <= 0)
             {
@@ -94,7 +101,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The account id is invalid!");
             }
 
-            var transactions = await _service.GetTransactionsByClient(accountId);
+            var transactions = await _service.GetTransactionsByAccount(accountId, page, units);
 
             if(transactions == null)
             {
@@ -111,6 +118,8 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// Gets all Transactions associated client.
         /// </summary>
         /// <param name="clientId">ID of the client for which to retrieve transactions.</param>
+        /// <param name="page">Page number for pagination</param>
+        /// <param name="units">Number of Transactions per page.</param>
         /// <returns>
         /// 200 OK response with the list of Transactions with the client if successful.
         /// 401 Unauthorized response if the user is not authenticated.
@@ -123,8 +132,13 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("transactions/client/{clientId:int}")]
-        public async Task<IActionResult> GetAllTransactionsByClient(int clientId)
+        public async Task<IActionResult> GetAllTransactionsByClient(int clientId, [FromQuery] int page = 1, [FromQuery] int units = 99)
         {
+            if (page < 1 || units < 1)
+            {
+                _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
+            }
 
             if (clientId <= 0)
             {
@@ -132,7 +146,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client id is invalid!");
             }
 
-            var transactions = await _service.GetTransactionsByClient(clientId);
+            var transactions = await _service.GetTransactionsByClient(clientId, page, units);
 
             if (transactions == null)
             {

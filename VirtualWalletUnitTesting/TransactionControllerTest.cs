@@ -108,7 +108,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1,1,99)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -136,7 +136,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1,1,99)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -164,7 +164,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1,1,99)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -199,13 +199,13 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionsByClient(3)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(20, 20, 20)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
             //Act
 
-            var result = await controller.GetAllTransactionsByAccount(3);
+            var result = await controller.GetAllTransactionsByClient(20,20,20);
             var objectResult = result as ObjectResult;
             var value = objectResult.Value as ApiSuccessResponse;
             var finalResult = value.Data;
@@ -227,7 +227,7 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByClient(1,1,99)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
@@ -262,13 +262,13 @@ namespace VirtualWalletUnitTesting
 
             var mockService = new Mock<ITransactionService>();
             var mockLogger = new Mock<ILogger<TransactionsController>>();
-            mockService.Setup(service => service.GetTransactionsByClient(1)).ReturnsAsync(transactions);
+            mockService.Setup(service => service.GetTransactionsByAccount(20, 20, 20)).ReturnsAsync(transactions);
             var controller = new TransactionsController(mockService.Object, mockLogger.Object);
 
 
             //Act
 
-            var result = await controller.GetAllTransactionsByAccount(1);
+            var result = await controller.GetAllTransactionsByAccount(20,20,20);
             var objectResult = result as ObjectResult;
             var value = objectResult.Value as ApiSuccessResponse;
             var finalResult = value.Data;

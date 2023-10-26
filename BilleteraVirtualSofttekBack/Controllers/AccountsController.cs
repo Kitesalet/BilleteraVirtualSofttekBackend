@@ -7,6 +7,7 @@ using BilleteraVirtualSofttekBack.Models.Interfaces.ServiceInterfaces;
 using IntegradorSofttekImanol.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
 using System.Security.Claims;
 
@@ -90,15 +91,21 @@ namespace BilleteraVirtualSofttekBack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [Route("accounts/{id:int}")]
-        public async Task<IActionResult> GetAllAccountsByClient(int id)
+        public async Task<IActionResult> GetAllAccountsByClient(int id, [FromQuery] int page = 1, [FromQuery] int units = 99)
         {
+            if (page < 1 || units < 1)
+            {
+                _logger.LogInformation($"There was an error in the pagination, page = {page}, units = {units}!");
+                return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "There was an error in the pagination!");
+            }
+
             if (id < 1)
             {
                 _logger.LogInformation($"Client ID was invalid, id = {id}!");
                 return ResponseFactory.CreateErrorResponse(HttpStatusCode.BadRequest, "The client ID was invalid");
             }
 
-            var accounts = await _service.GetAllAccountsByClientAsync(id);
+            var accounts = await _service.GetAllAccountsByClientAsync(id, page, units);
 
             _logger.LogInformation("All accounts were retrieved!");
             return ResponseFactory.CreateSuccessResponse(HttpStatusCode.OK, accounts);
@@ -192,7 +199,7 @@ namespace BilleteraVirtualSofttekBack.Controllers
         /// </returns>
 
         [HttpPut]
-        [Authorize("Admin")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

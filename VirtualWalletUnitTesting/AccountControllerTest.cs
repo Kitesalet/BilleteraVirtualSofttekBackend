@@ -113,7 +113,7 @@ namespace VirtualWalletUnitTesting
             var mockFactory = new Mock<IHttpClientFactory>();
             var mockLogger = new Mock<ILogger<AccountsController>>();
 
-            mockService.Setup(service => service.GetAllAccountsByClientAsync(0)).ReturnsAsync(accounts);
+            mockService.Setup(service => service.GetAllAccountsByClientAsync(0,1,99)).ReturnsAsync(accounts);
             var controller = new AccountsController(mockService.Object, mockFactory.Object, mockLogger.Object);
 
             //Act
@@ -150,7 +150,7 @@ namespace VirtualWalletUnitTesting
             var mockFactory = new Mock<IHttpClientFactory>();
             var mockLogger = new Mock<ILogger<AccountsController>>();
 
-            mockService.Setup(service => service.GetAllAccountsByClientAsync(1)).ReturnsAsync(accounts);
+            mockService.Setup(service => service.GetAllAccountsByClientAsync(1,1,99)).ReturnsAsync(accounts);
             var controller = new AccountsController(mockService.Object,mockFactory.Object,mockLogger.Object);
 
             //Act
